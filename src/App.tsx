@@ -1,6 +1,7 @@
-import Home from "./pages/Home";
+import Home from "./pages/Home/index";
 import { ThemeProvider } from "@mui/material";
 import theme from "./theme/theme";
+import "./App.css";
 
 function App() {
   return (

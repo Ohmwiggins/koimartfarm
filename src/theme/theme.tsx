@@ -26,21 +26,25 @@ const themeOptions: ThemeOptions = {
   },
 
   typography: {
-    fontFamily: "'Roboto', 'Noto Sans Thai', sans-serif",
+    fontFamily: "Anuphan, Inknut Antiqua, LINESeedSansEN, LINESeedSansTH",
     h1: {
       fontWeight: 700,
-      fontSize: "3rem",
+      fontSize: 64,
     },
     h2: {
       fontWeight: 600,
-      fontSize: "2rem",
+      fontSize: 40,
     },
     h3: {
       fontWeight: 600,
-      fontSize: "1.5rem",
+      fontSize: 24,
     },
     body1: {
-      fontSize: "1rem",
+      fontSize: 20,
+      lineHeight: 1.6,
+    },
+    body2: {
+      fontSize: 16,
       lineHeight: 1.6,
     },
     button: {
@@ -62,13 +66,6 @@ const themeOptions: ThemeOptions = {
       },
     },
     MuiButton: {
-      styleOverrides: {
-        root: {
-          "&:hover": {
-            backgroundColor: "transparent",
-          },
-        },
-      },
       defaultProps: {
         disableElevation: true,
       },

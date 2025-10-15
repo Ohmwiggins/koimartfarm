@@ -3,7 +3,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import HomeIcon from "@mui/icons-material/Home";
 import appLogo from "./../../assets/logo/Logo.png";
 import { useState } from "react";
-import MenuDrawer from "./MenuDrawer";
+import MenuDrawerMobile from "./MenuDrawerMobile";
 
 function NavbarMobile() {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
@@ -53,7 +53,7 @@ function NavbarMobile() {
         </IconButton>
       </Container>
 
-      <MenuDrawer isMenuOpen={menuOpen} setIsMenuOpen={setMenuOpen} />
+      <MenuDrawerMobile isMenuOpen={menuOpen} setIsMenuOpen={setMenuOpen} />
     </Box>
   );
 }

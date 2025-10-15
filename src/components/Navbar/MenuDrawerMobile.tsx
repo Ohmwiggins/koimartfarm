@@ -10,12 +10,51 @@ import MenuIcon from "@mui/icons-material/Menu";
 import HomeIcon from "@mui/icons-material/Home";
 import appLogo from "./../../assets/logo/Logo.png";
 import Fade from "@mui/material/Fade";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useEffect } from "react";
+
 type ButtonProps = {
   isMenuOpen: boolean;
   setIsMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function MenuDrawer({ isMenuOpen, setIsMenuOpen }: ButtonProps) {
+type menuButtonProps = {
+  text: string;
+  method: () => void;
+};
+
+function MenuButton({ text, method }: menuButtonProps) {
+  return (
+    <Button
+      disableRipple
+      sx={{
+        color: (theme) => theme.palette.secondary.contrastText,
+      }}
+      onClick={() => method()}
+    >
+      <Typography
+        variant="body1"
+        sx={{
+          color: "text.primary",
+          fontSize: 24,
+          fontFamily: "LINESeedSansEN",
+        }}
+      >
+        {text}
+      </Typography>
+    </Button>
+  );
+}
+
+function MenuDrawerMobile({ isMenuOpen, setIsMenuOpen }: ButtonProps) {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  useEffect(() => {
+    if (!isMobile && isMenuOpen) {
+      setIsMenuOpen(false);
+    }
+  }, [isMobile, isMenuOpen]);
   return (
     <Drawer
       open={isMenuOpen}
@@ -79,57 +118,16 @@ function MenuDrawer({ isMenuOpen, setIsMenuOpen }: ButtonProps) {
       <Box
         sx={{ display: "flex", flexDirection: "column", paddingTop: 7, gap: 3 }}
       >
-        <Button
-          disableRipple
-          sx={{ color: (theme) => theme.palette.secondary.contrastText }}
-          onClick={() => console.log("Home")}
-        >
-          <Typography
-            variant="body1"
-            sx={{ color: "text.primary", fontSize: 24 }}
-          >
-            Home
-          </Typography>
-        </Button>
-        <Button
-          disableRipple
-          sx={{ color: (theme) => theme.palette.secondary.contrastText }}
-          onClick={() => console.log("History")}
-        >
-          <Typography
-            variant="body1"
-            sx={{ color: "text.primary", fontSize: 24 }}
-          >
-            History
-          </Typography>
-        </Button>
-        <Button
-          disableRipple
-          sx={{ color: (theme) => theme.palette.secondary.contrastText }}
-          onClick={() => console.log("Blog")}
-        >
-          <Typography
-            variant="body1"
-            sx={{ color: "text.primary", fontSize: 24 }}
-          >
-            Blog
-          </Typography>
-        </Button>
-        <Button
-          disableRipple
-          sx={{ color: (theme) => theme.palette.secondary.contrastText }}
-          onClick={() => console.log("Contact Ussss")}
-        >
-          <Typography
-            variant="body1"
-            sx={{ color: "text.primary", fontSize: 24 }}
-          >
-            Contact Us
-          </Typography>
-        </Button>
+        <MenuButton text="Home" method={() => console.log("Home")} />
+        <MenuButton text="History" method={() => console.log("History")} />
+        <MenuButton text="Blog" method={() => console.log("Blog")} />
+        <MenuButton
+          text="Contact Us"
+          method={() => console.log("Contact Us")}
+        />
       </Box>
     </Drawer>
   );
 }
 
-export default MenuDrawer;
+export default MenuDrawerMobile;

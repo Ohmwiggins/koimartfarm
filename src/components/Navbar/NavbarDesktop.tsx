@@ -1,5 +1,26 @@
-import { Box, Button, Container } from "@mui/material";
+import { Box, Button, Container, makeStyles } from "@mui/material";
 import appLogo from "./../../assets/logo/FullLogo.png";
+
+type menuButtonProps = {
+  text: string;
+  method: () => void;
+};
+
+function MenuButton({ text, method }: menuButtonProps) {
+  return (
+    <Button
+      disableRipple
+      sx={{
+        color: (theme) => theme.palette.primary.contrastText,
+        fontFamily: "LINESeedSansEN",
+        fontSize: 16,
+      }}
+      onClick={() => method()}
+    >
+      {text}
+    </Button>
+  );
+}
 
 function NavbarDesktop() {
   return (
@@ -30,34 +51,13 @@ function NavbarDesktop() {
           gap: 1,
         }}
       >
-        <Button
-          disableRipple
-          sx={{ color: (theme) => theme.palette.primary.contrastText }}
-          onClick={() => console.log("Home")}
-        >
-          Home
-        </Button>
-        <Button
-          disableRipple
-          sx={{ color: (theme) => theme.palette.primary.contrastText }}
-          onClick={() => console.log("History")}
-        >
-          History
-        </Button>
-        <Button
-          disableRipple
-          sx={{ color: (theme) => theme.palette.primary.contrastText }}
-          onClick={() => console.log("Blog")}
-        >
-          Blog
-        </Button>
-        <Button
-          disableRipple
-          sx={{ color: (theme) => theme.palette.primary.contrastText }}
-          onClick={() => console.log("Contact Us")}
-        >
-          Contact Us
-        </Button>
+        <MenuButton text="Home" method={() => console.log("Home")} />
+        <MenuButton text="History" method={() => console.log("History")} />
+        <MenuButton text="Blog" method={() => console.log("Blog")} />
+        <MenuButton
+          text="Contact Us"
+          method={() => console.log("Contact Us")}
+        />
       </Box>
     </Container>
   );
