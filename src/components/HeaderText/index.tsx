@@ -1,11 +1,11 @@
 import { Typography } from "@mui/material";
 
-function HeaderText({ title }: { title: string }) {
+function HeaderText({ title, color }: { title: string; color?: string }) {
   return (
     <Typography
       variant="h2"
       sx={{
-        color: "primary.light",
+        color: color ?? "primary.light",
         fontFamily: "Inknut Antiqua",
       }}
     >
