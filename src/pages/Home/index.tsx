@@ -8,6 +8,8 @@ import KoiHighlight from "./KoiHighlight";
 import History from "./History";
 import Blog from "./Blog";
 import KoiVariety from "./KoiVariety";
+import FacebookPost from "./FacebookPost";
+import Footer from "../../components/Footer";
 
 function Home() {
   return (
@@ -146,6 +148,16 @@ function Home() {
           <KoiVariety />
         </Box>
       </Container>
+      {/* 
+      <Container maxWidth="xl">
+        <FacebookPost />
+      </Container> */}
+
+      <Box sx={{ backgroundColor: "primary.dark", width: "100%" }}>
+        <Container maxWidth="xl" sx={{ paddingY: 10 }}>
+          <Footer />
+        </Container>
+      </Box>
     </Box>
   );
 }

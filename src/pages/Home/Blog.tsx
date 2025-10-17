@@ -46,7 +46,7 @@ function HighlightComponent({
 
 function Blog() {
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={2} sx={{ justifyContent: "center" }}>
       {blogs.map((b) => (
         <Grid key={b.id} size={{ xs: 12, sm: 6, md: 4, lg: 3, xl: 3 }}>
           <Box sx={{ display: "flex", justifyContent: "center" }}>

@@ -6,7 +6,7 @@ const themeOptions: ThemeOptions = {
     primary: {
       main: "#E91D26",
       light: "#FA391F",
-      dark: "#B71C1C",
+      dark: "#231F20",
       contrastText: "#ffffff",
     },
     secondary: {
@@ -75,6 +75,22 @@ const themeOptions: ThemeOptions = {
         root: {
           borderRadius: 16,
           boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+        },
+      },
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        input: { color: "#fff" },
+        notchedOutline: { borderColor: "#fff" },
+      },
+    },
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#ffff",
+          padding: 5,
+          borderRadius: 4,
+          fontSize: 16,
         },
       },
     },
