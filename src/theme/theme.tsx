@@ -4,19 +4,17 @@ const themeOptions: ThemeOptions = {
   palette: {
     mode: "light",
     primary: {
-      main: "#E91D26",
+      main: "#E91D26", //header red
       light: "#FA391F",
-      dark: "#231F20",
+      dark: "#231F20", //footer black
       contrastText: "#ffffff",
     },
     secondary: {
-      main: "#D3AF37",
-      dark: "#A88720",
-      light: "#F5E1A4",
-      contrastText: "#231F20",
+      main: "#D3AF37", //gold
+      contrastText: "#000000",
     },
     background: {
-      default: "#E7E7E7",
+      default: "#E7E7E7", //main background gray
       paper: "#ffffff",
     },
     text: {

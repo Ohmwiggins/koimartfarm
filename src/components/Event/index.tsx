@@ -1,5 +1,6 @@
-import { Box, Container, Divider, Grid, Typography } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import type { KoiEvent } from "../../models/events";
+import { EventDivider, EventTable } from "./Event.styles";
 
 type EventProps = {
   events: KoiEvent[];
@@ -7,29 +8,27 @@ type EventProps = {
 
 function Event(props: EventProps) {
   return (
-    <Container maxWidth="md" sx={{ paddingY: 5 }}>
+    <EventTable maxWidth="md">
       {props.events.map((e) => {
         return (
-          <Box key={e.id} sx={{ paddingY: 1 }}>
+          <Box key={e.id}>
             <Grid container spacing={5}>
               <Grid size={4}>
-                <Typography fontSize={{ xs: 16, sm: 20 }} color="text.primary">
+                <Typography variant="body1" color="text.primary">
                   {e.date}
                 </Typography>
               </Grid>
               <Grid size={8}>
-                <Typography fontSize={{ xs: 16, sm: 20 }} color="text.primary">
+                <Typography variant="body1" color="text.primary">
                   {e.detail}
                 </Typography>
               </Grid>
             </Grid>
-            <Divider
-              sx={{ borderBottomWidth: 1, borderColor: "text.primary" }}
-            />
+            <EventDivider />
           </Box>
         );
       })}
-    </Container>
+    </EventTable>
   );
 }
 
