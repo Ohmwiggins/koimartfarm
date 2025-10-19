@@ -1,4 +1,4 @@
-import { Box, Grid, InputBase, styled, type BoxProps, type GridProps, type InputBaseProps } from "@mui/material";
+import { Box, InputBase, styled, type BoxProps, type InputBaseProps } from "@mui/material";
 
 export const GoogleMapBox = styled(Box)<BoxProps>(() => ({
   width: "100%",

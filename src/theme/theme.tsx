@@ -11,6 +11,7 @@ const themeOptions: ThemeOptions = {
     },
     secondary: {
       main: "#D3AF37", //gold
+      light: "#ffffff",
       contrastText: "#000000",
     },
     background: {

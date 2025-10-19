@@ -1,7 +1,7 @@
 import { Box, Container, IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import HomeIcon from "@mui/icons-material/Home";
-import appLogo from "./../../assets/logo/Logo.png";
+import appLogo from "./../../../assets/logo/Logo.png";
 import { useState } from "react";
 import MenuDrawerMobile from "./MenuDrawerMobile";
 

@@ -1,6 +1,6 @@
 import { AppBar } from "@mui/material";
-import NavbarDesktop from "./NavbarDesktop";
-import NavbarMobile from "./NavbarMobile";
+import NavbarDesktop from "./DesktopView";
+import NavbarMobile from "./MobileView";
 
 function NavBar() {
   return (
