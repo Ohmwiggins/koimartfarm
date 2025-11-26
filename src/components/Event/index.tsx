@@ -1,3 +1,5 @@
+"use client";
+
 import { Box, Grid, Typography } from "@mui/material";
 import type { KoiEvent } from "../../models/events";
 import { EventDivider, EventTable } from "./Event.styles";

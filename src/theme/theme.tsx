@@ -1,4 +1,6 @@
-import { createTheme, type ThemeOptions } from "@mui/material/styles";
+"use client";
+import { alpha, createTheme, type ThemeOptions } from "@mui/material/styles";
+import { ThemeProvider } from "@mui/material/styles";
 
 const themeOptions: ThemeOptions = {
   palette: {
@@ -25,7 +27,8 @@ const themeOptions: ThemeOptions = {
   },
 
   typography: {
-    fontFamily: "Anuphan, Inknut Antiqua, LINESeedSansEN, LINESeedSansTH",
+    fontFamily:
+      "var(--font-anuphan), var(--font-inknut), var(--font-lineseed-en), var(--font-lineseed-th)",
     h1: {
       fontWeight: 700,
       fontSize: 64,
@@ -68,6 +71,14 @@ const themeOptions: ThemeOptions = {
       defaultProps: {
         disableElevation: true,
       },
+      styleOverrides: {
+        contained: {
+          "&.Mui-disabled": {
+            backgroundColor: "#555555",
+            color: "#ffffff",
+          },
+        },
+      },
     },
     MuiCard: {
       styleOverrides: {
@@ -83,18 +94,24 @@ const themeOptions: ThemeOptions = {
         notchedOutline: { borderColor: "#fff" },
       },
     },
-    MuiInputBase: {
+    MuiInput: {
       styleOverrides: {
         root: {
           backgroundColor: "#ffff",
           padding: 5,
           borderRadius: 4,
           fontSize: 16,
+          "&.Mui-error": {
+            backgroundColor: "#F4797E", // light red
+          },
         },
       },
     },
   },
 };
 
-const theme = createTheme(themeOptions);
-export default theme;
+function KoiMartTheme({ children }: { children: React.ReactNode }) {
+  const theme = createTheme(themeOptions);
+  return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
+}
+export default KoiMartTheme;

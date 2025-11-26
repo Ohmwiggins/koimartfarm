@@ -6,7 +6,7 @@ function HeaderText({ title, color }: { title: string; color?: string }) {
       variant="h2"
       sx={{
         color: color ?? "primary.light",
-        fontFamily: "Inknut Antiqua",
+        fontFamily: "var(--font-inknut)",
       }}
     >
       {title}

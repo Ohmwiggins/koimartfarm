@@ -1,13 +1,16 @@
+"use client";
+
 import { Box, Container, Drawer } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import HomeIcon from "@mui/icons-material/Home";
-import appLogo from "./../../../assets/logo/Logo.png";
 import Fade from "@mui/material/Fade";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useEffect } from "react";
 import NavBarIconButton from "./NavBarIconButton";
 import { MenuButtonDrawer } from "./MenuDrawerMobile.styles";
+import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
 
 function MenuDrawerMobile({
   isMenuOpen,
@@ -16,13 +19,19 @@ function MenuDrawerMobile({
   isMenuOpen: boolean;
   setIsMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
+  const pathname = usePathname() ?? "/";
+  const contactHref = `${pathname}#contact`;
+
+  const router = useRouter();
+
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   useEffect(() => {
-    if (!isMobile && isMenuOpen) {
+    if (!isMobile) {
       setIsMenuOpen(false);
     }
-  }, [isMobile, isMenuOpen]);
+  }, [isMobile, isMenuOpen, setIsMenuOpen]);
+
   return (
     <Drawer
       open={isMenuOpen}
@@ -52,24 +61,20 @@ function MenuDrawerMobile({
         <NavBarIconButton
           method={() => {
             setIsMenuOpen(!isMenuOpen);
-            console.log(`isMenuOpen: ${isMenuOpen}`);
           }}
           component={<MenuIcon sx={{ fontSize: 30 }} />}
         />
-        <Box
-          component="img"
-          src={appLogo}
-          sx={{
-            width: "100%",
-            maxWidth: 55,
-            height: "auto",
-            display: { xs: "flex", sm: "none" },
-          }}
+        <Image
+          src={"/img/logo.png"}
+          alt="KoiMartFarm Logo"
+          width={200}
+          height={200}
+          style={{ width: 55, height: "auto", display: "block" }}
         />
         <NavBarIconButton
           method={() => {
             setIsMenuOpen(!isMenuOpen);
-            console.log(`isMenuOpen: ${isMenuOpen}`);
+            router.push("/#home");
           }}
           component={<HomeIcon sx={{ fontSize: 30 }} />}
         />
@@ -78,16 +83,19 @@ function MenuDrawerMobile({
       <Box
         sx={{ display: "flex", flexDirection: "column", marginTop: 7, gap: 3 }}
       >
-        <MenuButtonDrawer onClick={() => console.log("Home")}>
+        <MenuButtonDrawer href="/#home" onClick={() => setIsMenuOpen(false)}>
           Home
         </MenuButtonDrawer>
-        <MenuButtonDrawer onClick={() => console.log("History")}>
+        <MenuButtonDrawer href="/#history" onClick={() => setIsMenuOpen(false)}>
           History
         </MenuButtonDrawer>
-        <MenuButtonDrawer onClick={() => console.log("Blog")}>
+        <MenuButtonDrawer href="/#blog" onClick={() => setIsMenuOpen(false)}>
           Blog
         </MenuButtonDrawer>
-        <MenuButtonDrawer onClick={() => console.log("ContactUs")}>
+        <MenuButtonDrawer
+          href={contactHref}
+          onClick={() => setIsMenuOpen(false)}
+        >
           Contact Us
         </MenuButtonDrawer>
       </Box>

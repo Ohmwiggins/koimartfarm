@@ -1,14 +1,13 @@
-import { Box, InputBase, styled, type BoxProps, type InputBaseProps } from "@mui/material";
+import { Box, Input, InputBase, InputProps, styled, type BoxProps, type InputBaseProps } from "@mui/material";
 
-export const GoogleMapBox = styled(Box)<BoxProps>(() => ({
+export const ContactUsLayout = styled(Box)<BoxProps>(() => ({
   width: "100%",
-  height: "100%",
-  minHeight: 200,
-  borderRadius: 20,
-  overflow: "hidden",
+  height: "90%",
+  minHeight: 250,
+  display: "flex", flexDirection: "column",
 }));
 
-export const TextInputField = styled(InputBase)<InputBaseProps>(({ theme }) => ({
+export const TextInputField = styled(Input)<InputProps>(({ theme }) => ({
   width: "100%",
   paddingLeft: theme.spacing(2),
   marginTop: theme.spacing(0.5),

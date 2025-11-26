@@ -1,9 +1,11 @@
+"use client";
+
 import { Box, Container, IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import HomeIcon from "@mui/icons-material/Home";
-import appLogo from "./../../../assets/logo/Logo.png";
 import { useState } from "react";
 import MenuDrawerMobile from "./MenuDrawerMobile";
+import Image from "next/image";
 
 function NavbarMobile() {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
@@ -12,7 +14,7 @@ function NavbarMobile() {
       <Container
         maxWidth="lg"
         sx={{
-          display: { xs: "flex", sm: "none" },
+          display: "flex",
           flexDirection: "row",
           justifyContent: "space-between",
           alignItems: "center",
@@ -27,22 +29,19 @@ function NavbarMobile() {
           color="inherit"
           onClick={() => {
             setMenuOpen(!menuOpen);
-            console.log(`isMenuOpen: ${menuOpen}`);
           }}
         >
           <MenuIcon />
         </IconButton>
-        <Box
-          component="img"
-          src={appLogo}
-          sx={{
-            width: "100%",
-            maxWidth: 50,
-            height: "auto",
-            display: { xs: "flex", sm: "none" },
-          }}
+        <Image
+          src={"/img/logo.png"}
+          alt="KoiMartFarm Background2"
+          width={200}
+          height={200}
+          style={{ width: 50, height: "auto", display: "block" }}
         />
         <IconButton
+          href="/#home"
           size="large"
           aria-label="account of current user"
           aria-controls="menu-appbar"
