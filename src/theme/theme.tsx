@@ -1,5 +1,5 @@
 "use client";
-import { alpha, createTheme, type ThemeOptions } from "@mui/material/styles";
+import { createTheme, type ThemeOptions } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/material/styles";
 
 const themeOptions: ThemeOptions = {

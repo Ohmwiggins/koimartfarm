@@ -35,8 +35,8 @@ function ContactForm() {
       console.log(json);
       if (!json.ok) throw new Error(json.error || "Failed");
       resetAllFields();
-    } catch (e: any) {
-      console.error(e.message);
+    } catch (e) {
+      console.error(e);
     } finally {
       setLoading(false);
     }

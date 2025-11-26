@@ -1,4 +1,4 @@
-import { Box, Input, InputBase, InputProps, styled, type BoxProps, type InputBaseProps } from "@mui/material";
+import { Box, Input, InputProps, styled, type BoxProps } from "@mui/material";
 
 export const ContactUsLayout = styled(Box)<BoxProps>(() => ({
   width: "100%",

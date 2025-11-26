@@ -1,7 +1,7 @@
 "use client";
 
 import { Box, Container, Grid, Typography } from "@mui/material";
-import { ContactUsLayout, AppIcon, SocialIcon } from "./Footer.styles";
+import { ContactUsLayout, SocialIcon } from "./Footer.styles";
 import HeaderText from "../HeaderText";
 import Image from "next/image";
 import ContactForm from "./ContactForm";

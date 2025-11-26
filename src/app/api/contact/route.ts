@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-
-const nodemailer = require("nodemailer");
+import nodemailer from "nodemailer";
 
 export const runtime = "nodejs";
 
@@ -15,9 +14,6 @@ export async function POST(req: Request) {
             );
         }
 
-        console.log(name)
-        console.log(company)
-        console.log("buggggg")
         const user = process.env.NODEMAILER_GMAIL_USER;
         const appPass = process.env.NODEMAILER_APP_PASSWORD;
 
@@ -52,10 +48,10 @@ export async function POST(req: Request) {
             ok: true,
             messageId: info.messageId
         });
-    } catch (err: any) {
+    } catch (err) {
         console.error("Email send failed:", err);
         return NextResponse.json(
-            { ok: false, error: err?.message ?? "Send failed" },
+            { ok: false, error: err ?? "Send failed" },
             { status: 500 }
         );
     }
