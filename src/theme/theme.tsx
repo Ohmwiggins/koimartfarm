@@ -63,7 +63,7 @@ const themeOptions: ThemeOptions = {
     MuiAppBar: {
       styleOverrides: {
         root: {
-          backgroundColor: "#E91D26",
+          backgroundColor: "#8C8C8C",
         },
       },
     },
