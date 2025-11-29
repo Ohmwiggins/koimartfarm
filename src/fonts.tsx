@@ -18,17 +18,17 @@ export const inknut = Inknut_Antiqua({
 export const lineSeedEN = localFont({
   src: [
     {
-      path: "../public/fonts/LINESeedSans_W_Th.woff2",
+      path: "./assets/fonts/LINESeedSans_W_Th.woff2",
       weight: "100",
       style: "normal",
     },
     {
-      path: "../public/fonts/LINESeedSans_W_Rg.woff2",
+      path: "./assets/fonts/LINESeedSans_W_Rg.woff2",
       weight: "400",
       style: "normal",
     },
     {
-      path: "../public/fonts/LINESeedSans_W_Bd.woff2",
+      path: "./assets/fonts/LINESeedSans_W_Bd.woff2",
       weight: "700",
       style: "normal",
     },
@@ -41,17 +41,17 @@ export const lineSeedEN = localFont({
 export const lineSeedTH = localFont({
   src: [
     {
-      path: "../public/fonts/LINESeedSansTH_W_Th.woff2",
+      path: "./assets/fonts/LINESeedSansTH_W_Th.woff2",
       weight: "100",
       style: "normal",
     },
     {
-      path: "../public/fonts/LINESeedSansTH_W_Rg.woff2",
+      path: "./assets/fonts/LINESeedSansTH_W_Rg.woff2",
       weight: "400",
       style: "normal",
     },
     {
-      path: "../public/fonts/LINESeedSansTH_W_Bd.woff2",
+      path: "./assets/fonts/LINESeedSansTH_W_Bd.woff2",
       weight: "700",
       style: "normal",
     },
