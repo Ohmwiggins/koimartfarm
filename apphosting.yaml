@@ -1,0 +1,48 @@
+runConfig:
+  minInstances: 0
+
+env:
+  - variable: RESEND_API_KEY
+    secret: RESEND_API_KEY
+
+  - variable: NODEMAILER_GOOGLE_CLIENT_ID
+    secret: NODEMAILER_GOOGLE_CLIENT_ID
+
+  - variable: NODEMAILER_GOOGLE_CLIENT_SECRET
+    secret: NODEMAILER_GOOGLE_CLIENT_SECRET
+
+  - variable: NODEMAILER_GOOGLE_REFRESH_TOKEN
+    secret: NODEMAILER_GOOGLE_REFRESH_TOKEN
+
+  - variable: NODEMAILER_APP_PASSWORD
+    secret: NODEMAILER_APP_PASSWORD
+
+  - variable: NODEMAILER_GMAIL_USER
+    secret: NODEMAILER_GMAIL_USER
+
+  - variable: TARGET_EMAIL
+    secret: TARGET_EMAIL
+# Settings for Backend (on Cloud Run).
+# See https://firebase.google.com/docs/app-hosting/configure#cloud-run
+# runConfig:
+#   minInstances: 0
+# maxInstances: 100
+# concurrency: 80
+# cpu: 1
+# memoryMiB: 512
+
+# Environment variables and secrets.
+# env:
+# Configure environment variables.
+# See https://firebase.google.com/docs/app-hosting/configure#user-defined-environment
+# - variable: MESSAGE
+#   value: Hello world!
+#   availability:
+#     - BUILD
+#     - RUNTIME
+
+# Grant access to secrets in Cloud Secret Manager.
+# See https://firebase.google.com/docs/app-hosting/configure#secret-parameters
+# - variable: MY_SECRET
+#   secret: mySecretRef
+
