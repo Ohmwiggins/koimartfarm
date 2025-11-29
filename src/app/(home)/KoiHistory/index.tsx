@@ -7,7 +7,7 @@ function History() {
       <Grid size={{ sm: 12, md: 5 }}>
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           <Image
-            src={"/img/Japan.png"}
+            src={"/img/japan.png"}
             alt="KoiMartFarm Japan"
             width={800}
             height={800}
