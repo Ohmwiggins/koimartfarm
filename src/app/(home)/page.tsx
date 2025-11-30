@@ -9,7 +9,6 @@ import KoiHighlight from "./KoiHighlight";
 import History from "./KoiHistory";
 import BlogHighlight from "./BlogHighlight";
 import KoiVariety from "./KoiVariety";
-// import FacebookPost from "./FacebookPost";
 import Image from "next/image";
 
 function Home() {
@@ -27,7 +26,13 @@ function Home() {
           alt="KoiMartFarm Background"
           width={3000}
           height={2000}
-          style={{ width: "100%", height: "auto", display: "block" }}
+          style={{
+            width: "100%",
+            height: "100vh",
+            display: "block",
+            objectFit: "cover",
+            objectPosition: "center",
+          }}
         />
         <Box
           sx={{

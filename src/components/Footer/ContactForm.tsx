@@ -49,10 +49,8 @@ function ContactForm() {
     setDetailsErr(!details);
 
     if (nameErr || companyErr || topicErr || detailsErr) {
-      console.log("aeseg");
       return false;
     }
-    console.log("dddddd");
     return true;
   };
 
