@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Container, Grow, Typography } from "@mui/material";
 import Event from "../../components/Event/index";
 import eventDetails from "../../data/events.json";
 import HeaderText from "../../components/HeaderText";
@@ -10,8 +10,34 @@ import History from "./KoiHistory";
 import BlogHighlight from "./BlogHighlight";
 import KoiVariety from "./KoiVariety";
 import Image from "next/image";
+import { useInView } from "react-intersection-observer";
 
 function Home() {
+  const { ref: eventRef, inView: eventInView } = useInView({
+    triggerOnce: true,
+    threshold: 0.2,
+  });
+
+  const { ref: highlightRef, inView: highlightInView } = useInView({
+    triggerOnce: true,
+    threshold: 0.2,
+  });
+
+  const { ref: historyRef, inView: historyInView } = useInView({
+    triggerOnce: true,
+    threshold: 0.2,
+  });
+
+  const { ref: blogRef, inView: blogInView } = useInView({
+    triggerOnce: true,
+    threshold: 0.2,
+  });
+
+  const { ref: varietyRef, inView: varietyInView } = useInView({
+    triggerOnce: true,
+    threshold: 0.2,
+  });
+
   return (
     <Box
       sx={{
@@ -21,6 +47,7 @@ function Home() {
     >
       <Box sx={{ position: "relative" }}>
         <Image
+          priority
           id="home"
           src={"/img/bg1.png"}
           alt="KoiMartFarm Background"
@@ -34,6 +61,7 @@ function Home() {
             objectPosition: "center",
           }}
         />
+
         <Box
           sx={{
             position: "absolute",
@@ -45,30 +73,45 @@ function Home() {
             width: "100%",
           }}
         >
-          <Typography
-            fontFamily="var(--font-inknut)"
-            sx={{ fontSize: { xs: 32, sm: 50, md: 64 } }}
-          >
-            KOI MART FARM
-          </Typography>
-          <Typography variant="body1" sx={{ color: "primary.contrastText" }}>
-            ปลาคาร์ฟแฟนซีจากฟาร์มญี่ปุ่นชั้นนำ
-          </Typography>
+          <Grow in={true} timeout={1500}>
+            <Box>
+              <Typography
+                fontFamily="var(--font-inknut)"
+                sx={{ fontSize: { xs: 32, sm: 50, md: 64 } }}
+              >
+                KOI MART FARM
+              </Typography>
+              <Typography
+                variant="body1"
+                sx={{ color: "primary.contrastText" }}
+              >
+                ปลาคาร์ฟแฟนซีจากฟาร์มญี่ปุ่นชั้นนำ
+              </Typography>
+            </Box>
+          </Grow>
         </Box>
       </Box>
 
       <Container
+        ref={eventRef}
         sx={{
           paddingY: 10,
           display: "flex",
           flexDirection: "column",
         }}
       >
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
-          <HeaderText title="Events" />
-        </Box>
-        <Event events={eventDetails.slice(0, 5)} />
-        <LinkedOutlineButton text="ดูทั้งหมด" path="/events" />
+        <Grow in={eventInView} timeout={1500}>
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <HeaderText title="Events" />
+          </Box>
+        </Grow>
+
+        <Grow in={eventInView} timeout={2500}>
+          <Box sx={{ display: "flex", flexDirection: "column" }}>
+            <Event events={eventDetails.slice(0, 5)} />
+            <LinkedOutlineButton text="ดูทั้งหมด" path="/events" />
+          </Box>
+        </Grow>
       </Container>
 
       <Box
@@ -78,24 +121,38 @@ function Home() {
           flexDirection: "column",
           justifyContent: "center",
         }}
+        ref={highlightRef}
       >
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
-          <HeaderText title="Highlight KOIs" />
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            paddingY: 5,
-            overflowX: "hidden",
-          }}
-        >
-          <KoiHighlight />
-        </Box>
-        <LinkedOutlineButton text="ดูทั้งหมด" path="/highlights" />
+        <Grow in={highlightInView} timeout={1500}>
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <HeaderText title="Highlight KOIs" />
+          </Box>
+        </Grow>
+        <Grow in={highlightInView} timeout={2500}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                paddingY: 5,
+                overflowX: "hidden",
+              }}
+            >
+              <KoiHighlight />
+            </Box>
+            <LinkedOutlineButton text="ดูทั้งหมด" path="/highlights" />
+          </Box>
+        </Grow>
       </Box>
 
       <Container
+        ref={historyRef}
         id="history"
         maxWidth="xl"
         sx={{
@@ -104,15 +161,19 @@ function Home() {
           flexDirection: "column",
         }}
       >
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
-          <HeaderText title="History" />
-        </Box>
+        <Grow in={historyInView} timeout={1500}>
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <HeaderText title="History" />
+          </Box>
+        </Grow>
+
         <Box sx={{ paddingY: 5 }}>
           <History />
         </Box>
       </Container>
 
       <Container
+        ref={blogRef}
         id="blog"
         maxWidth="xl"
         sx={{
@@ -121,9 +182,12 @@ function Home() {
           flexDirection: "column",
         }}
       >
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
-          <HeaderText title="Blog" />
-        </Box>
+        <Grow in={blogInView} timeout={1500}>
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <HeaderText title="Blog" />
+          </Box>
+        </Grow>
+
         <Box sx={{ paddingY: 5 }}>
           <BlogHighlight />
         </Box>
@@ -134,10 +198,17 @@ function Home() {
         alt="KoiMartFarm Background2"
         width={3000}
         height={800}
-        style={{ width: "100%", height: "auto", display: "block" }}
+        style={{
+          width: "100%",
+          height: "50vh",
+          display: "block",
+          objectFit: "cover",
+          objectPosition: "center",
+        }}
       />
 
       <Container
+        ref={varietyRef}
         maxWidth="xl"
         sx={{
           paddingY: 5,
@@ -145,9 +216,12 @@ function Home() {
           flexDirection: "column",
         }}
       >
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
-          <HeaderText title="Koi Varieties" />
-        </Box>
+        <Grow in={varietyInView} timeout={1500}>
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <HeaderText title="Koi Varieties" />
+          </Box>
+        </Grow>
+
         <Box sx={{ paddingY: 5 }}>
           <KoiVariety />
         </Box>
