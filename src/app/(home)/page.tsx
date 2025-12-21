@@ -155,8 +155,8 @@ function Home() {
         </Grow>
       </Box>
 
+      <Box ref={historyRef}></Box>
       <Container
-        ref={historyRef}
         id="history"
         maxWidth="xl"
         sx={{
@@ -165,7 +165,7 @@ function Home() {
           flexDirection: "column",
         }}
       >
-        <Grow in={historyInView} timeout={1500}>
+        <Grow in={historyInView} timeout={1000}>
           <Box sx={{ display: "flex", justifyContent: "center" }}>
             <HeaderText title="History" />
           </Box>
