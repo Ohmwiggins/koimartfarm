@@ -39,7 +39,15 @@ const themeOptions: ThemeOptions = {
     },
     h3: {
       fontWeight: 600,
+      fontSize: 30,
+    },
+    h4: {
+      fontWeight: 600,
       fontSize: 24,
+    },
+    h5: {
+      fontWeight: 600,
+      fontSize: 20,
     },
     body1: {
       fontSize: 20,
@@ -48,6 +56,10 @@ const themeOptions: ThemeOptions = {
     body2: {
       fontSize: 16,
       lineHeight: 1.6,
+    },
+    subtitle1: {
+      fontSize: 16,
+      fontWeight: 600,
     },
     button: {
       fontWeight: 600,

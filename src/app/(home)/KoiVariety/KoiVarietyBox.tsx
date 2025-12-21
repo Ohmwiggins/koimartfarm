@@ -25,7 +25,7 @@ function KoiVarietyBox({
         }}
       />
       <Box paddingLeft={{ xs: 6, md: 10 }}>
-        <Typography variant="h3" color="secondary.main">
+        <Typography variant="h4" color="secondary.main">
           {type}
         </Typography>
         <Typography variant="body2" color="text.primary" paddingTop={2}>

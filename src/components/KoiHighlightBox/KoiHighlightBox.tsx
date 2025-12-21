@@ -9,7 +9,7 @@ function KoiHighlightBox({ img, desc }: { img: string; desc: string }) {
         alt="KoiMartFarm Background2"
         width={300}
         height={500}
-        style={{ width: 150, height: "auto", display: "block" }}
+        style={{ width: "100%", height: "auto", display: "block" }}
       />
 
       <Typography

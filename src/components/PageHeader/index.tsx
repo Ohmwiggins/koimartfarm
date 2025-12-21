@@ -2,8 +2,8 @@
 
 import { Box, IconButton } from "@mui/material";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import HeaderText from "../../components/HeaderText";
 import { useRouter } from "next/navigation";
+import PageHeaderText from "../PageHeaderText";
 
 function PageHeader({ text }: { text: string }) {
   const router = useRouter();
@@ -26,16 +26,14 @@ function PageHeader({ text }: { text: string }) {
       }}
     >
       <IconButton
-        size="large"
-        aria-label="account of current user"
-        aria-controls="menu-appbar"
-        aria-haspopup="true"
+        size="medium"
         color="inherit"
         onClick={() => handleBack()}
+        sx={{ mr: 2 }}
       >
-        <ArrowBackIosNewIcon sx={{ fontSize: 50 }} />
+        <ArrowBackIosNewIcon sx={{ fontSize: 40 }} />
       </IconButton>
-      <HeaderText title={text} />
+      <PageHeaderText title={text} />
     </Box>
   );
 }

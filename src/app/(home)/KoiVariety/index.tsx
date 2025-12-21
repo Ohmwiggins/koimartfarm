@@ -27,10 +27,10 @@ function KoiVariety() {
     triggerOnce: true,
     threshold: 0.2,
   });
-  const { ref: koi7Ref, inView: koi7InView } = useInView({
-    triggerOnce: true,
-    threshold: 0.2,
-  });
+  // const { ref: koi7Ref, inView: koi7InView } = useInView({
+  //   triggerOnce: true,
+  //   threshold: 0.2,
+  // });
 
   return (
     <Box
@@ -130,7 +130,7 @@ function KoiVariety() {
           </Box>
         </Grid>
       </Grid>
-      <Box ref={koi7Ref} sx={{ paddingY: 5 }}>
+      {/* <Box ref={koi7Ref} sx={{ paddingY: 5 }}>
         <Grow in={koi7InView} timeout={2000}>
           <Box>
             <KoiVarietyBox
@@ -140,7 +140,7 @@ function KoiVariety() {
             />
           </Box>
         </Grow>
-      </Box>
+      </Box> */}
     </Box>
   );
 }

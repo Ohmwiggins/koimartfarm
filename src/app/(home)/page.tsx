@@ -49,7 +49,7 @@ function Home() {
         <Image
           priority
           id="home"
-          src={"/img/bg1.png"}
+          src={"/img/bg0.png"}
           alt="KoiMartFarm Background"
           width={3000}
           height={2000}
@@ -57,8 +57,9 @@ function Home() {
             width: "100%",
             height: "100vh",
             display: "block",
-            objectFit: "cover",
+            objectFit: "contain",
             objectPosition: "center",
+            backgroundColor: "#030916",
           }}
         />
 
@@ -109,7 +110,7 @@ function Home() {
         <Grow in={eventInView} timeout={2500}>
           <Box sx={{ display: "flex", flexDirection: "column" }}>
             <Event events={eventDetails.slice(0, 5)} />
-            <LinkedOutlineButton text="ดูทั้งหมด" path="/events" />
+            {/* <LinkedOutlineButton text="ดูทั้งหมด" path="/events" /> */}
           </Box>
         </Grow>
       </Container>
@@ -125,7 +126,7 @@ function Home() {
       >
         <Grow in={highlightInView} timeout={1500}>
           <Box sx={{ display: "flex", justifyContent: "center" }}>
-            <HeaderText title="Highlight KOIs" />
+            <HeaderText title="Koi Appreciation" />
           </Box>
         </Grow>
         <Grow in={highlightInView} timeout={2500}>
@@ -146,7 +147,10 @@ function Home() {
             >
               <KoiHighlight />
             </Box>
-            <LinkedOutlineButton text="ดูทั้งหมด" path="/highlights" />
+            <LinkedOutlineButton
+              text="ศึกษาเพิ่มเติม"
+              path="/blog/koi-appreciation"
+            />
           </Box>
         </Grow>
       </Box>

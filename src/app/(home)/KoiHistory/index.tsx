@@ -1,4 +1,4 @@
-import { Box, Grid, Grow, Typography } from "@mui/material";
+import { Box, Fade, Grid, Grow, Typography } from "@mui/material";
 import Image from "next/image";
 import { useInView } from "react-intersection-observer";
 
@@ -8,127 +8,126 @@ function History() {
     threshold: 0.2,
   });
 
-  const { ref: text1Ref, inView: text1InView } = useInView({
+  const { ref: textRef, inView: textInView } = useInView({
     triggerOnce: true,
     threshold: 0.2,
   });
 
-  const { ref: text2Ref, inView: text2InView } = useInView({
-    triggerOnce: true,
-    threshold: 0.2,
-  });
-
-  const { ref: text3Ref, inView: text3InView } = useInView({
-    triggerOnce: true,
-    threshold: 0.2,
-  });
-
-  const { ref: text4Ref, inView: text4InView } = useInView({
+  const { ref: travelImgRef, inView: travelImgInView } = useInView({
     triggerOnce: true,
     threshold: 0.2,
   });
 
   return (
-    <Grid container>
-      <Grid ref={imageRef} size={{ sm: 12, md: 5 }}>
-        <Grow in={imageInView} timeout={2000}>
-          <Box sx={{ display: "flex", justifyContent: "center" }}>
-            <Image
-              src={"/img/japan.png"}
-              alt="KoiMartFarm Japan"
-              width={800}
-              height={800}
-              style={{ width: "60%", height: "auto", display: "block" }}
-            />
-          </Box>
-        </Grow>
-      </Grid>
-      <Grid size={{ sm: 12, md: 7 }}>
-        <Grid container spacing={2}>
-          <Grid ref={text1Ref} size={12}>
-            <Grow in={text1InView} timeout={2000}>
+    <Box>
+      <Grid container sx={{ width: "100%" }}>
+        <Grid ref={imageRef} size={{ sm: 12, md: 5 }}>
+          <Grow in={imageInView} timeout={2000}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100%",
+              }}
+            >
+              <Image
+                src={"/img/history/ceo.png"}
+                alt="KoiMartFarm Japan"
+                width={800}
+                height={800}
+                style={{ width: "60%", height: "auto", display: "block" }}
+              />
+            </Box>
+          </Grow>
+        </Grid>
+        <Grid ref={textRef} size={{ sm: 12, md: 7 }}>
+          <Grow in={textInView} timeout={2000}>
+            <Box
+              sx={{ display: "flex", flexDirection: "column", paddingTop: 2 }}
+            >
+              <Typography variant="body1" color="text.primary">
+                เริ่มจากความชื่นชอบและรักที่จะเลี้ยง
+                <br />
+                ปลาคาร์ฟมาเป็นเวลายาวนานของคุณพ่อ สุชาติ ศุภทนต์
+              </Typography>
               <Typography
                 variant="body2"
                 color="text.primary"
-                sx={{ paddingTop: { sm: 10, md: 0 } }}
+                sx={{
+                  lineHeight: 1.5,
+                }}
               >
-                Koi Mart Farm เกิดจากความหลงใหลในความงามของปลาโค่ย
-                เราเชื่อว่าปลาโค่ยไม่ใช่เพียงสัตว์เลี้ยง
-                แต่คือสัญลักษณ์แห่งความสง่างาม ความโชคดี และความพากเพียร
-                เราจึงตั้งใจสร้างพื้นที่ที่รวมปลาโค่ยคุณภาพสูง เพื่อมอบความสุข
-                และคุณค่าที่มากกว่าการเลี้ยงปลา
+                <br />
+                ตั้งแต่ผมเด็ก ๆ จนถึงผมเป็นวัยรุ่น
+                <br />
+                ผมเองได้รับผิดชอบการดูแลปลาคาร์ฟด้วยความรู้สึกสนุกและตื่นเต้นในช่วงเวลานั้น
+                <br />
+                ผมเองก็ได้เห็นหลายสิ่งหลายอย่างในการเปลี่ยนแปลงของพัฒนาการในด้านต่าง
+                <br />
+                ๆ ของปลาคาร์ฟ การเติบโตที่มีสีสันสดใส ลวดลายที่สวยงาม
+                <br />
+                และดูแปลกตาของแต่ละสายพันธุ์
+                <br />
+                <br />
+                รูปร่างโครงสร้างที่ใหญ่ของตัวปลา
+                อีกทั้งเรื่องราวความเป็นมาของปลาคาร์ฟที่มีมายาวนานนับพันปี
+                <br />
+                ความหมายของการเลี้ยงปลาคาร์ฟที่ดี มีเอกลักษณ์ และอุดมสมบูรณ์
+                <br />
+                ด้วยเสน่ห์เหล่านี้
+                จึงเป็นแรงบันดาลใจที่อยากถ่ายทอดความรู้สึกและความหมายดี ๆ
+                ในการเลี้ยงปลาคาร์ฟ
+                ซึ่งถือว่าเป็นงานอดิเรกอย่างหนึ่งที่ทุกคนเข้าถึงได้ เด็ก
+                หนุ่มสาว วัยทำงาน คนเกษียณ ผู้หญิงหรือผู้ชาย
+                ที่สามารถเข้าถึงความสุขที่อิ่มเอมได้ทุกช่วงวัยไปพร้อม ๆ
+                กันได้อย่างลงตัว
+                <br />
+                และเป็นศูนย์กลางของความสุขในครอบครัวได้เป็นอย่างดี
+                <br />
+                ความรู้สึกดี ๆ เหล่านี้เป็นที่มาของความสุข ที่ผมสามารถแชร์ถึงทุก
+                ๆ คนได้ ผ่านทาง โค่ยมาร์ฟาร์ม
+                <br />
+                <br />
               </Typography>
-            </Grow>
-          </Grid>
-          <Grid size={12} paddingY={5}>
-            <Grid container spacing={8}>
-              <Grid ref={text2Ref} size={{ sm: 12, md: 4 }}>
-                <Grow in={text2InView} timeout={2000}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                    }}
-                  >
-                    <Typography variant="h3" color="secondary.main">
-                      จากประเทศญี่ปุ่นสู่ประเทศไทย
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="text.primary"
-                      paddingTop={2}
-                    >
-                      เมื่อปลาโค่ยมาถึงประเทศไทย เราดูแลด้วยมาตรฐานสูงสุด
-                      ทั้งระบบน้ำที่สะอาด การกักกัน (quarantine)
-                      และการให้อาหารที่เหมาะสมเพื่อให้ปลาทุกตัวแข็งแรงและพร้อมไปสร้างความสุขในบ่อของคุณ
-                    </Typography>
-                  </Box>
-                </Grow>
-              </Grid>
-              <Grid ref={text3Ref} size={{ sm: 12, md: 4 }}>
-                <Grow in={text3InView} timeout={2000}>
-                  <Box>
-                    <Typography variant="h3" color="secondary.main">
-                      ความภาคภูมิใจของเรา
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="text.primary"
-                      paddingTop={2}
-                    >
-                      สิ่งที่ทำให้เราภูมิใจที่สุดคือ
-                      การได้เห็นลูกค้าของเราไม่เพียงแค่มีปลาโค่ยสวยงามในครอบครอง
-                      แต่ยังประสบ ความสำเร็จในเวทีประกวดระดับประเทศอีกด้วย
-                      ปลาโค่ยจาก Koi Mart Farm
-                      จึงเป็นเครื่องพิสูจน์ถึงคุณภาพมาตรฐาน
-                      และความตั้งใจที่เรามอบให้ในทุกชีวิต
-                    </Typography>
-                  </Box>
-                </Grow>
-              </Grid>
-              <Grid ref={text4Ref} size={{ sm: 12, md: 4 }}>
-                <Grow in={text4InView} timeout={2000}>
-                  <Box>
-                    <Typography variant="h3" color="secondary.main">
-                      การคัดสรรค์ปลาที่ดีที่สุดจากประเทศญี่ปุ่น
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="text.primary"
-                      paddingTop={2}
-                    >
-                      เมื่อปลาโค่ยมาถึงประเทศไทย เราดูแลด้วยมาตรฐานสูงสุด
-                      ทั้งระบบน้ำที่สะอาด การกักกัน (quarantine)
-                      และการให้อาหารที่เหมาะสมเพื่อให้ปลาทุกตัวแข็งแรงและพร้อมไปสร้างความสุขในบ่อของคุณ
-                    </Typography>
-                  </Box>
-                </Grow>
-              </Grid>
-            </Grid>
-          </Grid>
+              <Box>
+                <Typography variant="h5">บวรศักดิ์ ศุภทนต์</Typography>
+                <Typography variant="body1">CEO KOIMART GROUP</Typography>
+              </Box>
+            </Box>
+          </Grow>
         </Grid>
       </Grid>
-    </Grid>
+      <Grid
+        container
+        ref={travelImgRef}
+        spacing={1}
+        sx={{ marginTop: 10, mx: 2 }}
+      >
+        {[...Array(16)].map((_, index) => (
+          <Grid
+            key={index}
+            size={{ xs: 6, sm: 4, md: 3 }}
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Fade in={travelImgInView} timeout={index * 300}>
+              <Image
+                src={`/img/history/lists/list${index + 1}.png`}
+                alt="KoiMartFarm Japan"
+                width={800}
+                height={800}
+                style={{ width: "100%", height: "auto", display: "block" }}
+              />
+            </Fade>
+          </Grid>
+        ))}
+      </Grid>
+    </Box>
   );
 }
 

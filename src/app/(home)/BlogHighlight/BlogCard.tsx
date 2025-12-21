@@ -10,31 +10,31 @@ function BlogCard({
   img,
   desc,
 }: {
-  blogId: number;
+  blogId: string;
   title: string;
   img: string;
   desc: string;
 }) {
   return (
-    <Card sx={{ display: "flex", flexDirection: "column", maxWidth: 350 }}>
+    <Card sx={{ display: "flex", flexDirection: "column", width: 330 }}>
       <Image
-        src={`/img/blogs/${img}`}
+        src={img}
         alt={title}
         width={800}
         height={1000}
         style={{
           width: "auto",
-          height: 150,
+          height: 200,
           objectFit: "cover",
           display: "block",
         }}
       />
       <CardContent>
-        <Typography variant="body2" noWrap sx={{ fontWeight: "bold" }}>
-          {title}
-        </Typography>
         <Typography variant="body2" noWrap>
           {desc}
+        </Typography>
+        <Typography variant="body2" noWrap sx={{ fontWeight: "bold" }}>
+          {title}
         </Typography>
       </CardContent>
       <Box sx={{ padding: 1 }}>

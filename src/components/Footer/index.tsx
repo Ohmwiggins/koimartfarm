@@ -66,7 +66,7 @@ function Footer() {
                 style={{ width: 250, height: "auto", display: "block" }}
               />
               <Typography
-                variant="h3"
+                variant="h4"
                 sx={{
                   color: "primary.contrastText",
                   paddingY: 2,

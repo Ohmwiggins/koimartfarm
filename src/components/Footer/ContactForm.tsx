@@ -65,7 +65,7 @@ function ContactForm() {
     <Box sx={{ height: "100%" }}>
       <ContactUsLayout>
         <Typography
-          variant="h3"
+          variant="h4"
           sx={{ color: "primary.contrastText", marginTop: { xs: 3, md: 0 } }}
         >
           ส่งข้อความหาเรา
