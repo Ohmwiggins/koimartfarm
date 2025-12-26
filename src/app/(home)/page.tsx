@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Container, Grow, Typography } from "@mui/material";
+import { Box, Container, Fade, Grow, Typography } from "@mui/material";
 import Event from "../../components/Event/index";
 import eventDetails from "../../data/events.json";
 import HeaderText from "../../components/HeaderText";
@@ -11,6 +11,7 @@ import BlogHighlight from "./BlogHighlight";
 import KoiVariety from "./KoiVariety";
 import Image from "next/image";
 import { useInView } from "react-intersection-observer";
+import { useEffect, useState } from "react";
 
 function Home() {
   const { ref: eventRef, inView: eventInView } = useInView({
@@ -38,6 +39,17 @@ function Home() {
     threshold: 0.2,
   });
 
+  //NOTE: for bg fading
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const totalImages = 9;
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % totalImages);
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <Box
       sx={{
@@ -45,33 +57,54 @@ function Home() {
         maxWidth: "100vw",
       }}
     >
-      <Box sx={{ position: "relative" }}>
-        <Image
-          priority
-          id="home"
-          src={"/img/bg0.png"}
-          alt="KoiMartFarm Background"
-          width={3000}
-          height={2000}
-          style={{
-            width: "100%",
-            height: "100vh",
-            display: "block",
-            objectFit: "contain",
-            objectPosition: "center",
-            backgroundColor: "#030916",
-          }}
-        />
+      <Box
+        sx={{
+          position: "relative",
+          height: "100vh",
+          overflow: "hidden",
+          backgroundColor: "#030916",
+        }}
+      >
+        {Array.from({ length: totalImages }).map((_, i) => (
+          <Fade key={i} in={currentIndex === i} timeout={1500}>
+            <Box
+              sx={{
+                position: "absolute",
+                top: { xs: "-40%", sm: "-63%", md: "-70%", lg: "-75%" },
+                letf: "50%",
+                left: 0,
+                width: "100%",
+                height: "150%",
+                zIndex: 0,
+              }}
+            >
+              <Image
+                priority={i === 0}
+                src={`/img/koi-bg/${i + 1}.png`}
+                alt={`KoiMartFarm Background ${i + 1}`}
+                width={3000}
+                height={2000}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "contain",
+                  objectPosition: "center",
+                }}
+              />
+            </Box>
+          </Fade>
+        ))}
 
         <Box
           sx={{
             position: "absolute",
-            top: "70%",
+            top: "85%",
             left: "50%",
             transform: "translate(-50%, -50%)",
             color: "secondary.main",
             textAlign: "center",
             width: "100%",
+            zIndex: 2,
           }}
         >
           <Grow in={true} timeout={1500}>
