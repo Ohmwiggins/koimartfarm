@@ -59,52 +59,54 @@ function Home() {
     >
       <Box
         sx={{
-          position: "relative",
+          display: "flex",
+          flexDirection: "column",
           height: "100vh",
           overflow: "hidden",
           backgroundColor: "#030916",
         }}
       >
-        {Array.from({ length: totalImages }).map((_, i) => (
-          <Fade key={i} in={currentIndex === i} timeout={1500}>
-            <Box
-              sx={{
-                position: "absolute",
-                top: { xs: "-40%", sm: "-63%", md: "-70%", lg: "-75%" },
-                letf: "50%",
-                left: 0,
-                width: "100%",
-                height: "150%",
-                zIndex: 0,
-              }}
-            >
-              <Image
-                priority={i === 0}
-                src={`/img/koi-bg/${i + 1}.png`}
-                alt={`KoiMartFarm Background ${i + 1}`}
-                width={3000}
-                height={2000}
-                style={{
+        <Box
+          sx={{
+            height: { xs: "70%", sm: "80%" },
+            position: "relative",
+          }}
+        >
+          {Array.from({ length: totalImages }).map((_, i) => (
+            <Fade key={i} in={currentIndex === i} timeout={1500}>
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
                   width: "100%",
                   height: "100%",
-                  objectFit: "contain",
-                  objectPosition: "center",
                 }}
-              />
-            </Box>
-          </Fade>
-        ))}
+              >
+                <Image
+                  priority={i === 0}
+                  src={`/img/koi-bg/${i + 1}.png`}
+                  alt={`KoiMartFarm Background ${i + 1}`}
+                  width={3000}
+                  height={2000}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    objectPosition: "bottom center",
+                  }}
+                />
+              </Box>
+            </Fade>
+          ))}
+        </Box>
 
         <Box
           sx={{
-            position: "absolute",
-            top: "85%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
             color: "secondary.main",
             textAlign: "center",
             width: "100%",
-            zIndex: 2,
+            zIndex: 1,
           }}
         >
           <Grow in={true} timeout={1500}>
