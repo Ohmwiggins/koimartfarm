@@ -101,6 +101,7 @@ function History() {
       </Grid>
       <Grid
         container
+        columns={{ xs: 12, sm: 12, md: 10 }}
         ref={travelImgRef}
         spacing={1}
         sx={{ marginTop: 10, mx: 2 }}
@@ -108,7 +109,7 @@ function History() {
         {[...Array(16)].map((_, index) => (
           <Grid
             key={index}
-            size={{ xs: 6, sm: 4, md: 3 }}
+            size={{ xs: 6, sm: 4, md: 2 }}
             sx={{
               display: "flex",
               justifyContent: "center",

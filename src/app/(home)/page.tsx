@@ -193,7 +193,7 @@ function Home() {
       <Box ref={historyRef}></Box>
       <Container
         id="history"
-        maxWidth="xl"
+        maxWidth="lg"
         sx={{
           paddingY: 10,
           display: "flex",
