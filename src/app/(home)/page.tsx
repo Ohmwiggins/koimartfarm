@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Container, Grow, Typography } from "@mui/material";
+import { Box, Container, Grow } from "@mui/material";
 import Event from "../../components/Event/index";
 import eventDetails from "../../data/events.json";
 import HeaderText from "../../components/HeaderText";

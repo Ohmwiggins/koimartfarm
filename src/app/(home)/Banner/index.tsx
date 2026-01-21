@@ -4,7 +4,7 @@ import Image from "next/image";
 export default function Banner() {
   const scrollAnimation = keyframes`
     0% { transform: translateX(0); }
-    100% { transform: translate3d(-33.33%, 0, 0); }
+    100% { transform: translate3d(-50%, 0, 0); }
   `;
 
   return (
@@ -14,7 +14,7 @@ export default function Banner() {
         flexDirection: "column",
         height: "100vh",
         overflow: "hidden",
-        backgroundColor: "#030916",
+        backgroundColor: "background.banner",
       }}
     >
       <Box
@@ -30,27 +30,26 @@ export default function Banner() {
           width: "max-content",
           willChange: "transform",
           backfaceVisibility: "hidden",
-          animation: `${scrollAnimation} 300s linear infinite`,
-          backgroundColor: "#030916",
+          animation: `${scrollAnimation} 100s linear infinite`,
+          backgroundColor: "background.banner",
 
           perspective: 1000,
           transformStyle: "preserve-3d",
         }}
       >
-        {Array.from({ length: 10 }).map((_, i) => {
-          const imageNumber = (i % 9) + 1;
+        {Array.from({ length: 2 }).map((_, i) => {
           return (
             <Image
               key={i}
               src={`/img/banner.png`}
-              alt={`KoiMartFarm Background ${imageNumber}`}
-              width={12000}
-              height={2000}
+              alt={`KoiMartFarm Background ${i}`}
+              width={1200}
+              height={200}
               style={{
                 width: "auto",
                 height: "90%",
               }}
-              priority={i < 9}
+              priority={true}
             />
           );
         })}

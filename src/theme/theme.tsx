@@ -2,6 +2,12 @@
 import { createTheme, type ThemeOptions } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/material/styles";
 
+declare module "@mui/material/styles" {
+  interface TypeBackground {
+    banner: string;
+  }
+}
+
 const themeOptions: ThemeOptions = {
   palette: {
     mode: "light",
@@ -19,6 +25,7 @@ const themeOptions: ThemeOptions = {
     background: {
       default: "#E7E7E7", //main background gray
       paper: "#ffffff",
+      banner: "#030916",
     },
     text: {
       primary: "#000000",
