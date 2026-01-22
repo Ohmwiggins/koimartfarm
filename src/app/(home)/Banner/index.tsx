@@ -12,14 +12,15 @@ export default function Banner() {
       sx={{
         display: "flex",
         flexDirection: "column",
-        height: "100vh",
+        height: "80vh",
         overflow: "hidden",
-        backgroundColor: "background.banner",
+        backgroundColor: "background.default",
+        paddingTop: "80px",
       }}
     >
       <Box
         sx={{
-          height: { xs: "70%", sm: "80%" },
+          height: { xs: "70%", sm: "75%" },
           display: "flex",
           flexDirection: "row",
           alignItems: "center",
@@ -31,7 +32,7 @@ export default function Banner() {
           willChange: "transform",
           backfaceVisibility: "hidden",
           animation: `${scrollAnimation} 100s linear infinite`,
-          backgroundColor: "background.banner",
+          backgroundColor: "background.default",
 
           perspective: 1000,
           transformStyle: "preserve-3d",
@@ -43,8 +44,8 @@ export default function Banner() {
               key={i}
               src={`/img/banner.png`}
               alt={`KoiMartFarm Background ${i}`}
-              width={1200}
-              height={200}
+              width={6000}
+              height={1000}
               style={{
                 width: "auto",
                 height: "90%",
@@ -71,7 +72,7 @@ export default function Banner() {
             >
               KOI MART FARM
             </Typography>
-            <Typography variant="body1" sx={{ color: "primary.contrastText" }}>
+            <Typography variant="body1" sx={{ color: "text.primary" }}>
               ปลาคาร์ฟแฟนซีจากฟาร์มญี่ปุ่นชั้นนำ
             </Typography>
           </Box>

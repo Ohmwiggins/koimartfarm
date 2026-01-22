@@ -1,7 +1,7 @@
 "use client";
 
 import { Box, Container, Grow } from "@mui/material";
-import Event from "../../components/Event/index";
+import Event from "./Event/index";
 import eventDetails from "../../data/events.json";
 import HeaderText from "../../components/HeaderText";
 import LinkedOutlineButton from "../../components/LinkedOutlineButton";
@@ -18,6 +18,11 @@ function Home() {
     triggerOnce: true,
     threshold: 0.2,
   });
+
+  // const { ref: eventHighlightRef, inView: eventHighlightInView } = useInView({
+  //   triggerOnce: true,
+  //   threshold: 0.2,
+  // });
 
   const { ref: highlightRef, inView: highlightInView } = useInView({
     triggerOnce: true,
@@ -48,7 +53,7 @@ function Home() {
     >
       <Banner />
 
-      <Container
+      <Box
         ref={eventRef}
         sx={{
           paddingY: 10,
@@ -68,7 +73,7 @@ function Home() {
             {/* <LinkedOutlineButton text="ดูทั้งหมด" path="/events" /> */}
           </Box>
         </Grow>
-      </Container>
+      </Box>
 
       <Box
         sx={{
