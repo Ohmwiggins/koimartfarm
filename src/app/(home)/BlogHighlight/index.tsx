@@ -81,8 +81,20 @@ function BlogHighlight() {
           <Box sx={{ display: "flex", justifyContent: "center" }}>
             <BlogCard
               blogId={"koi-hunting-tips-1"}
-              title={"Koi hunting tips 1 "}
+              title={"Koi hunting tips 1"}
               img={"/img/blogs/koi-hunting-tips-1/blog6-banner.png"}
+              desc={"บทความ"}
+            />
+          </Box>
+        </Grow>
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3, xl: 3 }}>
+        <Grow in={blogHilightInView} timeout={1000}>
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <BlogCard
+              blogId={"koi-hunting-tips-2"}
+              title={"Koi hunting tips 2"}
+              img={"/img/blogs/koi-hunting-tips-2/blog7-banner.png"}
               desc={"บทความ"}
             />
           </Box>
