@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import Image from "next/image";
 
 function KoiVarietyBox({
@@ -12,26 +12,32 @@ function KoiVarietyBox({
 }) {
   return (
     <Box sx={{ display: "flex", flexDirection: "row" }}>
-      <Image
-        src={img}
-        alt={"KoiMartFarm Varieties " + img}
-        width={150}
-        height={200}
-        style={{
-          width: 80,
-          height: "auto",
-          display: "block",
-          alignSelf: "flex-start",
-        }}
-      />
-      <Box paddingLeft={{ xs: 6, md: 10 }}>
-        <Typography variant="h4" color="secondary.main">
-          {type}
-        </Typography>
-        <Typography variant="body2" color="text.primary" paddingTop={2}>
-          {desc}
-        </Typography>
-      </Box>
+      <Grid container sx={{ width: "100%", gap: 2 }}>
+        <Grid size={{ xs: 11, sm: 5 }}>
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <Image
+              src={img}
+              alt={"KoiMartFarm Varieties " + img}
+              width={150}
+              height={200}
+              style={{
+                width: "150px",
+                height: "auto",
+              }}
+            />
+          </Box>
+        </Grid>
+        <Grid size={{ xs: 11, sm: 5 }}>
+          <Box sx={{ width: "100%" }}>
+            <Typography variant="h4" color="secondary.main">
+              {type}
+            </Typography>
+            <Typography variant="body2" color="text.primary" paddingTop={2}>
+              {desc}
+            </Typography>
+          </Box>
+        </Grid>
+      </Grid>
     </Box>
   );
 }

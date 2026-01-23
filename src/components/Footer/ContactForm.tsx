@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { AppIcon, ContactUsLayout, TextInputField } from "./Footer.styles";
+import { ContactUsLayout, TextInputField } from "./Footer.styles";
 import FilledButton from "../FilledButton";
 import { useState } from "react";
 
@@ -113,10 +113,13 @@ function ContactForm() {
       </ContactUsLayout>
 
       <Box
-        sx={{ marginTop: 1, display: "flex", justifyContent: "space-between" }}
+        sx={{
+          marginTop: "10px",
+          display: "flex",
+          justifyContent: "center",
+        }}
       >
-        <AppIcon src="/img/koi.png" alt="Koi Mart Farm Logo" />
-        <Box sx={{ width: "30%", height: "60%" }}>
+        <Box sx={{ width: { xs: "80%", md: "40%" } }}>
           <FilledButton text="ส่ง" isLoading={loading} method={handleClick} />
         </Box>
       </Box>

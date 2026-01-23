@@ -1,24 +1,21 @@
-import { Button } from "@mui/material";
+"use client";
+import { Button, styled } from "@mui/material";
 
-function LinkedOutlineButton({ text, path }: { text: string; path: string }) {
-  return (
-    <Button
-      variant="outlined"
-      href={path}
-      sx={{
-        mx: "auto",
-        color: "text.primary",
-        borderColor: "text.primary",
-        paddingX: { xs: 2, sm: 5 },
-        fontWeight: "bold",
-        "&:hover": {
-          borderColor: "text.primary",
-        },
-      }}
-    >
-      {text}
-    </Button>
-  );
-}
+const LinkedOutlineButton = styled(Button)(({ theme }) => ({
+  color: theme.palette.text.primary,
+  borderColor: theme.palette.text.primary,
+  borderRadius: 8,
+  paddingLeft: 24,
+  paddingRight: 24,
+  paddingTop: 8,
+  paddingBottom: 8,
+  fontWeight: "bold",
+  "&:hover": {
+    borderColor: theme.palette.text.primary,
+  },
+  flexDirection: "row",
+  alignItems: "center",
+  gap: 8,
+}));
 
-export default LinkedOutlineButton;
+export default LinkedOutlineButton as typeof Button;

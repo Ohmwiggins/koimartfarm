@@ -4,7 +4,8 @@ import { Box } from "@mui/material";
 
 export const metadata: Metadata = {
   title: "Blog",
-  description: "…",
+  description:
+    "Learn about the importance of shape, quality, and pattern in koi appreciation.",
 };
 
 export default function BlogLayout({

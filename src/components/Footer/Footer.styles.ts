@@ -4,7 +4,8 @@ export const ContactUsLayout = styled(Box)<BoxProps>(() => ({
   width: "100%",
   height: "90%",
   minHeight: 250,
-  display: "flex", flexDirection: "column",
+  display: "flex",
+  flexDirection: "column",
 }));
 
 export const TextInputField = styled(Input)<InputProps>(({ theme }) => ({
@@ -19,7 +20,7 @@ export const AppIcon = styled("img")(() => ({
 }));
 
 export const SocialIcon = styled("img")(({ theme }) => ({
-  maxWidth: 50,
+  maxWidth: "20%",
   paddingLeft: theme.spacing(1),
   paddingRight: theme.spacing(1),
   cursor: "pointer",

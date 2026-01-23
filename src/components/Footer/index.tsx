@@ -47,15 +47,56 @@ function Footer() {
           <Grid size={{ xs: 12, md: 6 }}>
             <ContactForm />
           </Grid>
-
-          <Grid size={{ sm: 12, md: 6 }}>
+          <Grid
+            size={12}
+            sx={{
+              my: "60px",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <SocialIcon
+              src={"/img/socialmedias/facebook.png"}
+              onClick={() =>
+                window.open("https://www.facebook.com/KoiMartFarmBKK", "_blank")
+              }
+              alt="KoiMartFarm Facebook"
+            />
+            <SocialIcon
+              src={"/img/socialmedias/tiktok.png"}
+              onClick={() =>
+                window.open(
+                  "https://www.tiktok.com/@koimart.farm?_t=ZS-90joD57tes6&_r=1",
+                  "_blank",
+                )
+              }
+              alt="KoiMartFarm Tiktok"
+            />
+            <SocialIcon
+              src={"/img/socialmedias/line.png"}
+              onClick={() =>
+                window.open("https://page.line.me/ssk0751s", "_blank")
+              }
+              alt="KoiMartFarm Line"
+            />
+            <SocialIcon
+              src={"/img/socialmedias/instagram.png"}
+              onClick={() =>
+                window.open(
+                  "https://www.instagram.com/koimartfarm?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==",
+                  "_blank",
+                )
+              }
+              alt="KoiMartFarm Instagram"
+            />
+          </Grid>
+          <Grid size={12}>
             <Box
               sx={{
                 display: "flex",
                 flexDirection: "column",
                 alignItems: { xs: "center", md: "flex-start" },
                 textAlign: { xs: "center", md: "left" },
-                marginTop: 5,
               }}
             >
               <Image
@@ -63,7 +104,7 @@ function Footer() {
                 alt="Koi Mart Farm Logo"
                 width={428}
                 height={126}
-                style={{ width: 250, height: "auto", display: "block" }}
+                style={{ width: 300, height: "auto", display: "block" }}
               />
               <Typography
                 variant="h4"
@@ -82,49 +123,6 @@ function Footer() {
                 Nonthaburi 11120
               </Typography>
             </Box>
-          </Grid>
-          <Grid
-            size={{ sm: 12, md: 6 }}
-            sx={{
-              display: "flex",
-              justifyContent: { sm: "center", md: "flex-end" },
-              alignItems: "flex-end",
-            }}
-          >
-            <SocialIcon
-              src={"/img/socialmedias/facebook.png"}
-              onClick={() =>
-                window.open("https://www.facebook.com/KoiMartFarmBKK", "_blank")
-              }
-              alt="KoiMartFarm Facebook"
-            />
-            <SocialIcon
-              src={"/img/socialmedias/tiktok.png"}
-              onClick={() =>
-                window.open(
-                  "https://www.tiktok.com/@koimart.farm?_t=ZS-90joD57tes6&_r=1",
-                  "_blank"
-                )
-              }
-              alt="KoiMartFarm Tiktok"
-            />
-            <SocialIcon
-              src={"/img/socialmedias/line.png"}
-              onClick={() =>
-                window.open("https://page.line.me/ssk0751s", "_blank")
-              }
-              alt="KoiMartFarm Line"
-            />
-            <SocialIcon
-              src={"/img/socialmedias/instagram.png"}
-              onClick={() =>
-                window.open(
-                  "https://www.instagram.com/koimartfarm?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==",
-                  "_blank"
-                )
-              }
-              alt="KoiMartFarm Instagram"
-            />
           </Grid>
         </Grid>
       </Container>

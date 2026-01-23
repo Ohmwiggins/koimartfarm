@@ -1,10 +1,9 @@
 "use client";
 
-import { Box, Container, Grow } from "@mui/material";
+import { Box, Button, Container, Grow } from "@mui/material";
 import Event from "./Event/index";
 import eventDetails from "../../data/events.json";
 import HeaderText from "../../components/HeaderText";
-import LinkedOutlineButton from "../../components/LinkedOutlineButton";
 import KoiHighlight from "./KoiHighlight";
 import History from "./KoiHistory";
 import BlogHighlight from "./BlogHighlight";
@@ -107,10 +106,15 @@ function Home() {
             >
               <KoiHighlight />
             </Box>
-            <LinkedOutlineButton
-              text="ศึกษาเพิ่มเติม"
-              path="/blog/koi-appreciation"
-            />
+            <Box sx={{ display: "flex", justifyContent: "center" }}>
+              <Button
+                variant="outlined"
+                href={"/blog/koi-appreciation"}
+                sx={{ color: "text.primary", borderColor: "text.primary" }}
+              >
+                ศึกษาเพิ่มเติม
+              </Button>
+            </Box>
           </Box>
         </Grow>
       </Box>
