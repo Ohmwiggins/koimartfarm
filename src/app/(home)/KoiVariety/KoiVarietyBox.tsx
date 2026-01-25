@@ -21,31 +21,27 @@ function KoiVarietyBox({
           <Box
             sx={{
               display: "flex",
-              justifyContent: { xs: "center" },
-              marginRight: { xs: 0, sm: 4 },
+              justifyContent: "center",
+              marginRight: { xs: 0, md: 4 },
+              marginBottom: { xs: 2, md: 0 },
             }}
           >
             <Image
               src={img}
               alt={"KoiMartFarm Varieties " + img}
-              width={150}
-              height={200}
+              width={200}
+              height={267}
               style={{
-                width: "auto",
-                height: "100%",
+                width: "100%",
+                height: "auto",
+                maxWidth: "200px",
                 boxShadow: "0 8px 20px rgba(0, 0, 0, 0.2)",
               }}
             />
           </Box>
         </Grid>
         <Grid size={{ xs: 12, md: 7 }}>
-          <Box
-            sx={{
-              width: "100%",
-              mx: { xs: "10%", sm: 0 },
-              my: { xs: 2, sm: 2, md: 0 },
-            }}
-          >
+          <Box sx={{ width: "100%", mx: { xs: "10%", sm: 0 } }}>
             <Typography variant="h4" color="secondary.main">
               {type}
             </Typography>
