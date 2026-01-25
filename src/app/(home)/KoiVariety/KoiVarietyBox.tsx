@@ -12,9 +12,9 @@ function KoiVarietyBox({
 }) {
   return (
     <Box sx={{ display: "flex", flexDirection: "row" }}>
-      <Grid container sx={{ width: "100%", gap: 2 }}>
-        <Grid size={{ xs: 11, sm: 5 }}>
-          <Box sx={{ display: "flex", justifyContent: "center" }}>
+      <Grid container sx={{ width: "100%" }}>
+        <Grid size={{ xs: 11, sm: 5 }} sx={{ marginBottom: { xs: 2, sm: 0 } }}>
+          <Box sx={{ display: "flex", justifyContent: { xs: "center", sm: "flex-end" }, paddingRight: { xs: 0, sm: 4 } }}>
             <Image
               src={img}
               alt={"KoiMartFarm Varieties " + img}

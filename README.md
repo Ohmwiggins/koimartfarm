@@ -1,73 +1,99 @@
-# React + TypeScript + Vite
+# Koimartfarm UI
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the official repository for the Koimartfarm UI, a web application built with Next.js and TypeScript.
 
-Currently, two official plugins are available:
+![Koimartfarm UI Banner](public/img/banner.png)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## About The Project
 
-## React Compiler
+Koimartfarm UI is a modern, responsive, and user-friendly web application for koi enthusiasts. It provides information about koi varieties, events, and articles about koi keeping. It also features a contact form for users to get in touch with the farm.
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+### Built With
 
-## Expanding the ESLint configuration
+* [Next.js](https://nextjs.org/)
+* [React](https://reactjs.org/)
+* [TypeScript](https://www.typescriptlang.org/)
+* [Material-UI](https://mui.com/)
+* [Emotion](https://emotion.sh/docs/introduction)
+* [Nodemailer](https://nodemailer.com/about/)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Getting Started
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+To get a local copy up and running follow these simple steps.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Prerequisites
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+* npm
+  ```sh
+  npm install npm@latest -g
+  ```
+
+### Installation
+
+1. Clone the repo
+   ```sh
+   git clone https://github.com/koimartfarm/koimartfarm-ui.git
+   ```
+2. Install NPM packages
+   ```sh
+   npm install
+   ```
+
+### Development
+
+To run the app in the development mode, run the following command:
+
+```bash
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser. The page will reload if you make edits.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Building for Production
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+To build the app for production, run the following command:
+
+```bash
+npm run build
 ```
+
+This will build the app for production to the `.next` folder. It correctly bundles React in production mode and optimizes the build for the best performance.
+
+### Production
+
+To start the application in production mode, run the following command:
+
+```bash
+npm run start
+```
+
+## Linting
+
+To lint the codebase, run the following command:
+
+```bash
+npm run lint
+```
+
+## Contributing
+
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+
+If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
+Don't forget to give the project a star! Thanks again!
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## License
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+## Contact
+
+Koimartfarm - [@koimartfarm](https://twitter.com/koimartfarm) - koimartfarm@example.com
+
+Project Link: [https://github.com/koimartfarm/koimartfarm-ui](https://github.com/koimartfarm/koimartfarm-ui)

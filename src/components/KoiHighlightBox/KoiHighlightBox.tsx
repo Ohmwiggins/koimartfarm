@@ -1,9 +1,24 @@
 import { Box, Typography } from "@mui/material";
 import Image from "next/image";
 
-function KoiHighlightBox({ img, desc }: { img: string; desc?: string }) {
+function KoiHighlightBox({
+  img,
+  desc,
+  onClick,
+}: {
+  img: string;
+  desc?: string;
+  onClick?: () => void;
+}) {
   return (
-    <Box sx={{ display: "flex", flexDirection: "column" }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        cursor: onClick ? "pointer" : "default",
+      }}
+      onClick={onClick}
+    >
       <Image
         src={`${img}`}
         alt={`highlight-img-${desc}`}

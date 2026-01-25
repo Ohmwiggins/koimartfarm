@@ -8,7 +8,6 @@ import KoiHighlight from "./KoiHighlight";
 import History from "./KoiHistory";
 import BlogHighlight from "./BlogHighlight";
 import KoiVariety from "./KoiVariety";
-import Image from "next/image";
 import { useInView } from "react-intersection-observer";
 import Banner from "./Banner";
 
@@ -101,7 +100,6 @@ function Home() {
                 display: "flex",
                 justifyContent: "center",
                 paddingY: 5,
-                overflowX: "hidden",
               }}
             >
               <KoiHighlight />
@@ -161,23 +159,24 @@ function Home() {
         </Box>
       </Container>
 
-      <Image
-        src={"/img/bg2.png"}
-        alt="KoiMartFarm Background2"
-        width={3000}
-        height={800}
-        style={{
-          width: "100%",
-          height: "50vh",
-          display: "block",
-          objectFit: "cover",
-          objectPosition: "center",
-        }}
-      />
+      <Box sx={{ display: "flex", justifyContent: "center", paddingY: 5 }}>
+        <iframe
+          src="https://www.youtube.com/embed/3HtnQz21_yk?autoplay=1&mute=1&loop=1&playlist=3HtnQz21_yk"
+          title="YouTube video player"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+          style={{
+            height: "80vh",
+            aspectRatio: "9 / 16",
+            border: "none",
+            maxWidth: "100%",
+          }}
+        ></iframe>
+      </Box>
 
       <Container
         ref={varietyRef}
-        maxWidth="xl"
+        maxWidth="lg"
         sx={{
           paddingY: 5,
           display: "flex",

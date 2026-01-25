@@ -27,10 +27,10 @@ function KoiVariety() {
     triggerOnce: true,
     threshold: 0.2,
   });
-  // const { ref: koi7Ref, inView: koi7InView } = useInView({
-  //   triggerOnce: true,
-  //   threshold: 0.2,
-  // });
+  const { ref: koi7Ref, inView: koi7InView } = useInView({
+    triggerOnce: true,
+    threshold: 0.2,
+  });
 
   return (
     <Box
@@ -110,7 +110,7 @@ function KoiVariety() {
                   <KoiVarietyBox
                     img="/img/varieties/Asagi.png"
                     type="Asagi (อะซางิ)"
-                    desc="ความหรูหราที่สะท้อนแสงได้ในทุกหยดน้ำ Ogon เป็นสายพันธุ์เมทัลลิก สีทอง เงิน หรือแพลทินัม แสดงถึงความมั่งคั่ง ความโชคดี และเสน่ห์เรียบง่ายที่โดดเด่นไม่เหมือนใคร"
+                    desc="มีลักษณะเด่นที่หลังเป็นลายเกล็ดน้ำเงินเทาแบบตาข่าย พร้อมท้อง แก้ม และครีบที่มีสีแดงส้มไล่ขึ้น เป็นสัญลักษณ์ของความสงบ สุขุม มั่นคง ปัญญา และความลุ่มลึก"
                   />
                 </Box>
               </Grow>
@@ -120,9 +120,9 @@ function KoiVariety() {
               <Grow in={koi6InView} timeout={2000}>
                 <Box>
                   <KoiVarietyBox
-                    img="/img/varieties/Asagi.png"
-                    type="Asagi (อะซางิ)"
-                    desc="ความหรูหราที่สะท้อนแสงได้ในทุกหยดน้ำ Ogon เป็นสายพันธุ์เมทัลลิก สีทอง เงิน หรือแพลทินัม แสดงถึงความมั่งคั่ง ความโชคดี และเสน่ห์เรียบง่ายที่โดดเด่นไม่เหมือนใคร"
+                    img="/img/varieties/Shusui.png"
+                    type="Shusui (ชุสุอิ)"
+                    desc="เวอร์ชัน Doitsu ของ Asagi ที่มีเส้นเกล็ดวิ่งตามสันหลังเพียงแถวเดียว Shusui ดูโมเดิร์นแต่ยังคงความสงบแบบดั้งเดิม เป็นสายพันธุ์ที่ผสมผสานความเรียบง่ายกับความทันสมัยได้ลงตัว"
                   />
                 </Box>
               </Grow>
@@ -130,17 +130,17 @@ function KoiVariety() {
           </Box>
         </Grid>
       </Grid>
-      {/* <Box ref={koi7Ref} sx={{ paddingY: 5 }}>
+      <Box ref={koi7Ref} sx={{ paddingY: 5 }}>
         <Grow in={koi7InView} timeout={2000}>
           <Box>
             <KoiVarietyBox
-              img="/img/varieties/Shusui.png"
-              type="Shusui (ชุสุอิ)"
-              desc="เวอร์ชัน Doitsu ของ Asagi ที่มีเส้นเกล็ดวิ่งตามสันหลังเพียงแถวเดียว Shusui ดูโมเดิร์นแต่ยังคงความสงบแบบดั้งเดิม เป็นสายพันธุ์ที่ผสมผสานความเรียบง่ายกับความทันสมัยได้ลงตัว"
+              img="/img/varieties/Chagoi.png"
+              type="Chagoi (ชุสุอิ)"
+              desc="สุนทรียภาพแห่งผืนป่า — เฉดสีน้ำตาลชาผสานเขียวมะกอกและประกายทองคืออัตลักษณ์ของความสมบูรณ์แบบที่ธรรมชาติรังสรรค์มาอย่างลงตัว ภายใต้รูปลักษณ์ที่แข็งแรงคือจิตใจที่เปี่ยมด้วยมิตรภาพ ผู้ที่ได้ครอบครอง คือผู้ที่ได้เชื่อมโยงกับ 'พลังแห่งความอบอุ่น' และความกลมเกลียวอย่างแท้จริง"
             />
           </Box>
         </Grow>
-      </Box> */}
+      </Box>
     </Box>
   );
 }

@@ -1,6 +1,13 @@
-import { Box, Fade, Grid, Grow, Typography } from "@mui/material";
+"use client";
+import { Box, Fade, Grid, Grow, Typography, Modal, IconButton } from "@mui/material";
 import Image from "next/image";
 import { useInView } from "react-intersection-observer";
+import { useState, useEffect, useCallback } from "react";
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import CloseIcon from '@mui/icons-material/Close';
+
+const historyImages = Array.from({ length: 17 }, (_, i) => `/img/history/lists/list${i + 1}.png`);
 
 function History() {
   const { ref: imageRef, inView: imageInView } = useInView({
@@ -17,6 +24,47 @@ function History() {
     triggerOnce: true,
     threshold: 0.2,
   });
+
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
+
+  const handleOpen = useCallback((index: number) => {
+    setSelectedImageIndex(index);
+  }, []);
+
+  const handleClose = useCallback(() => {
+    setSelectedImageIndex(null);
+  }, []);
+
+  const handlePrev = useCallback(() => {
+    setSelectedImageIndex(prevIndex => 
+      prevIndex !== null ? (prevIndex - 1 + historyImages.length) % historyImages.length : null
+    );
+  }, []);
+
+  const handleNext = useCallback(() => {
+    setSelectedImageIndex(prevIndex =>
+      prevIndex !== null ? (prevIndex + 1) % historyImages.length : null
+    );
+  }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (selectedImageIndex === null) return;
+
+      if (event.key === 'ArrowLeft') {
+        handlePrev();
+      } else if (event.key === 'ArrowRight') {
+        handleNext();
+      } else if (event.key === 'Escape') {
+        handleClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [selectedImageIndex, handlePrev, handleNext, handleClose]);
 
   return (
     <Box>
@@ -108,7 +156,7 @@ function History() {
         spacing={1}
         sx={{ marginTop: 10, mx: 2 }}
       >
-        {[...Array(16)].map((_, index) => (
+        {historyImages.map((imgSrc, index) => (
           <Grid
             key={index}
             size={{ xs: 6, sm: 4, md: 2 }}
@@ -119,17 +167,51 @@ function History() {
             }}
           >
             <Fade in={travelImgInView} timeout={index * 300}>
-              <Image
-                src={`/img/history/lists/list${index + 1}.png`}
-                alt="KoiMartFarm Japan"
-                width={800}
-                height={800}
-                style={{ width: "100%", height: "auto", display: "block" }}
-              />
+              <Box onClick={() => handleOpen(index)} sx={{ cursor: 'pointer', width: '100%' }}>
+                <Image
+                  src={imgSrc}
+                  alt="KoiMartFarm Japan"
+                  width={800}
+                  height={800}
+                  style={{ width: "100%", height: "auto", display: "block" }}
+                />
+              </Box>
             </Fade>
           </Grid>
         ))}
       </Grid>
+      <Modal open={selectedImageIndex !== null} onClose={handleClose} sx={{ backgroundColor: 'rgba(0, 0, 0, 0.8)'}}>
+        <Box sx={{
+          position: 'relative',
+          height: '100vh',
+          width: '100vw',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+
+          <IconButton onClick={handleClose} sx={{ position: 'absolute', top: 20, right: 20, color: 'white' }}>
+            <CloseIcon fontSize="large"/>
+          </IconButton>
+
+          <IconButton onClick={handlePrev} sx={{ position: 'absolute', left: 20, top: '50%', transform: 'translateY(-50%)', color: 'white' }}>
+            <ArrowBackIosNewIcon fontSize="large"/>
+          </IconButton>
+
+          <IconButton onClick={handleNext} sx={{ position: 'absolute', right: 20, top: '50%', transform: 'translateY(-50%)', color: 'white' }}>
+            <ArrowForwardIosIcon fontSize="large"/>
+          </IconButton>
+
+          {selectedImageIndex !== null && (
+            <img 
+              src={historyImages[selectedImageIndex]} 
+              alt="KoiMartFarm History" 
+              style={{ maxHeight: '90vh', maxWidth: '80vw', objectFit: 'contain' }}
+            />
+          )}
+
+        </Box>
+      </Modal>
     </Box>
   );
 }

@@ -1,11 +1,47 @@
-import { Box, Grow, keyframes, Typography } from "@mui/material";
+"use client";
+import { Box, Grow, Typography } from "@mui/material";
 import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 
 export default function Banner() {
-  const scrollAnimation = keyframes`
-    0% { transform: translateX(0); }
-    100% { transform: translate3d(-50%, 0, 0); }
-  `;
+  const [isPaused, setIsPaused] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+  const animationFrameRef = useRef<number | null>(null);
+
+  const handleInteraction = () => {
+    setIsPaused(true);
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = setTimeout(() => {
+      setIsPaused(false);
+    }, 2000); // Resume after 2 seconds of inactivity
+  };
+
+  useEffect(() => {
+    const scrollElement = scrollRef.current;
+    if (!scrollElement) return;
+
+    const scroll = () => {
+      if (!isPaused) {
+        if (scrollElement.scrollLeft >= scrollElement.scrollWidth / 2) {
+          scrollElement.scrollLeft = 0;
+        } else {
+          scrollElement.scrollLeft += 0.5; // Adjust scroll speed here
+        }
+      }
+      animationFrameRef.current = requestAnimationFrame(scroll);
+    };
+
+    animationFrameRef.current = requestAnimationFrame(scroll);
+
+    return () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
+  }, [isPaused]);
 
   return (
     <Box
@@ -15,25 +51,26 @@ export default function Banner() {
         height: "80vh",
         overflow: "hidden",
         backgroundColor: "background.default",
-        paddingTop: "80px",
+        paddingTop: "60px",
+        gap: "5%",
       }}
     >
       <Box
+        ref={scrollRef}
+        onWheel={handleInteraction}
+        onTouchStart={handleInteraction}
+        onTouchMove={handleInteraction}
         sx={{
-          height: { xs: "70%", sm: "75%" },
+          height: { xs: "70%", sm: "100%" },
           display: "flex",
           flexDirection: "row",
           alignItems: "center",
-          overflowX: "auto",
+          overflowX: "scroll",
           overflowY: "hidden",
           whiteSpace: "nowrap",
           scrollbarWidth: "none",
-          width: "max-content",
-          willChange: "transform",
+          width: "100%",
           backfaceVisibility: "hidden",
-          animation: `${scrollAnimation} 100s linear infinite`,
-          backgroundColor: "background.default",
-
           perspective: 1000,
           transformStyle: "preserve-3d",
         }}
@@ -48,7 +85,7 @@ export default function Banner() {
               height={1000}
               style={{
                 width: "auto",
-                height: "90%",
+                height: "100%",
               }}
               priority={true}
             />
