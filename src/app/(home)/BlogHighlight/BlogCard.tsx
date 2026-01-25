@@ -16,7 +16,14 @@ function BlogCard({
   desc: string;
 }) {
   return (
-    <Card sx={{ display: "flex", flexDirection: "column", width: 330 }}>
+    <Card
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        width: 330,
+        boxShadow: "0 8px 20px rgba(0, 0, 0, 0.2)",
+      }}
+    >
       <Image
         src={img}
         alt={title}
