@@ -1,125 +1,150 @@
 "use client";
 import { Box, Grow, Typography } from "@mui/material";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 export default function Banner() {
-  const [isPaused, setIsPaused] = useState(false);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const scrollRef = useRef<HTMLDivElement | null>(null);
-  const animationFrameRef = useRef<number | null>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const offsetRef = useRef(0);          // current translateX (px, always ≤ 0)
+  const rafRef = useRef<number | null>(null);
+  const isPausedRef = useRef(false);
+  const resumeTimerRef = useRef<NodeJS.Timeout | null>(null);
   const isDragging = useRef(false);
   const dragStartX = useRef(0);
-  const dragScrollLeft = useRef(0);
+  const dragStartOffset = useRef(0);
+  const imageWidthRef = useRef(0);      // width of ONE copy of the image
 
-  const handleInteraction = () => {
-    setIsPaused(true);
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-    timeoutRef.current = setTimeout(() => {
-      setIsPaused(false);
-    }, 2000);
-  };
+  // Apply offset and handle seamless loop
+  const applyOffset = useCallback((offset: number) => {
+    const w = imageWidthRef.current;
+    if (w === 0 || !trackRef.current) return;
+    // Wrap: when scrolled past one full image width, reset seamlessly
+    let o = offset;
+    if (o <= -w) o += w;
+    if (o > 0)   o -= w;
+    offsetRef.current = o;
+    trackRef.current.style.transform = `translateX(${o}px)`;
+  }, []);
 
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (!scrollRef.current) return;
-    isDragging.current = true;
-    dragStartX.current = e.pageX - scrollRef.current.offsetLeft;
-    dragScrollLeft.current = scrollRef.current.scrollLeft;
-    handleInteraction();
-  };
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging.current || !scrollRef.current) return;
-    const x = e.pageX - scrollRef.current.offsetLeft;
-    scrollRef.current.scrollLeft = dragScrollLeft.current - (x - dragStartX.current);
-  };
-
-  const handleMouseUp = () => {
-    isDragging.current = false;
-  };
-
+  // RAF auto-scroll loop
   useEffect(() => {
-    const scrollElement = scrollRef.current;
-    if (!scrollElement) return;
+    const track = trackRef.current;
+    if (!track) return;
 
-    const scroll = () => {
-      if (!isPaused) {
-        if (scrollElement.scrollLeft >= scrollElement.scrollWidth / 2) {
-          scrollElement.scrollLeft = 0;
-        } else {
-          scrollElement.scrollLeft += 0.5;
-        }
+    const SPEED = 1.2; // px per frame (~72px/s at 60fps)
+
+    const tick = () => {
+      if (!isPausedRef.current) {
+        applyOffset(offsetRef.current - SPEED);
       }
-      animationFrameRef.current = requestAnimationFrame(scroll);
+      rafRef.current = requestAnimationFrame(tick);
     };
 
-    animationFrameRef.current = requestAnimationFrame(scroll);
+    // Measure image width after it has a chance to render
+    const timer = setTimeout(() => {
+      const firstImg = track.firstElementChild as HTMLElement | null;
+      if (firstImg) imageWidthRef.current = firstImg.offsetWidth;
+      rafRef.current = requestAnimationFrame(tick);
+    }, 150);
 
     return () => {
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
-      }
+      clearTimeout(timer);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, [isPaused]);
+  }, [applyOffset]);
+
+  const pause = useCallback(() => {
+    isPausedRef.current = true;
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+  }, []);
+
+  const resumeLater = useCallback(() => {
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+    resumeTimerRef.current = setTimeout(() => {
+      isPausedRef.current = false;
+    }, 1500);
+  }, []);
+
+  // ── Mouse drag ──────────────────────────────────────────────────────────────
+  const onMouseDown = useCallback((e: React.MouseEvent) => {
+    isDragging.current = true;
+    dragStartX.current = e.clientX;
+    dragStartOffset.current = offsetRef.current;
+    pause();
+  }, [pause]);
+
+  const onMouseMove = useCallback((e: React.MouseEvent) => {
+    if (!isDragging.current) return;
+    applyOffset(dragStartOffset.current + (e.clientX - dragStartX.current));
+  }, [applyOffset]);
+
+  const onMouseUp = useCallback(() => {
+    if (!isDragging.current) return;
+    isDragging.current = false;
+    resumeLater();
+  }, [resumeLater]);
+
+  // ── Touch drag ──────────────────────────────────────────────────────────────
+  const onTouchStart = useCallback((e: React.TouchEvent) => {
+    dragStartX.current = e.touches[0].clientX;
+    dragStartOffset.current = offsetRef.current;
+    pause();
+  }, [pause]);
+
+  const onTouchMove = useCallback((e: React.TouchEvent) => {
+    applyOffset(dragStartOffset.current + (e.touches[0].clientX - dragStartX.current));
+  }, [applyOffset]);
+
+  const onTouchEnd = useCallback(() => {
+    resumeLater();
+  }, [resumeLater]);
 
   return (
     <Box sx={{ paddingTop: "60px", backgroundColor: "background.default" }}>
-      {/* Slide carousel */}
+      {/* Auto-scroll + draggable banner */}
       <Box
         sx={{
           position: "relative",
           height: { xs: "50vh", md: "70vh" },
           overflow: "hidden",
+          cursor: "grab",
+          "&:active": { cursor: "grabbing" },
+          userSelect: "none",
         }}
+        onMouseDown={onMouseDown}
+        onMouseMove={onMouseMove}
+        onMouseUp={onMouseUp}
+        onMouseLeave={onMouseUp}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
       >
         <Box
-          ref={scrollRef}
-          onWheel={handleInteraction}
-          onTouchStart={handleInteraction}
-          onTouchMove={handleInteraction}
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseUp}
+          ref={trackRef}
           sx={{
-            cursor: "grab",
-            "&:active": { cursor: "grabbing" },
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
             display: "flex",
             flexDirection: "row",
-            alignItems: "center",
-            overflowX: "scroll",
-            overflowY: "hidden",
-            whiteSpace: "nowrap",
-            scrollbarWidth: "none",
-            width: "100%",
             height: "100%",
-            backfaceVisibility: "hidden",
-            perspective: 1000,
-            transformStyle: "preserve-3d",
+            width: "max-content",
+            willChange: "transform",
           }}
         >
-          {Array.from({ length: 2 }).map((_, i) => (
+          {[0, 1].map((i) => (
             <Image
               key={i}
-              src={`/img/banner.png`}
-              alt={`KoiMartFarm Background ${i}`}
+              src="/img/banner.png"
+              alt="KoiMartFarm Banner"
               width={6000}
               height={1000}
-              style={{ width: "auto", height: "100%" }}
-              priority={true}
+              style={{ width: "auto", height: "100%", flexShrink: 0, pointerEvents: "none" }}
+              priority={i === 0}
+              draggable={false}
             />
           ))}
         </Box>
       </Box>
 
-      {/* Header + subtitle below the carousel */}
+      {/* Header + subtitle below the banner */}
       <Box
         sx={{
           textAlign: "center",
