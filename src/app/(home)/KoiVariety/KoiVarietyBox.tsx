@@ -45,32 +45,40 @@ function KoiVarietyBox({
             <Typography variant="h4" color="secondary.main">
               {type}
             </Typography>
-            <Box paddingTop={2}>
-              <Typography
-                sx={{ fontWeight: "bold" }}
-                variant="body2"
-                component="div"
-              >
-                ลักษณะเด่น
-              </Typography>
-              {characteristic.map((item, index) => (
-                <Typography key={index} variant="body2" component="div">
-                  - {item}
+            <Box paddingTop={3} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <Box>
+                <Typography
+                  sx={{ fontWeight: 600, mb: 1 }}
+                  variant="subtitle1"
+                  component="div"
+                >
+                  ลักษณะเด่น
                 </Typography>
-              ))}
-              <Box sx={{ height: "1em" }} />
-              <Typography
-                sx={{ fontWeight: "bold" }}
-                variant="body2"
-                component="div"
-              >
-                ความหมายเชิงสัญลักษณ์
-              </Typography>
-              {meaning.map((item, index) => (
-                <Typography key={index} variant="body2" component="div">
-                  - {item}
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+                  {characteristic.map((item, index) => (
+                    <Typography key={index} variant="body2" component="div" sx={{ lineHeight: 1.6 }}>
+                      • {item}
+                    </Typography>
+                  ))}
+                </Box>
+              </Box>
+
+              <Box>
+                <Typography
+                  sx={{ fontWeight: 600, mb: 1 }}
+                  variant="subtitle1"
+                  component="div"
+                >
+                  ความหมายเชิงสัญลักษณ์
                 </Typography>
-              ))}
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+                  {meaning.map((item, index) => (
+                    <Typography key={index} variant="body2" component="div" sx={{ lineHeight: 1.6 }}>
+                      • {item}
+                    </Typography>
+                  ))}
+                </Box>
+              </Box>
             </Box>
           </Box>
         </Grid>

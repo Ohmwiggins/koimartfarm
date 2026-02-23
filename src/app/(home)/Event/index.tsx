@@ -1,8 +1,7 @@
 "use client";
 
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Grid, Typography, Card, CardContent, Container, Chip } from "@mui/material";
 import type { KoiEvent } from "../../../models/events";
-import { EventTable } from "./Event.styles";
 import EventHighlight from "../EventHighlight";
 
 type EventProps = {
@@ -12,55 +11,65 @@ type EventProps = {
 function Event(props: EventProps) {
   return (
     <Box>
-      <EventTable maxWidth="md">
-        {props.events.map((e) => {
-          return (
-            <Box key={e.id}>
-              <Grid
-                container
-                sx={{
-                  px: 5,
-                  py: 2,
-                  my: 2,
-                  mx: 5,
-                  borderRadius: 2,
-                  backgroundColor: "secondary.light",
-                  alignItems: "center",
-                }}
-              >
-                <Grid size={{ xs: 12, sm: 4 }}>
-                  <Typography variant="body1" color="text.primary">
-                    {e.date}
-                  </Typography>
-                </Grid>
-                <Grid size={{ xs: 12, sm: 8 }}>
-                  <Typography variant="h5" color="text.primary">
-                    {e.detail}
-                  </Typography>
-                </Grid>
+      <Container maxWidth="lg">
+        <Grid container spacing={3}>
+          {props.events.map((e, index) => {
+            const isFeatured = index === 0;
+            return (
+              <Grid key={e.id} size={{ xs: 12, md: isFeatured ? 12 : 6 }}>
+                <Card
+                  sx={{
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: { xs: 'column', md: isFeatured ? 'row' : 'column' },
+                    borderLeft: isFeatured ? '4px solid' : 'none',
+                    borderColor: 'secondary.main',
+                    transition: 'box-shadow 0.3s ease, transform 0.2s ease',
+                    '&:hover': {
+                      boxShadow: "0 8px 24px rgba(0,0,0,0.10)",
+                      transform: 'translateY(-4px)',
+                    },
+                  }}
+                >
+                  <CardContent sx={{ flexGrow: 1, p: 4 }}>
+                    <Box sx={{ mb: 2 }}>
+                      <Chip
+                        label="งานอีเว้นท์"
+                        color="secondary"
+                        size="small"
+                        sx={{ fontWeight: 600 }}
+                      />
+                    </Box>
+                    <Typography
+                      variant={isFeatured ? "h4" : "h5"}
+                      color="text.primary"
+                      sx={{ mb: 2, fontWeight: 600 }}
+                    >
+                      {e.detail}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      📅 {e.date}
+                    </Typography>
+                  </CardContent>
+                </Card>
               </Grid>
-            </Box>
-          );
-        })}
-      </EventTable>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-        }}
-      >
+            );
+          })}
+        </Grid>
+      </Container>
+
+      <Container maxWidth="lg">
         <Box
           sx={{
             display: "flex",
             justifyContent: "center",
-            paddingY: 5,
+            marginTop: 8,
             overflowX: "hidden",
           }}
         >
           <EventHighlight />
         </Box>
-      </Box>
+      </Container>
     </Box>
   );
 }

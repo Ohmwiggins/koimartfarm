@@ -90,17 +90,19 @@ function KoiHighlight() {
   };
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column" }}>
+    <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
       <Box
         sx={{
           overflowX: "auto",
           overflowY: "hidden",
           display: "flex",
           flexDirection: "row",
+          gap: 2,
           maxWidth: "100vw",
           scrollbarWidth: "none",
-          height: "270px",
+          height: { xs: "220px", sm: "270px" },
           alignItems: "center",
+          padding: 2,
         }}
         ref={combinedRef1}
       >
@@ -121,10 +123,12 @@ function KoiHighlight() {
           overflowY: "hidden",
           display: "flex",
           flexDirection: "row",
+          gap: 2,
           maxWidth: "100vw",
           scrollbarWidth: "none",
-          height: "270px",
+          height: { xs: "220px", sm: "270px" },
           alignItems: "center",
+          padding: 2,
         }}
         ref={combinedRef2}
       >

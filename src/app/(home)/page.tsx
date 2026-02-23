@@ -54,7 +54,8 @@ function Home() {
       <Box
         ref={eventRef}
         sx={{
-          paddingY: 10,
+          paddingY: 12,
+          backgroundColor: 'background.default',
           display: "flex",
           flexDirection: "column",
         }}
@@ -68,14 +69,14 @@ function Home() {
         <Grow in={eventInView} timeout={2500}>
           <Box sx={{ display: "flex", flexDirection: "column" }}>
             <Event events={eventDetails.slice(0, 5)} />
-            {/* <LinkedOutlineButton text="ดูทั้งหมด" path="/events" /> */}
           </Box>
         </Grow>
       </Box>
 
       <Box
         sx={{
-          paddingY: 10,
+          paddingY: 8,
+          backgroundColor: 'background.elevation1',
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
@@ -100,6 +101,7 @@ function Home() {
                 display: "flex",
                 justifyContent: "center",
                 paddingY: 5,
+                marginLeft: { xs: 0, md: '5vw' },
               }}
             >
               <KoiHighlight />
@@ -117,82 +119,93 @@ function Home() {
         </Grow>
       </Box>
 
-      <Box ref={historyRef}></Box>
-      <Container
-        id="history"
-        maxWidth="lg"
-        sx={{
-          paddingY: 10,
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        <Grow in={historyInView} timeout={1000}>
-          <Box sx={{ display: "flex", justifyContent: "center" }}>
-            <HeaderText title="History" />
+      <Box ref={historyRef} sx={{ backgroundColor: 'background.default', paddingY: 10 }}>
+        <Container
+          id="history"
+          maxWidth="xl"
+          sx={{
+            marginLeft: { xs: 0, md: '5vw' },
+            marginRight: { xs: 0, md: 'auto' },
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <Grow in={historyInView} timeout={1000}>
+            <Box sx={{ display: "flex", justifyContent: "center" }}>
+              <HeaderText title="History" />
+            </Box>
+          </Grow>
+
+          <Box sx={{ paddingY: 5 }}>
+            <History />
           </Box>
-        </Grow>
+        </Container>
+      </Box>
 
-        <Box sx={{ paddingY: 5 }}>
-          <History />
-        </Box>
-      </Container>
+      <Box ref={blogRef} sx={{ backgroundColor: 'background.elevation1', paddingY: 12 }}>
+        <Container
+          id="blog"
+          maxWidth="lg"
+          sx={{
+            marginLeft: { xs: 0, md: 'auto' },
+            marginRight: { xs: 0, md: '5vw' },
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <Grow in={blogInView} timeout={1500}>
+            <Box sx={{ display: "flex", justifyContent: "center" }}>
+              <HeaderText title="Blog" />
+            </Box>
+          </Grow>
 
-      <Container
-        ref={blogRef}
-        id="blog"
-        maxWidth="xl"
-        sx={{
-          paddingY: 5,
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        <Grow in={blogInView} timeout={1500}>
-          <Box sx={{ display: "flex", justifyContent: "center" }}>
-            <HeaderText title="Blog" />
+          <Box sx={{ paddingY: 5 }}>
+            <BlogHighlight />
           </Box>
-        </Grow>
+        </Container>
+      </Box>
 
-        <Box sx={{ paddingY: 5 }}>
-          <BlogHighlight />
-        </Box>
-      </Container>
-
-      <Box sx={{ display: "flex", justifyContent: "center", paddingY: 5 }}>
+      <Box sx={{
+        display: "flex",
+        justifyContent: "center",
+        paddingY: 10,
+        backgroundColor: 'background.elevation2',
+      }}>
         <iframe
           src="https://www.youtube.com/embed/3HtnQz21_yk?autoplay=1&mute=1&loop=1&playlist=3HtnQz21_yk"
           title="YouTube video player"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowFullScreen
           style={{
-            height: "80vh",
+            height: "clamp(500px, 70vh, 800px)",
             aspectRatio: "9 / 16",
             border: "none",
             maxWidth: "100%",
+            borderRadius: "16px",
+            boxShadow: "0 8px 24px rgba(0, 0, 0, 0.12)",
           }}
         ></iframe>
       </Box>
 
-      <Container
-        ref={varietyRef}
-        maxWidth="lg"
-        sx={{
-          paddingY: 5,
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        <Grow in={varietyInView} timeout={1500}>
-          <Box sx={{ display: "flex", justifyContent: "center" }}>
-            <HeaderText title="Koi Varieties" />
-          </Box>
-        </Grow>
+      <Box ref={varietyRef} sx={{ backgroundColor: 'background.default', paddingY: 10 }}>
+        <Container
+          maxWidth="md"
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <Grow in={varietyInView} timeout={1500}>
+            <Box sx={{ display: "flex", justifyContent: "center" }}>
+              <HeaderText title="Koi Varieties" />
+            </Box>
+          </Grow>
 
-        <Box sx={{ paddingY: 5 }}>
-          <KoiVariety />
-        </Box>
-      </Container>
+          <Box sx={{ paddingY: 5 }}>
+            <KoiVariety />
+          </Box>
+        </Container>
+      </Box>
       {/* 
       <Container maxWidth="xl">
         <FacebookPost />

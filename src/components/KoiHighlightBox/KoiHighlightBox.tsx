@@ -16,6 +16,13 @@ function KoiHighlightBox({
         display: "flex",
         flexDirection: "column",
         cursor: onClick ? "pointer" : "default",
+        transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+        '&:hover': onClick ? {
+          transform: 'scale(1.05)',
+          '& img': {
+            boxShadow: '0 8px 20px rgba(0, 0, 0, 0.15)',
+          }
+        } : {},
       }}
       onClick={onClick}
     >
@@ -24,7 +31,14 @@ function KoiHighlightBox({
         alt={`highlight-img-${desc}`}
         width={300}
         height={500}
-        style={{ width: "180px", height: "auto", display: "block" }}
+        style={{
+          width: "180px",
+          height: "auto",
+          display: "block",
+          borderRadius: "8px",
+          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.08)",
+          transition: 'box-shadow 0.3s ease',
+        }}
       />
 
       {desc && (

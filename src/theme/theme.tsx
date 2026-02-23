@@ -5,6 +5,8 @@ import { ThemeProvider } from "@mui/material/styles";
 declare module "@mui/material/styles" {
   interface TypeBackground {
     banner: string;
+    elevation1: string;
+    elevation2: string;
   }
 }
 
@@ -23,9 +25,11 @@ const themeOptions: ThemeOptions = {
       contrastText: "#000000",
     },
     background: {
-      default: "#E7E7E7", //main background gray
+      default: "#F5F5F5", //main background warm gray - more premium
       paper: "#ffffff",
       banner: "#030916",
+      elevation1: "#FAFAFA", //subtle elevated sections
+      elevation2: "#F8F8F8", //cards/content areas
     },
     text: {
       primary: "#000000",
@@ -35,26 +39,36 @@ const themeOptions: ThemeOptions = {
 
   typography: {
     fontFamily:
-      "var(--font-anuphan), var(--font-inknut), var(--font-lineseed-en), var(--font-lineseed-th)",
+      "var(--font-anuphan), var(--font-lineseed-th), sans-serif",
     h1: {
+      fontFamily: "var(--font-inknut)",
       fontWeight: 700,
       fontSize: 64,
+      letterSpacing: '-0.02em',
     },
     h2: {
+      fontFamily: "var(--font-inknut)",
       fontWeight: 600,
       fontSize: 40,
+      letterSpacing: '-0.02em',
     },
     h3: {
+      fontFamily: "var(--font-inknut)",
       fontWeight: 600,
       fontSize: 30,
+      letterSpacing: '-0.02em',
     },
     h4: {
+      fontFamily: "var(--font-inknut)",
       fontWeight: 600,
       fontSize: 24,
+      letterSpacing: '-0.02em',
     },
     h5: {
+      fontFamily: "var(--font-inknut)",
       fontWeight: 600,
       fontSize: 20,
+      letterSpacing: '-0.02em',
     },
     body1: {
       fontSize: 20,
@@ -75,7 +89,7 @@ const themeOptions: ThemeOptions = {
   },
 
   shape: {
-    borderRadius: 8, // rounded corners for buttons/cards
+    borderRadius: 12, // modern rounded corners for buttons/cards
   },
 
   components: {
@@ -103,7 +117,12 @@ const themeOptions: ThemeOptions = {
       styleOverrides: {
         root: {
           borderRadius: 16,
-          boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+          boxShadow: "0 4px 12px rgba(0,0,0,0.06)",
+          transition: 'box-shadow 0.3s ease, transform 0.3s ease',
+          '&:hover': {
+            boxShadow: "0 8px 24px rgba(0,0,0,0.10)",
+            transform: 'translateY(-2px)',
+          },
         },
       },
     },

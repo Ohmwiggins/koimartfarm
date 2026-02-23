@@ -46,22 +46,24 @@ export default function Banner() {
   return (
     <Box
       sx={{
-        display: "flex",
-        flexDirection: "column",
+        position: 'relative',
         height: "80vh",
         overflow: "hidden",
-        backgroundColor: "background.default",
         paddingTop: "60px",
-        gap: "5%",
       }}
     >
+      {/* Full-bleed carousel background */}
       <Box
         ref={scrollRef}
         onWheel={handleInteraction}
         onTouchStart={handleInteraction}
         onTouchMove={handleInteraction}
         sx={{
-          height: { xs: "70%", sm: "100%" },
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
           display: "flex",
           flexDirection: "row",
           alignItems: "center",
@@ -70,6 +72,7 @@ export default function Banner() {
           whiteSpace: "nowrap",
           scrollbarWidth: "none",
           width: "100%",
+          height: "100%",
           backfaceVisibility: "hidden",
           perspective: 1000,
           transformStyle: "preserve-3d",
@@ -93,23 +96,59 @@ export default function Banner() {
         })}
       </Box>
 
+      {/* Dark gradient overlay for text contrast */}
       <Box
         sx={{
-          color: "secondary.main",
-          textAlign: "center",
-          width: "100%",
-          zIndex: 1,
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.4) 100%)',
+          pointerEvents: 'none',
+        }}
+      />
+
+      {/* Asymmetric text overlay - left-aligned, bottom positioned */}
+      <Box
+        sx={{
+          position: 'absolute',
+          left: { xs: '5%', md: '10%' },
+          bottom: '15%',
+          zIndex: 2,
+          maxWidth: { xs: '90%', sm: '600px', md: '700px' },
         }}
       >
         <Grow in={true} timeout={1500}>
-          <Box>
+          <Box
+            sx={{
+              backgroundColor: 'rgba(0, 0, 0, 0.4)',
+              backdropFilter: 'blur(8px)',
+              padding: 4,
+              borderRadius: 2,
+              borderLeft: '4px solid',
+              borderColor: 'secondary.main',
+            }}
+          >
             <Typography
               fontFamily="var(--font-inknut)"
-              sx={{ fontSize: { xs: 32, sm: 50, md: 64 } }}
+              sx={{
+                fontSize: { xs: 40, sm: 60, md: 72 },
+                color: '#ffffff',
+                textShadow: '2px 2px 8px rgba(0,0,0,0.3)',
+                lineHeight: 1.1,
+                mb: 2,
+              }}
             >
               KOI MART FARM
             </Typography>
-            <Typography variant="body1" sx={{ color: "text.primary" }}>
+            <Typography
+              variant="h5"
+              sx={{
+                color: '#ffffff',
+                textShadow: '1px 1px 4px rgba(0,0,0,0.3)',
+              }}
+            >
               ปลาคาร์ฟแฟนซีจากฟาร์มญี่ปุ่นชั้นนำ
             </Typography>
           </Box>
