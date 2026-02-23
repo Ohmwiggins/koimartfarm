@@ -55,7 +55,7 @@ function Home() {
       >
         <Grow in={eventInView} timeout={1500}>
           <Box sx={{ display: "flex", justifyContent: "center" }}>
-            <HeaderText title="Events" />
+            <HeaderText title="Events" color="#E91D26" />
           </Box>
         </Grow>
 
@@ -75,7 +75,7 @@ function Home() {
         >
           <Grow in={blogInView} timeout={1500}>
             <Box sx={{ display: "flex", justifyContent: "center" }}>
-              <HeaderText title="Blog" />
+              <HeaderText title="Blog" color="#E91D26" />
             </Box>
           </Grow>
 
@@ -93,7 +93,7 @@ function Home() {
         >
           <Grow in={historyInView} timeout={1000}>
             <Box sx={{ display: "flex", justifyContent: "center" }}>
-              <HeaderText title="About Us" />
+              <HeaderText title="About Us" color="#E91D26" />
             </Box>
           </Grow>
 
@@ -108,7 +108,7 @@ function Home() {
         <Container maxWidth="lg" sx={{ display: "flex", flexDirection: "column" }}>
           <Grow in={varietyInView} timeout={1500}>
             <Box sx={{ display: "flex", justifyContent: "center" }}>
-              <HeaderText title="Koi Varieties" />
+              <HeaderText title="Koi Varieties" color="#E91D26" />
             </Box>
           </Grow>
 
