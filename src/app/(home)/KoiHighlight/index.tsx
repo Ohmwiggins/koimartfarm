@@ -48,16 +48,19 @@ function KoiHighlight() {
   }, []);
 
   useEffect(() => {
-    if (scrollRef1.current) {
-      const scrollContainer = scrollRef1.current;
-      scrollContainer.scrollLeft =
-        (scrollContainer.scrollWidth - scrollContainer.clientWidth) / 2;
-    }
-    if (scrollRef2.current) {
-      const scrollContainer = scrollRef2.current;
-      scrollContainer.scrollLeft =
-        (scrollContainer.scrollWidth - scrollContainer.clientWidth) / 2;
-    }
+    const centerScroll = () => {
+      if (scrollRef1.current) {
+        const c = scrollRef1.current;
+        c.scrollLeft = (c.scrollWidth - c.clientWidth) / 2;
+      }
+      if (scrollRef2.current) {
+        const c = scrollRef2.current;
+        c.scrollLeft = (c.scrollWidth - c.clientWidth) / 2;
+      }
+    };
+    // Run after images have a chance to load and expand the scroll width
+    const timer = setTimeout(centerScroll, 200);
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
@@ -90,17 +93,19 @@ function KoiHighlight() {
   };
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column" }}>
+    <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
       <Box
         sx={{
           overflowX: "auto",
           overflowY: "hidden",
           display: "flex",
           flexDirection: "row",
+          gap: 2,
           maxWidth: "100vw",
           scrollbarWidth: "none",
-          height: "270px",
+          height: { xs: "220px", sm: "270px" },
           alignItems: "center",
+          padding: 2,
         }}
         ref={combinedRef1}
       >
@@ -121,10 +126,12 @@ function KoiHighlight() {
           overflowY: "hidden",
           display: "flex",
           flexDirection: "row",
+          gap: 2,
           maxWidth: "100vw",
           scrollbarWidth: "none",
-          height: "270px",
+          height: { xs: "220px", sm: "270px" },
           alignItems: "center",
+          padding: 2,
         }}
         ref={combinedRef2}
       >

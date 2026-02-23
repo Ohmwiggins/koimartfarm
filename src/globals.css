@@ -1,5 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 html, body {
     padding: 0;
     margin: 0;
     scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Subtle brand-color gradient overlay for premium feel */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+        radial-gradient(circle at 20% 50%, rgba(197, 165, 90, 0.02) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(15, 27, 45, 0.02) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Gold accent divider utility */
+@layer components {
+    .gold-divider {
+        width: 60px;
+        height: 2px;
+        background: linear-gradient(90deg, #C5A55A, #D4BA7A);
+    }
 }

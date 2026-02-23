@@ -1,18 +1,25 @@
 import localFont from "next/font/local";
-import { Anuphan, Inknut_Antiqua } from "next/font/google";
+import { Inter, Playfair_Display, Prompt } from "next/font/google";
 
-export const anuphan = Anuphan({
-  subsets: ["latin", "thai"],
-  weight: ["400", "600", "700"],
-  display: "swap",
-  variable: "--font-anuphan",
-});
-
-export const inknut = Inknut_Antiqua({
+export const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "600", "700"],
   display: "swap",
-  variable: "--font-inknut",
+  variable: "--font-inter",
+});
+
+export const playfair = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["400", "600", "700"],
+  display: "swap",
+  variable: "--font-playfair",
+});
+
+export const prompt = Prompt({
+  subsets: ["latin", "thai"],
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
+  variable: "--font-prompt",
 });
 
 export const lineSeedEN = localFont({

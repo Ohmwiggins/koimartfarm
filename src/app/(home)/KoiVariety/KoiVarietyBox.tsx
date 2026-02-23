@@ -35,42 +35,50 @@ function KoiVarietyBox({
                 width: "100%",
                 height: "auto",
                 maxWidth: "200px",
-                boxShadow: "0 8px 20px rgba(0, 0, 0, 0.2)",
+                borderRadius: "16px",
               }}
             />
           </Box>
         </Grid>
         <Grid size={{ xs: 12, md: 7 }}>
-          <Box sx={{ width: "100%", mx: { xs: "10%", sm: 0 } }}>
-            <Typography variant="h4" color="secondary.main">
+          <Box sx={{ width: "100%", px: { xs: 2, sm: 0 } }}>
+            <Typography variant="h5" sx={{ fontWeight: 600, color: "secondary.main" }}>
               {type}
             </Typography>
-            <Box paddingTop={2}>
-              <Typography
-                sx={{ fontWeight: "bold" }}
-                variant="body2"
-                component="div"
-              >
-                ลักษณะเด่น
-              </Typography>
-              {characteristic.map((item, index) => (
-                <Typography key={index} variant="body2" component="div">
-                  - {item}
+            <Box sx={{ paddingTop: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <Box>
+                <Typography
+                  sx={{ fontWeight: 600, mb: 0.5, fontSize: 14, letterSpacing: "0.02em" }}
+                  variant="subtitle2"
+                  component="div"
+                >
+                  ลักษณะเด่น
                 </Typography>
-              ))}
-              <Box sx={{ height: "1em" }} />
-              <Typography
-                sx={{ fontWeight: "bold" }}
-                variant="body2"
-                component="div"
-              >
-                ความหมายเชิงสัญลักษณ์
-              </Typography>
-              {meaning.map((item, index) => (
-                <Typography key={index} variant="body2" component="div">
-                  - {item}
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.25 }}>
+                  {characteristic.map((item, index) => (
+                    <Typography key={index} variant="body2" component="div" sx={{ lineHeight: 1.7, fontSize: 13 }}>
+                      • {item}
+                    </Typography>
+                  ))}
+                </Box>
+              </Box>
+
+              <Box>
+                <Typography
+                  sx={{ fontWeight: 600, mb: 0.5, fontSize: 14, letterSpacing: "0.02em" }}
+                  variant="subtitle2"
+                  component="div"
+                >
+                  ความหมายเชิงสัญลักษณ์
                 </Typography>
-              ))}
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.25 }}>
+                  {meaning.map((item, index) => (
+                    <Typography key={index} variant="body2" component="div" sx={{ lineHeight: 1.7, fontSize: 13 }}>
+                      • {item}
+                    </Typography>
+                  ))}
+                </Box>
+              </Box>
             </Box>
           </Box>
         </Grid>

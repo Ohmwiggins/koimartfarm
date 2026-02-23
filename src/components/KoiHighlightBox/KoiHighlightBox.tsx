@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import Image from "next/image";
 
 function KoiHighlightBox({
@@ -11,34 +11,45 @@ function KoiHighlightBox({
   onClick?: () => void;
 }) {
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        cursor: onClick ? "pointer" : "default",
-      }}
+    <div
+      className={`group relative flex flex-col ${onClick ? "cursor-pointer" : ""}`}
       onClick={onClick}
     >
-      <Image
-        src={`${img}`}
-        alt={`highlight-img-${desc}`}
-        width={300}
-        height={500}
-        style={{ width: "180px", height: "auto", display: "block" }}
-      />
+      <div className="relative overflow-hidden rounded-xl">
+        <Image
+          src={`${img}`}
+          alt={`highlight-img-${desc}`}
+          width={300}
+          height={500}
+          className="transition-transform duration-500 group-hover:scale-105"
+          style={{
+            width: "180px",
+            height: "240px",
+            objectFit: "cover",
+            display: "block",
+          }}
+        />
+        {/* Hover overlay with subtle navy tint */}
+        {onClick && (
+          <div className="absolute inset-0 bg-navy/0 group-hover:bg-navy/20 transition-all duration-300 rounded-xl" />
+        )}
+      </div>
 
       {desc && (
         <Typography
           variant="body2"
           sx={{
             color: "secondary.main",
-            fontWeight: "bold",
+            fontWeight: 600,
+            mt: 1,
+            fontSize: 13,
+            letterSpacing: "0.02em",
           }}
         >
           {desc}
         </Typography>
       )}
-    </Box>
+    </div>
   );
 }
 

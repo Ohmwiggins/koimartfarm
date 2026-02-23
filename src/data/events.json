@@ -2,6 +2,15 @@
   {
     "id": 0,
     "date": "7/02/2026",
-    "detail": "Koimart Cup 2026 \"KOIMART CUP 4 EVENT\""
+    "detail": "Koimart Cup 2026 \"KOIMART CUP 4 EVENT\"",
+    "imgs": ["/img/events/event-1.png", "/img/events/event-2.png"],
+    "description": ""
+  },
+  {
+    "id": 1,
+    "date": "21/03/2026",
+    "detail": "KOIMART CUP ISA",
+    "imgs": ["/img/events/event-3.jpg"],
+    "description": "เริ่มจำหน่ายสิทธิเลือกปลาแล้วตั้งแต่วันนี้เป็นต้นไป โดยแบ่งการเลือกปลาและตัดสินเป็น 3 กลุ่ม A B C"
   }
 ]

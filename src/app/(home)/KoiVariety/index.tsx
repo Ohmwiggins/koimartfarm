@@ -20,7 +20,7 @@ const koiVarieties = [
   },
   {
     img: "/img/varieties/Sanke.png",
-    type: "Sanke / Taisho Sanke (ซังเคะ)",
+    type: "Sanke / Taisho Sanke (ซันเก้)",
     characteristic: [
       "พื้นสีขาว",
       "ลายแดงผสมจุดดำ",
@@ -35,7 +35,7 @@ const koiVarieties = [
   },
   {
     img: "/img/varieties/Showa.png",
-    type: "Showa / Showa Sanshoku (โชวะ)",
+    type: "Showa / Showa Sanshoku (โชว่า)",
     characteristic: [
       "พื้นสีดำเป็นหลัก",
       "มีลายแดงและขาวแทรก",
@@ -51,7 +51,7 @@ const koiVarieties = [
   },
   {
     img: "/img/varieties/Ogon.png",
-    type: "Yamabuki Ogon (ยามาบูกิ โอโกน)",
+    type: "Yamabuki Ogon (ยามาบูกิ โอกอน)",
     characteristic: [
       "สีเหลืองทองทั้งตัว",
       "ผิวเงาแบบโลหะ (Metallic)",
@@ -61,7 +61,7 @@ const koiVarieties = [
   },
   {
     img: "/img/varieties/Asagi.png",
-    type: "Asagi (อะซากิ)",
+    type: "Asagi (อาซากิ)",
     characteristic: [
       "หลังเป็นลายเกล็ดน้ำเงินเทาแบบตาข่าย",
       "ท้อง แก้ม และครีบมีสีแดงส้มไล่ขึ้น",
@@ -86,7 +86,7 @@ const koiVarieties = [
   },
   {
     img: "/img/varieties/Chagoi.png",
-    type: "Chagoi (ชาโกอิ)",
+    type: "Chagoi (ชากอย)",
     characteristic: [
       "สีโทนน้ำตาลชา / เขียวมะกอก / ทองน้ำตาล",
       "โตเร็ว แข็งแรง",

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Footer from "../components/Footer";
 import NavBar from "../components/Navbar";
 import KoiMartTheme from "./../theme/theme";
-import { anuphan, inknut, lineSeedEN, lineSeedTH } from "./../fonts";
+import { inter, playfair, prompt, lineSeedEN, lineSeedTH } from "./../fonts";
 import "./../globals.css";
 
 export const metadata: Metadata = {
@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${anuphan.variable} ${inknut.variable} ${lineSeedEN.variable} ${lineSeedTH.variable}`}
+        className={`${inter.variable} ${playfair.variable} ${prompt.variable} ${lineSeedEN.variable} ${lineSeedTH.variable}`}
       >
         <KoiMartTheme>
           <NavBar />

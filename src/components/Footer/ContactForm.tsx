@@ -65,15 +65,30 @@ function ContactForm() {
     <Box sx={{ height: "100%" }}>
       <ContactUsLayout>
         <Typography
-          variant="h4"
-          sx={{ color: "primary.contrastText", marginTop: { xs: 3, md: 0 } }}
+          sx={{
+            fontFamily: "var(--font-playfair)",
+            color: "#FAF8F5",
+            fontSize: 22,
+            fontWeight: 600,
+            marginTop: { xs: 4, md: 0 },
+            mb: 1,
+          }}
         >
-          ส่งข้อความหาเรา
+          Send us a message
         </Typography>
-        <Box sx={{ mt: "auto" }}>
+        <Typography
+          variant="body2"
+          sx={{
+            color: "rgba(250, 248, 245, 0.5)",
+            mb: 3,
+          }}
+        >
+          We&apos;ll get back to you within 24 hours
+        </Typography>
+        <Box sx={{ mt: "auto", display: "flex", flexDirection: "column", gap: 0.5 }}>
           <TextInputField
             value={name}
-            placeholder="ชื่อผู้ติดต่อ"
+            placeholder="Name"
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               setName(event.target.value);
               setNameErr(false);
@@ -81,7 +96,7 @@ function ContactForm() {
             error={nameErr}
           />
           <TextInputField
-            placeholder="บริษัท"
+            placeholder="Company"
             value={company}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               setCompany(event.target.value);
@@ -90,7 +105,7 @@ function ContactForm() {
             error={companyErr}
           />
           <TextInputField
-            placeholder="หัวเรื่อง"
+            placeholder="Subject"
             value={topic}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               setTopic(event.target.value);
@@ -101,7 +116,7 @@ function ContactForm() {
           <TextInputField
             multiline
             rows={4}
-            placeholder="รายละเอียด"
+            placeholder="Message"
             value={details}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               setDetails(event.target.value);
@@ -114,13 +129,13 @@ function ContactForm() {
 
       <Box
         sx={{
-          marginTop: "10px",
+          marginTop: 2,
           display: "flex",
           justifyContent: "center",
         }}
       >
-        <Box sx={{ width: { xs: "80%", md: "40%" } }}>
-          <FilledButton text="ส่ง" isLoading={loading} method={handleClick} />
+        <Box sx={{ width: { xs: "80%", md: "50%" } }}>
+          <FilledButton text="Send Message" isLoading={loading} method={handleClick} />
         </Box>
       </Box>
     </Box>
