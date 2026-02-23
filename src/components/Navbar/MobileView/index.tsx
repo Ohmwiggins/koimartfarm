@@ -34,7 +34,7 @@ function NavbarMobile() {
           <MenuIcon />
         </IconButton>
         <Image
-          src={"/img/logo.png"}
+          src={"/img/logo-circle.png"}
           alt="KoiMartFarm Background2"
           width={200}
           height={200}

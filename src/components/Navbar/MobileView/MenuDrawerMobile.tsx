@@ -10,7 +10,7 @@ import { useEffect } from "react";
 import NavBarIconButton from "./NavBarIconButton";
 import { MenuButtonDrawer } from "./MenuDrawerMobile.styles";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 function MenuDrawerMobile({
   isMenuOpen,
@@ -19,8 +19,6 @@ function MenuDrawerMobile({
   isMenuOpen: boolean;
   setIsMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const pathname = usePathname() ?? "/";
-  const contactHref = `${pathname}#contact`;
 
   const router = useRouter();
 
@@ -65,7 +63,7 @@ function MenuDrawerMobile({
           component={<MenuIcon sx={{ fontSize: 30 }} />}
         />
         <Image
-          src={"/img/logo.png"}
+          src={"/img/logo-circle.png"}
           alt="KoiMartFarm Logo"
           width={200}
           height={200}
@@ -74,7 +72,7 @@ function MenuDrawerMobile({
         <NavBarIconButton
           method={() => {
             setIsMenuOpen(!isMenuOpen);
-            router.push("/#home");
+            router.push("/");
           }}
           component={<HomeIcon sx={{ fontSize: 30 }} />}
         />
@@ -83,19 +81,19 @@ function MenuDrawerMobile({
       <Box
         sx={{ display: "flex", flexDirection: "column", marginTop: 7, gap: 3 }}
       >
-        <MenuButtonDrawer href="/#home" onClick={() => setIsMenuOpen(false)}>
+        <MenuButtonDrawer href="/" onClick={() => setIsMenuOpen(false)}>
           Home
         </MenuButtonDrawer>
-        <MenuButtonDrawer href="/#history" onClick={() => setIsMenuOpen(false)}>
-          History
+        <MenuButtonDrawer href="/#events" onClick={() => setIsMenuOpen(false)}>
+          Events
         </MenuButtonDrawer>
         <MenuButtonDrawer href="/#blog" onClick={() => setIsMenuOpen(false)}>
           Blog
         </MenuButtonDrawer>
-        <MenuButtonDrawer
-          href={contactHref}
-          onClick={() => setIsMenuOpen(false)}
-        >
+        <MenuButtonDrawer href="/#about" onClick={() => setIsMenuOpen(false)}>
+          About Us
+        </MenuButtonDrawer>
+        <MenuButtonDrawer href="/#contact" onClick={() => setIsMenuOpen(false)}>
           Contact Us
         </MenuButtonDrawer>
       </Box>

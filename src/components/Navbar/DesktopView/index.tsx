@@ -6,9 +6,6 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 function NavbarDesktop() {
-  const pathname = usePathname() ?? "/";
-  const contactHref = `${pathname}#contact`;
-
   return (
     <Container
       maxWidth="xl"
@@ -22,18 +19,19 @@ function NavbarDesktop() {
     >
       <Image
         priority
-        src="/img/full-logo.png"
+        src="/img/logo-circle.png"
         alt="Koimart Farm Logo"
-        width={800}
+        width={200}
         height={200}
-        style={{ width: 200, height: "auto", display: "block" }}
+        style={{ width: 64, height: "auto", display: "block" }}
       />
 
       <Box>
-        <MenuButtonDesktop href="/#home">Home</MenuButtonDesktop>
-        <MenuButtonDesktop href="/#history">History</MenuButtonDesktop>
+        <MenuButtonDesktop href="/">Home</MenuButtonDesktop>
+        <MenuButtonDesktop href="/#events">Events</MenuButtonDesktop>
         <MenuButtonDesktop href="/#blog">Blog</MenuButtonDesktop>
-        <MenuButtonDesktop href={contactHref}>Contact Us</MenuButtonDesktop>
+        <MenuButtonDesktop href="/#about">About Us</MenuButtonDesktop>
+        <MenuButtonDesktop href="/#contact">Contact Us</MenuButtonDesktop>
       </Box>
     </Container>
   );

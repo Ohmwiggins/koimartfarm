@@ -48,16 +48,19 @@ function KoiHighlight() {
   }, []);
 
   useEffect(() => {
-    if (scrollRef1.current) {
-      const scrollContainer = scrollRef1.current;
-      scrollContainer.scrollLeft =
-        (scrollContainer.scrollWidth - scrollContainer.clientWidth) / 2;
-    }
-    if (scrollRef2.current) {
-      const scrollContainer = scrollRef2.current;
-      scrollContainer.scrollLeft =
-        (scrollContainer.scrollWidth - scrollContainer.clientWidth) / 2;
-    }
+    const centerScroll = () => {
+      if (scrollRef1.current) {
+        const c = scrollRef1.current;
+        c.scrollLeft = (c.scrollWidth - c.clientWidth) / 2;
+      }
+      if (scrollRef2.current) {
+        const c = scrollRef2.current;
+        c.scrollLeft = (c.scrollWidth - c.clientWidth) / 2;
+      }
+    };
+    // Run after images have a chance to load and expand the scroll width
+    const timer = setTimeout(centerScroll, 200);
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {

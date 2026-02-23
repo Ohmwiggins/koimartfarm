@@ -8,6 +8,9 @@ export default function Banner() {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const animationFrameRef = useRef<number | null>(null);
+  const isDragging = useRef(false);
+  const dragStartX = useRef(0);
+  const dragScrollLeft = useRef(0);
 
   const handleInteraction = () => {
     setIsPaused(true);
@@ -16,7 +19,25 @@ export default function Banner() {
     }
     timeoutRef.current = setTimeout(() => {
       setIsPaused(false);
-    }, 2000); // Resume after 2 seconds of inactivity
+    }, 2000);
+  };
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (!scrollRef.current) return;
+    isDragging.current = true;
+    dragStartX.current = e.pageX - scrollRef.current.offsetLeft;
+    dragScrollLeft.current = scrollRef.current.scrollLeft;
+    handleInteraction();
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging.current || !scrollRef.current) return;
+    const x = e.pageX - scrollRef.current.offsetLeft;
+    scrollRef.current.scrollLeft = dragScrollLeft.current - (x - dragStartX.current);
+  };
+
+  const handleMouseUp = () => {
+    isDragging.current = false;
   };
 
   useEffect(() => {
@@ -28,7 +49,7 @@ export default function Banner() {
         if (scrollElement.scrollLeft >= scrollElement.scrollWidth / 2) {
           scrollElement.scrollLeft = 0;
         } else {
-          scrollElement.scrollLeft += 0.5; // Adjust scroll speed here
+          scrollElement.scrollLeft += 0.5;
         }
       }
       animationFrameRef.current = requestAnimationFrame(scroll);
@@ -44,112 +65,97 @@ export default function Banner() {
   }, [isPaused]);
 
   return (
-    <Box
-      sx={{
-        position: 'relative',
-        height: "80vh",
-        overflow: "hidden",
-        paddingTop: "60px",
-      }}
-    >
-      {/* Full-bleed carousel background */}
+    <Box sx={{ paddingTop: "60px", backgroundColor: "background.default" }}>
+      {/* Slide carousel */}
       <Box
-        ref={scrollRef}
-        onWheel={handleInteraction}
-        onTouchStart={handleInteraction}
-        onTouchMove={handleInteraction}
         sx={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          overflowX: "scroll",
-          overflowY: "hidden",
-          whiteSpace: "nowrap",
-          scrollbarWidth: "none",
-          width: "100%",
-          height: "100%",
-          backfaceVisibility: "hidden",
-          perspective: 1000,
-          transformStyle: "preserve-3d",
+          position: "relative",
+          height: { xs: "50vh", md: "70vh" },
+          overflow: "hidden",
         }}
       >
-        {Array.from({ length: 2 }).map((_, i) => {
-          return (
+        <Box
+          ref={scrollRef}
+          onWheel={handleInteraction}
+          onTouchStart={handleInteraction}
+          onTouchMove={handleInteraction}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
+          sx={{
+            cursor: "grab",
+            "&:active": { cursor: "grabbing" },
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            overflowX: "scroll",
+            overflowY: "hidden",
+            whiteSpace: "nowrap",
+            scrollbarWidth: "none",
+            width: "100%",
+            height: "100%",
+            backfaceVisibility: "hidden",
+            perspective: 1000,
+            transformStyle: "preserve-3d",
+          }}
+        >
+          {Array.from({ length: 2 }).map((_, i) => (
             <Image
               key={i}
               src={`/img/banner.png`}
               alt={`KoiMartFarm Background ${i}`}
               width={6000}
               height={1000}
-              style={{
-                width: "auto",
-                height: "100%",
-              }}
+              style={{ width: "auto", height: "100%" }}
               priority={true}
             />
-          );
-        })}
+          ))}
+        </Box>
       </Box>
 
-      {/* Dark gradient overlay for text contrast */}
+      {/* Header + subtitle below the carousel */}
       <Box
         sx={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: 'linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.4) 100%)',
-          pointerEvents: 'none',
-        }}
-      />
-
-      {/* Asymmetric text overlay - left-aligned, bottom positioned */}
-      <Box
-        sx={{
-          position: 'absolute',
-          left: { xs: '5%', md: '10%' },
-          bottom: '15%',
-          zIndex: 2,
-          maxWidth: { xs: '90%', sm: '600px', md: '700px' },
+          textAlign: "center",
+          py: { xs: 5, md: 7 },
+          px: 2,
+          backgroundColor: "background.default",
         }}
       >
         <Grow in={true} timeout={1500}>
-          <Box
-            sx={{
-              backgroundColor: 'rgba(0, 0, 0, 0.4)',
-              backdropFilter: 'blur(8px)',
-              padding: 4,
-              borderRadius: 2,
-              borderLeft: '4px solid',
-              borderColor: 'secondary.main',
-            }}
-          >
+          <Box>
             <Typography
-              fontFamily="var(--font-inknut)"
               sx={{
-                fontSize: { xs: 40, sm: 60, md: 72 },
-                color: '#ffffff',
-                textShadow: '2px 2px 8px rgba(0,0,0,0.3)',
-                lineHeight: 1.1,
+                fontFamily: "var(--font-playfair)",
+                fontSize: { xs: 38, sm: 56, md: 72 },
+                color: "#FF0007",
+                lineHeight: 1.05,
+                fontWeight: 700,
+                letterSpacing: "-0.02em",
                 mb: 2,
               }}
             >
-              KOI MART FARM
+              KOIMART FARM
             </Typography>
             <Typography
-              variant="h5"
               sx={{
-                color: '#ffffff',
-                textShadow: '1px 1px 4px rgba(0,0,0,0.3)',
+                fontFamily: "var(--font-prompt)",
+                fontSize: { xs: 15, sm: 17, md: 19 },
+                color: "text.secondary",
+                fontWeight: 300,
+                letterSpacing: "0.03em",
+                maxWidth: 680,
+                mx: "auto",
+                lineHeight: 1.7,
               }}
             >
-              ปลาคาร์ฟแฟนซีจากฟาร์มญี่ปุ่นชั้นนำ
+              นำเข้าปลา Fancy Carp จากทุกๆ ฟาร์มดังในประเทศญี่ปุ่น อาทิเช่น Dainichi, Sakai, Isa, Momotaro, Marudo
             </Typography>
           </Box>
         </Grow>
