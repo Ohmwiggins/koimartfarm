@@ -3,7 +3,6 @@
 import { Box, Container } from "@mui/material";
 import { MenuButtonDesktop } from "./NavbarDesktop.styles";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
 
 function NavbarDesktop() {
   return (
