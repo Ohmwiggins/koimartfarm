@@ -5,7 +5,7 @@ import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import type { KoiEvent } from "../../../models/events";
 
 type EventProps = {
@@ -23,11 +23,9 @@ function EventImageCarousel({ imgs }: { imgs: string[] }) {
   return (
     <Box
       sx={{
-        flexShrink: 0,
-        width: { xs: "100%", md: 220 },
-        height: { xs: 220, md: 260 },
+        width: "100%",
+        height: "100%",
         position: "relative",
-        borderRadius: { xs: "12px", md: "16px 0 0 16px" },
         overflow: "hidden",
       }}
     >
@@ -45,17 +43,17 @@ function EventImageCarousel({ imgs }: { imgs: string[] }) {
           onClick={(e) => { e.stopPropagation(); setIndex(index - 1); }}
           sx={{
             position: "absolute",
-            left: 6,
+            left: 8,
             top: "50%",
             transform: "translateY(-50%)",
             backgroundColor: "rgba(15,27,45,0.6)",
             color: "#FAF8F5",
-            width: 28,
-            height: 28,
+            width: 32,
+            height: 32,
             "&:hover": { backgroundColor: "rgba(15,27,45,0.85)" },
           }}
         >
-          <ArrowBackIosNewIcon sx={{ fontSize: 12 }} />
+          <ArrowBackIosNewIcon sx={{ fontSize: 14 }} />
         </IconButton>
       )}
 
@@ -66,17 +64,17 @@ function EventImageCarousel({ imgs }: { imgs: string[] }) {
           onClick={(e) => { e.stopPropagation(); setIndex(index + 1); }}
           sx={{
             position: "absolute",
-            right: 6,
+            right: 8,
             top: "50%",
             transform: "translateY(-50%)",
             backgroundColor: "rgba(15,27,45,0.6)",
             color: "#FAF8F5",
-            width: 28,
-            height: 28,
+            width: 32,
+            height: 32,
             "&:hover": { backgroundColor: "rgba(15,27,45,0.85)" },
           }}
         >
-          <ArrowForwardIosIcon sx={{ fontSize: 12 }} />
+          <ArrowForwardIosIcon sx={{ fontSize: 14 }} />
         </IconButton>
       )}
 
@@ -85,7 +83,7 @@ function EventImageCarousel({ imgs }: { imgs: string[] }) {
         <Box
           sx={{
             position: "absolute",
-            bottom: 8,
+            bottom: 12,
             left: 0,
             right: 0,
             display: "flex",
@@ -114,82 +112,174 @@ function EventImageCarousel({ imgs }: { imgs: string[] }) {
 }
 
 function Event(props: EventProps) {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const checkScroll = () => {
+    if (!scrollContainerRef.current) return;
+    const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+    setCanScrollLeft(scrollLeft > 0);
+    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 5);
+  };
+
+  const scroll = (direction: "left" | "right") => {
+    if (!scrollContainerRef.current) return;
+    const scrollAmount = scrollContainerRef.current.clientWidth * 0.9;
+    scrollContainerRef.current.scrollBy({
+      left: direction === "left" ? -scrollAmount : scrollAmount,
+      behavior: "smooth",
+    });
+    setTimeout(checkScroll, 300);
+  };
+
   return (
     <Container maxWidth="lg">
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 4 }}>
-        {props.events.map((e) => (
-          <Box
-            key={e.id}
-            onClick={() => window.open("https://www.koimart.shop/th/news", "_blank")}
+      <Box sx={{ position: "relative" }}>
+        {/* Left Arrow */}
+        {canScrollLeft && (
+          <IconButton
+            onClick={() => scroll("left")}
             sx={{
-              display: "flex",
-              flexDirection: { xs: "column", md: "row" },
-              alignItems: { xs: "flex-start", md: "center" },
-              gap: { xs: 3, md: 5 },
-              backgroundColor: "background.paper",
-              borderRadius: "16px",
-              border: "1px solid rgba(197, 165, 90, 0.35)",
-              overflow: "hidden",
-              p: { xs: 2, md: 0 },
-              cursor: "pointer",
-              transition: "transform 0.2s ease, box-shadow 0.2s ease",
+              position: "absolute",
+              left: { xs: -12, sm: -20 },
+              top: "50%",
+              transform: "translateY(-50%)",
+              zIndex: 2,
+              backgroundColor: "rgba(15,27,45,0.85)",
+              color: "#C5A55A",
+              width: { xs: 36, sm: 44 },
+              height: { xs: 36, sm: 44 },
               "&:hover": {
-                transform: "translateY(-2px)",
-                boxShadow: "0 8px 32px rgba(0,0,0,0.12)",
+                backgroundColor: "rgba(15,27,45,0.95)",
+                color: "#FAF8F5",
               },
             }}
           >
-            {/* Event poster image(s) */}
-            {e.imgs && e.imgs.length > 0 && (
-              <EventImageCarousel imgs={e.imgs} />
-            )}
+            <ArrowBackIosNewIcon />
+          </IconButton>
+        )}
 
-            {/* Event details */}
-            <Box sx={{ flex: 1, py: { xs: 2, md: 4 }, pr: { xs: 2, md: 4 } }}>
-              {/* Date — icon + label */}
-              <Box sx={{ display: "flex", alignItems: "center", gap: 0.75, mb: 1 }}>
-                <CalendarTodayIcon sx={{ fontSize: 13, color: "secondary.main" }} />
-                <Typography
+        {/* Events Container */}
+        <Box
+          ref={scrollContainerRef}
+          onScroll={checkScroll}
+          sx={{
+            display: "flex",
+            gap: 3,
+            overflowX: "auto",
+            scrollSnapType: "x mandatory",
+            scrollbarWidth: "none",
+            "&::-webkit-scrollbar": { display: "none" },
+            py: 3,
+          }}
+        >
+          {props.events.map((e) => (
+            <Box
+              key={e.id}
+              onClick={() => window.open("https://www.koimart.shop/th/news", "_blank")}
+              sx={{
+                scrollSnapAlign: "start",
+                flexShrink: 0,
+                width: { xs: "85%", sm: "calc(50% - 12px)" },
+                display: "flex",
+                flexDirection: "column",
+                backgroundColor: "background.paper",
+                borderRadius: "16px",
+                border: "1px solid rgba(197, 165, 90, 0.35)",
+                overflow: "hidden",
+                cursor: "pointer",
+                transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                "&:hover": {
+                  transform: "translateY(-2px)",
+                  boxShadow: "0 8px 32px rgba(0,0,0,0.12)",
+                },
+              }}
+            >
+              {/* Event poster image(s) */}
+              {e.imgs && e.imgs.length > 0 && (
+                <Box
                   sx={{
-                    fontSize: 11,
-                    fontWeight: 600,
-                    letterSpacing: "0.08em",
-                    textTransform: "uppercase",
-                    color: "secondary.main",
-                    lineHeight: 1.5,
-                    fontFamily: "var(--font-inter)",
+                    width: "100%",
+                    height: 240,
+                    position: "relative",
                   }}
                 >
-                  {e.date}
-                </Typography>
-              </Box>
-              {/* Title */}
-              <Typography
-                sx={{
-                  fontWeight: 700,
-                  fontSize: 18,
-                  color: "primary.main",
-                  mb: 1,
-                  lineHeight: 1.35,
-                }}
-              >
-                {e.detail}
-              </Typography>
-              {e.description && (
-                <Typography
-                  sx={{
-                    fontSize: 14,
-                    fontWeight: 400,
-                    color: "text.secondary",
-                    lineHeight: 1.6,
-                  }}
-                >
-                  {e.description}
-                </Typography>
+                  <EventImageCarousel imgs={e.imgs} />
+                </Box>
               )}
+
+              {/* Event details */}
+              <Box sx={{ p: 3 }}>
+                {/* Date — icon + label */}
+                <Box sx={{ display: "flex", alignItems: "center", gap: 0.75, mb: 1.5 }}>
+                  <CalendarTodayIcon sx={{ fontSize: 13, color: "secondary.main" }} />
+                  <Typography
+                    sx={{
+                      fontSize: 11,
+                      fontWeight: 600,
+                      letterSpacing: "0.08em",
+                      textTransform: "uppercase",
+                      color: "secondary.main",
+                      lineHeight: 1.5,
+                      fontFamily: "var(--font-inter)",
+                    }}
+                  >
+                    {e.date}
+                  </Typography>
+                </Box>
+                {/* Title */}
+                <Typography
+                  sx={{
+                    fontWeight: 700,
+                    fontSize: 18,
+                    color: "primary.main",
+                    mb: 1.5,
+                    lineHeight: 1.35,
+                  }}
+                >
+                  {e.detail}
+                </Typography>
+                {e.description && (
+                  <Typography
+                    sx={{
+                      fontSize: 14,
+                      fontWeight: 400,
+                      color: "text.secondary",
+                      lineHeight: 1.6,
+                    }}
+                  >
+                    {e.description}
+                  </Typography>
+                )}
+              </Box>
             </Box>
-          </Box>
-        ))}
+          ))}
+        </Box>
+
+        {/* Right Arrow */}
+        {canScrollRight && (
+          <IconButton
+            onClick={() => scroll("right")}
+            sx={{
+              position: "absolute",
+              right: { xs: -12, sm: -20 },
+              top: "50%",
+              transform: "translateY(-50%)",
+              zIndex: 2,
+              backgroundColor: "rgba(15,27,45,0.85)",
+              color: "#C5A55A",
+              width: { xs: 36, sm: 44 },
+              height: { xs: 36, sm: 44 },
+              "&:hover": {
+                backgroundColor: "rgba(15,27,45,0.95)",
+                color: "#FAF8F5",
+              },
+            }}
+          >
+            <ArrowForwardIosIcon />
+          </IconButton>
+        )}
       </Box>
     </Container>
   );

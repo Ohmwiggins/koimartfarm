@@ -30,7 +30,8 @@ function NavbarDesktop() {
         <MenuButtonDesktop href="/#events">Events</MenuButtonDesktop>
         <MenuButtonDesktop href="/#blog">Blog</MenuButtonDesktop>
         <MenuButtonDesktop href="/#about">About Us</MenuButtonDesktop>
-        <MenuButtonDesktop href="/#contact">Contact Us</MenuButtonDesktop>
+        <MenuButtonDesktop href="/#links">Links</MenuButtonDesktop>
+        <MenuButtonDesktop href="/#contact">Contact</MenuButtonDesktop>
       </Box>
     </Container>
   );

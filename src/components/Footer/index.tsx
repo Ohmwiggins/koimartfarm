@@ -155,7 +155,7 @@ function Footer() {
           </Grid>
 
           {/* Links grid — 4-col 2-row layout */}
-          <Grid size={12} sx={{ my: 8 }}>
+          <Grid id="links" size={12} sx={{ my: 8 }}>
             <Grid container spacing={2}>
               {links.map(({ label, url, icon, iconBg, glowColor }) => (
                   <Grid key={label} size={{ xs: 12, sm: 6, md: 3 }}>

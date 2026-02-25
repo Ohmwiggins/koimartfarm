@@ -93,8 +93,11 @@ function MenuDrawerMobile({
         <MenuButtonDrawer href="/#about" onClick={() => setIsMenuOpen(false)}>
           About Us
         </MenuButtonDrawer>
+        <MenuButtonDrawer href="/#links" onClick={() => setIsMenuOpen(false)}>
+          Links
+        </MenuButtonDrawer>
         <MenuButtonDrawer href="/#contact" onClick={() => setIsMenuOpen(false)}>
-          Contact Us
+          Contact
         </MenuButtonDrawer>
       </Box>
     </Drawer>

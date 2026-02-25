@@ -160,7 +160,7 @@ function History() {
                   variant="body1"
                   sx={{ color: "text.secondary", fontStyle: "italic", fontWeight: 500, lineHeight: 1.8, fontSize: { xs: 15, md: 16 }, wordBreak: "keep-all", overflowWrap: "break-word" }}
                 >
-                  เริ่มต้นจากความชื่นชอบ และรักที่จะเลี้ยงปลาคาร์ปมาเป็นเวลายาวนาน
+                  เริ่มต้นจากความชื่นชอบ และรักที่จะเลี้ยงปลาคาร์ฟมาเป็นเวลายาวนาน
                   ของคุณพ่อ{" "}
                   <Box component="span" sx={{ whiteSpace: "nowrap" }}>สุชาติ ศุภทนต์</Box>
                 </Typography>
@@ -169,17 +169,17 @@ function History() {
               {/* Body paragraphs */}
               <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                 <Typography variant="body2" sx={{ color: "text.primary", lineHeight: 1.85, wordBreak: "keep-all", overflowWrap: "break-word" }}>
-                  ตั้งแต่ผมยังเด็ก จนถึงช่วงวัยรุ่น ผมได้รับผิดชอบการดูแลปลาคาร์ปด้วยความรู้สึกสนุกและตื่นเต้น
+                  ตั้งแต่ผมยังเด็ก จนถึงช่วงวัยรุ่น ผมได้รับผิดชอบการดูแลปลาคาร์ฟด้วยความรู้สึกสนุกและตื่นเต้น
                   ในช่วงเวลานั้น ผมได้เห็นหลายสิ่งหลายอย่างจากการเปลี่ยนแปลง และพัฒนาการในด้านต่างๆ ของปลา...
                 </Typography>
                 <Typography variant="body2" sx={{ color: "text.primary", lineHeight: 1.85, wordBreak: "keep-all", overflowWrap: "break-word" }}>
                   ทั้งการเติบโตที่มีสีสันสดใส ลวดลายที่สวยงาม ดูแปลกตาในแต่ละสายพันธุ์ ไปจนถึงรูปร่างโครงสร้างที่ใหญ่โตของตัวปลา
-                  อีกทั้งเรื่องราวความเป็นมาของปลาคาร์ปที่มีมายาวนานนับพันปี และความหมายของการเลี้ยงที่มีเอกลักษณ์
+                  อีกทั้งเรื่องราวความเป็นมาของปลาคาร์ฟที่มีมายาวนานนับพันปี และความหมายของการเลี้ยงที่มีเอกลักษณ์
                   สื่อถึงความอุดมสมบูรณ์ ความมั่งคั่ง และร่ำรวย
                 </Typography>
                 <Typography variant="body2" sx={{ color: "text.primary", lineHeight: 1.85, wordBreak: "keep-all", overflowWrap: "break-word" }}>
                   ด้วยเสน่ห์เหล่านี้... จึงเป็นแรงบันดาลใจที่อยากจะถ่ายทอดความรู้สึกและความหมายดีๆ
-                  ในการเลี้ยงปลาคาร์ป ซึ่งถือว่าเป็นงานอดิเรกที่ทุกคนเข้าถึงได้
+                  ในการเลี้ยงปลาคาร์ฟ ซึ่งถือว่าเป็นงานอดิเรกที่ทุกคนเข้าถึงได้
                 </Typography>
                 <Typography variant="body2" sx={{ color: "text.primary", lineHeight: 1.85, wordBreak: "keep-all", overflowWrap: "break-word" }}>
                   ไม่ว่าจะเป็นเด็ก หนุ่มสาว วัยทำงาน คนเกษียณ ผู้หญิง หรือผู้ชาย
