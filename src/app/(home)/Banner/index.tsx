@@ -1,37 +1,62 @@
 "use client";
-import { Box, Grow, Typography } from "@mui/material";
+import { Box, IconButton, Typography, Grow } from "@mui/material";
 import Image from "next/image";
-import { useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+
+// Individual 4:5 portrait koi images — add/remove here as needed.
+// The Admin Panel will manage this list dynamically in the future.
+const SLIDES = [
+  "/img/koi-images/Koi-image-01.png",
+  "/img/koi-images/Koi-image-02.png",
+  "/img/koi-images/Koi-image-03.png",
+  "/img/koi-images/Koi-image-04.png",
+  "/img/koi-images/Koi-image-05.png",
+  "/img/koi-images/Koi-image-06.png",
+  "/img/koi-images/Koi-image-07.png",
+];
 
 export default function Banner() {
   const trackRef = useRef<HTMLDivElement>(null);
-  const offsetRef = useRef(0);          // current translateX (px, always ≤ 0)
+  const offsetRef = useRef(0);           // current translateX (px, always ≤ 0)
   const rafRef = useRef<number | null>(null);
   const isPausedRef = useRef(false);
-  const resumeTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const resumeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isDragging = useRef(false);
   const dragStartX = useRef(0);
   const dragStartOffset = useRef(0);
-  const imageWidthRef = useRef(0);      // width of ONE copy of the image
+  const slideWidthRef = useRef(0);       // width of ONE image slide (px)
+  const totalWidthRef = useRef(0);       // width of ONE full set of slides (px)
 
-  // Apply offset and handle seamless loop
+  const [currentDot, setCurrentDot] = useState(0);
+
+  // ── Apply offset with seamless-loop wrapping ────────────────────────────
   const applyOffset = useCallback((offset: number) => {
-    const w = imageWidthRef.current;
-    if (w === 0 || !trackRef.current) return;
-    // Wrap: when scrolled past one full image width, reset seamlessly
+    const total = totalWidthRef.current;
+    if (total === 0 || !trackRef.current) return;
+
     let o = offset;
-    if (o <= -w) o += w;
-    if (o > 0)   o -= w;
+    if (o <= -total) o += total;
+    if (o > 0) o -= total;
+
     offsetRef.current = o;
     trackRef.current.style.transform = `translateX(${o}px)`;
+
+    // Keep dot indicator in sync
+    const slideW = slideWidthRef.current;
+    if (slideW > 0) {
+      const raw = Math.round(Math.abs(o) / slideW) % SLIDES.length;
+      setCurrentDot(raw);
+    }
   }, []);
 
-  // RAF auto-scroll loop
+  // ── RAF auto-scroll loop (1.2 px/frame ≈ 72 px/s at 60 fps) ───────────
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
 
-    const SPEED = 1.2; // px per frame (~72px/s at 60fps)
+    const SPEED = 1.2;
 
     const tick = () => {
       if (!isPausedRef.current) {
@@ -40,10 +65,13 @@ export default function Banner() {
       rafRef.current = requestAnimationFrame(tick);
     };
 
-    // Measure image width after it has a chance to render
+    // Measure after first render paint
     const timer = setTimeout(() => {
-      const firstImg = track.firstElementChild as HTMLElement | null;
-      if (firstImg) imageWidthRef.current = firstImg.offsetWidth;
+      const firstSlide = track.firstElementChild as HTMLElement | null;
+      if (firstSlide) {
+        slideWidthRef.current = firstSlide.offsetWidth;
+        totalWidthRef.current = firstSlide.offsetWidth * SLIDES.length;
+      }
       rafRef.current = requestAnimationFrame(tick);
     }, 150);
 
@@ -53,6 +81,7 @@ export default function Banner() {
     };
   }, [applyOffset]);
 
+  // ── Pause / resume helpers ──────────────────────────────────────────────
   const pause = useCallback(() => {
     isPausedRef.current = true;
     if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
@@ -62,21 +91,41 @@ export default function Banner() {
     if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
     resumeTimerRef.current = setTimeout(() => {
       isPausedRef.current = false;
-    }, 1500);
+    }, 2000);
   }, []);
 
-  // ── Mouse drag ──────────────────────────────────────────────────────────────
-  const onMouseDown = useCallback((e: React.MouseEvent) => {
-    isDragging.current = true;
-    dragStartX.current = e.clientX;
-    dragStartOffset.current = offsetRef.current;
-    pause();
-  }, [pause]);
+  // ── Arrow navigation (jump by exactly one slide width) ─────────────────
+  const jumpBy = useCallback(
+    (direction: "prev" | "next") => {
+      const slideW = slideWidthRef.current;
+      if (slideW === 0) return;
+      pause();
+      applyOffset(
+        offsetRef.current + (direction === "prev" ? slideW : -slideW)
+      );
+      resumeLater();
+    },
+    [pause, applyOffset, resumeLater]
+  );
 
-  const onMouseMove = useCallback((e: React.MouseEvent) => {
-    if (!isDragging.current) return;
-    applyOffset(dragStartOffset.current + (e.clientX - dragStartX.current));
-  }, [applyOffset]);
+  // ── Mouse drag ──────────────────────────────────────────────────────────
+  const onMouseDown = useCallback(
+    (e: React.MouseEvent) => {
+      isDragging.current = true;
+      dragStartX.current = e.clientX;
+      dragStartOffset.current = offsetRef.current;
+      pause();
+    },
+    [pause]
+  );
+
+  const onMouseMove = useCallback(
+    (e: React.MouseEvent) => {
+      if (!isDragging.current) return;
+      applyOffset(dragStartOffset.current + (e.clientX - dragStartX.current));
+    },
+    [applyOffset]
+  );
 
   const onMouseUp = useCallback(() => {
     if (!isDragging.current) return;
@@ -84,24 +133,30 @@ export default function Banner() {
     resumeLater();
   }, [resumeLater]);
 
-  // ── Touch drag ──────────────────────────────────────────────────────────────
-  const onTouchStart = useCallback((e: React.TouchEvent) => {
-    dragStartX.current = e.touches[0].clientX;
-    dragStartOffset.current = offsetRef.current;
-    pause();
-  }, [pause]);
+  // ── Touch drag ──────────────────────────────────────────────────────────
+  const onTouchStart = useCallback(
+    (e: React.TouchEvent) => {
+      dragStartX.current = e.touches[0].clientX;
+      dragStartOffset.current = offsetRef.current;
+      pause();
+    },
+    [pause]
+  );
 
-  const onTouchMove = useCallback((e: React.TouchEvent) => {
-    applyOffset(dragStartOffset.current + (e.touches[0].clientX - dragStartX.current));
-  }, [applyOffset]);
+  const onTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      applyOffset(
+        dragStartOffset.current + (e.touches[0].clientX - dragStartX.current)
+      );
+    },
+    [applyOffset]
+  );
 
-  const onTouchEnd = useCallback(() => {
-    resumeLater();
-  }, [resumeLater]);
+  const onTouchEnd = useCallback(() => resumeLater(), [resumeLater]);
 
   return (
     <Box sx={{ paddingTop: "60px", backgroundColor: "background.default" }}>
-      {/* Auto-scroll + draggable banner */}
+      {/* ── Strip carousel ─────────────────────────────────────────────── */}
       <Box
         sx={{
           position: "relative",
@@ -110,6 +165,7 @@ export default function Banner() {
           cursor: "grab",
           "&:active": { cursor: "grabbing" },
           userSelect: "none",
+          backgroundColor: "primary.dark",
         }}
         onMouseDown={onMouseDown}
         onMouseMove={onMouseMove}
@@ -119,6 +175,10 @@ export default function Banner() {
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
       >
+        {/*
+         * Track — SLIDES duplicated once for a seamless infinite loop.
+         * Each slide: height 100% + aspectRatio 4/5 → portrait, no gaps.
+         */}
         <Box
           ref={trackRef}
           sx={{
@@ -129,22 +189,107 @@ export default function Banner() {
             willChange: "transform",
           }}
         >
-          {[0, 1].map((i) => (
-            <Image
+          {[...SLIDES, ...SLIDES].map((src, i) => (
+            <Box
               key={i}
-              src="/img/banner.png"
-              alt="KoiMartFarm Banner"
-              width={6000}
-              height={1000}
-              style={{ width: "auto", height: "100%", flexShrink: 0, pointerEvents: "none" }}
-              priority={i === 0}
-              draggable={false}
+              sx={{
+                position: "relative",
+                height: "100%",
+                aspectRatio: "4/5",
+                flexShrink: 0,
+              }}
+            >
+              <Image
+                src={src}
+                alt={`Koi image ${(i % SLIDES.length) + 1}`}
+                fill
+                style={{ objectFit: "cover", pointerEvents: "none" }}
+                priority={i < SLIDES.length}
+                draggable={false}
+              />
+            </Box>
+          ))}
+        </Box>
+
+        {/* ── Prev arrow ───────────────────────────────────────────────── */}
+        <IconButton
+          onClick={() => jumpBy("prev")}
+          aria-label="Previous image"
+          sx={{
+            position: "absolute",
+            left: { xs: 12, md: 24 },
+            top: "50%",
+            transform: "translateY(-50%)",
+            zIndex: 10,
+            backgroundColor: "rgba(15,27,45,0.55)",
+            color: "#FAF8F5",
+            width: { xs: 40, md: 52 },
+            height: { xs: 40, md: 52 },
+            "&:hover": {
+              backgroundColor: "rgba(15,27,45,0.9)",
+              color: "secondary.main",
+            },
+          }}
+        >
+          <ArrowBackIosNewIcon />
+        </IconButton>
+
+        {/* ── Next arrow ───────────────────────────────────────────────── */}
+        <IconButton
+          onClick={() => jumpBy("next")}
+          aria-label="Next image"
+          sx={{
+            position: "absolute",
+            right: { xs: 12, md: 24 },
+            top: "50%",
+            transform: "translateY(-50%)",
+            zIndex: 10,
+            backgroundColor: "rgba(15,27,45,0.55)",
+            color: "#FAF8F5",
+            width: { xs: 40, md: 52 },
+            height: { xs: 40, md: 52 },
+            "&:hover": {
+              backgroundColor: "rgba(15,27,45,0.9)",
+              color: "secondary.main",
+            },
+          }}
+        >
+          <ArrowForwardIosIcon />
+        </IconButton>
+
+        {/* ── Dot indicators ───────────────────────────────────────────── */}
+        <Box
+          sx={{
+            position: "absolute",
+            bottom: 16,
+            left: 0,
+            right: 0,
+            display: "flex",
+            justifyContent: "center",
+            gap: 1,
+            zIndex: 10,
+            pointerEvents: "none",
+          }}
+        >
+          {SLIDES.map((_, i) => (
+            <Box
+              key={i}
+              sx={{
+                width: i === currentDot ? 24 : 8,
+                height: 8,
+                borderRadius: "4px",
+                backgroundColor:
+                  i === currentDot
+                    ? "secondary.main"
+                    : "rgba(255,255,255,0.4)",
+                transition: "all 0.3s ease",
+              }}
             />
           ))}
         </Box>
       </Box>
 
-      {/* Header + subtitle below the banner */}
+      {/* ── Brand text below the strip ─────────────────────────────────── */}
       <Box
         sx={{
           textAlign: "center",
@@ -153,13 +298,13 @@ export default function Banner() {
           backgroundColor: "background.default",
         }}
       >
-        <Grow in={true} timeout={1500}>
+        <Grow in timeout={1500}>
           <Box>
             <Typography
               sx={{
                 fontFamily: "var(--font-playfair)",
                 fontSize: { xs: 38, sm: 56, md: 72 },
-                color: "#FF0007",
+                color: "#E91D26",
                 lineHeight: 1.05,
                 fontWeight: 700,
                 letterSpacing: "-0.02em",
@@ -180,7 +325,8 @@ export default function Banner() {
                 lineHeight: 1.7,
               }}
             >
-              นำเข้าปลา Fancy Carp จากทุกๆ ฟาร์มดังในประเทศญี่ปุ่น อาทิเช่น Dainichi, Sakai, Isa, Momotaro, Marudo
+              นำเข้าและจัดจำหน่าย Fancy Carp จากทุกๆ ฟาร์มดังในประเทศญี่ปุ่น
+              อาทิเช่น Dainichi, Sakai, Isa, Momotaro, Marudo
             </Typography>
           </Box>
         </Grow>

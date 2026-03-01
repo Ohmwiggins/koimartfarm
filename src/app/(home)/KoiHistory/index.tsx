@@ -192,23 +192,6 @@ function History() {
                 </Typography>
               </Box>
 
-              {/* Stats row */}
-              <Box sx={{ mt: 5, display: "flex", gap: { xs: 3, sm: 5 }, flexWrap: "wrap", borderTop: "1px solid", borderColor: "divider", pt: 4 }}>
-                {[
-                  { value: "30+", label: "ปีแห่งประสบการณ์" },
-                  { value: "7+", label: "สายพันธุ์คัดสรร" },
-                  { value: "100%", label: "นำเข้าจากญี่ปุ่น" },
-                ].map(({ value, label }) => (
-                  <Box key={label}>
-                    <Typography sx={{ fontFamily: "var(--font-playfair)", fontSize: 28, fontWeight: 700, color: "secondary.main", lineHeight: 1 }}>
-                      {value}
-                    </Typography>
-                    <Typography sx={{ fontSize: 12, color: "text.secondary", mt: 0.5, fontFamily: "var(--font-prompt)" }}>
-                      {label}
-                    </Typography>
-                  </Box>
-                ))}
-              </Box>
             </Box>
           </Grow>
         </Grid>

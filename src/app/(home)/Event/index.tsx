@@ -160,7 +160,7 @@ function Event(props: EventProps) {
           </IconButton>
         )}
 
-        {/* Events Container */}
+        {/* Events Container — py:5 (40px) gives shadow room without clipping */}
         <Box
           ref={scrollContainerRef}
           onScroll={checkScroll}
@@ -171,47 +171,56 @@ function Event(props: EventProps) {
             scrollSnapType: "x mandatory",
             scrollbarWidth: "none",
             "&::-webkit-scrollbar": { display: "none" },
-            py: 3,
+            py: 5,
           }}
         >
           {props.events.map((e) => (
             <Box
               key={e.id}
-              onClick={() => window.open("https://www.koimart.shop/th/news", "_blank")}
               sx={{
                 scrollSnapAlign: "start",
                 flexShrink: 0,
                 width: { xs: "85%", sm: "calc(50% - 12px)" },
                 display: "flex",
-                flexDirection: "column",
+                flexDirection: "row",
                 backgroundColor: "background.paper",
                 borderRadius: "16px",
                 border: "1px solid rgba(197, 165, 90, 0.35)",
                 overflow: "hidden",
-                cursor: "pointer",
-                transition: "transform 0.2s ease, box-shadow 0.2s ease",
-                "&:hover": {
-                  transform: "translateY(-2px)",
-                  boxShadow: "0 8px 32px rgba(0,0,0,0.12)",
-                },
+                // Forces a new stacking context so the browser honours the
+                // overflow-hidden clip at the rounded corners even when inner
+                // elements (position:relative / Next/Image fill) are composited
+                // on their own GPU layer.
+                isolation: "isolate",
               }}
             >
-              {/* Event poster image(s) */}
+              {/* Image — left side, 4:5 ratio, stretches to card height */}
               {e.imgs && e.imgs.length > 0 && (
                 <Box
                   sx={{
-                    width: "100%",
-                    height: 240,
+                    width: { xs: "45%", sm: "42%" },
+                    flexShrink: 0,
                     position: "relative",
+                    aspectRatio: "4/5",
+                    alignSelf: "stretch",
                   }}
                 >
                   <EventImageCarousel imgs={e.imgs} />
                 </Box>
               )}
 
-              {/* Event details */}
-              <Box sx={{ p: 3 }}>
-                {/* Date — icon + label */}
+              {/* Info — right side */}
+              <Box
+                sx={{
+                  p: { xs: 2, sm: 3 },
+                  flex: 1,
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  minWidth: 0,
+                }}
+              >
+                {/* Date */}
                 <Box sx={{ display: "flex", alignItems: "center", gap: 0.75, mb: 1.5 }}>
                   <CalendarTodayIcon sx={{ fontSize: 13, color: "secondary.main" }} />
                   <Typography
@@ -228,11 +237,12 @@ function Event(props: EventProps) {
                     {e.date}
                   </Typography>
                 </Box>
+
                 {/* Title */}
                 <Typography
                   sx={{
                     fontWeight: 700,
-                    fontSize: 18,
+                    fontSize: { xs: 15, sm: 17 },
                     color: "primary.main",
                     mb: 1.5,
                     lineHeight: 1.35,
@@ -240,10 +250,11 @@ function Event(props: EventProps) {
                 >
                   {e.detail}
                 </Typography>
+
                 {e.description && (
                   <Typography
                     sx={{
-                      fontSize: 14,
+                      fontSize: { xs: 12, sm: 13 },
                       fontWeight: 400,
                       color: "text.secondary",
                       lineHeight: 1.6,

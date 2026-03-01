@@ -52,7 +52,7 @@ koimartfarm-ui/
 │   │   │   └── koi-hunting-tips-2/
 │   │   ├── api/contact/              # Contact form POST endpoint
 │   │   │   └── route.ts
-│   │   └── layout.tsx                # Root layout (AppBar + Footer)
+│   │   └── layout.tsx                # Root layout (NavBar + Footer only)
 │   ├── components/                   # Reusable components
 │   │   ├── Navbar/
 │   │   │   ├── index.tsx             # Responsive navbar wrapper
@@ -81,6 +81,7 @@ koimartfarm-ui/
 ├── public/img/                       # Static images organized by category
 │   ├── blogs/                        # Blog post images (per slug folder)
 │   ├── events/                       # Event images
+│   ├── koi-images/                   # Banner carousel images (Koi-image-01..07.png)
 │   └── highlight/                    # Koi highlight images
 ├── Dockerfile                        # 3-stage Node 18-alpine build
 ├── apphosting.yaml                   # Firebase App Hosting config
@@ -126,9 +127,10 @@ background.default:  "#FAF8F5"  // Cream — page background
 background.paper:    "#ffffff"  // White — cards
 text.primary:        "#1A1A1A"  // Near black
 text.secondary:      "#5C4033"  // Earth brown
-```
 
-> NOTE: The old palette (red `#E91D26`, gray `#E7E7E7`) listed in older docs is outdated. The current theme uses Navy/Gold/Cream.
+// Brand CI Red (used directly, not in MUI theme)
+ci.red:              "#E91D26"  // CI Red — "KOIMART FARM" title, section headings
+```
 
 ### Typography
 ```
@@ -181,7 +183,7 @@ export default ComponentName;
 1. **Emotion Styled Components** — complex layouts with many CSS rules
 2. **MUI `sx` prop** — responsive values and theme tokens
 3. **Tailwind utilities** — layout helpers (`flex`, `grid`, spacing)
-4. **Never**: CSS modules, hardcoded colors, inline style objects
+4. **Never**: CSS modules, hardcoded colors (except CI red `#E91D26`), inline style objects
 
 ### State Management
 - No external state management (no Redux, Zustand, Jotai, etc.)
@@ -229,7 +231,9 @@ xl: 1920  // Extra large
 - Drag to pause — handles both mouse and touch events
 - Seamless infinite loop (duplicated images)
 - Height: 50vh (mobile) → 70vh (desktop)
-- "KOIMART FARM" title + Thai subtitle below carousel
+- Image source: `SLIDES` array hardcoded in `Banner/index.tsx` → `/public/img/koi-images/`
+- "KOIMART FARM" title in CI red (`#E91D26`) + Thai subtitle below carousel
+- **Backend editable**: carousel image list
 
 ### 2. Events (`src/app/(home)/Event/`)
 - Horizontal scrolling container with scroll snap
@@ -238,11 +242,11 @@ xl: 1920  // Extra large
   - Inner carousel: prev/next arrow buttons, pagination dots
 - Outer navigation: left/right scroll arrows (disabled at boundaries)
 - Data source: `/src/data/events.json`
+- **Backend editable**: event entries (date, detail, images, description)
 
 ### 3. About Us / History (`src/app/(home)/KoiHistory/`)
 - CEO portrait with decorative gold corner accents
 - Founder story in Thai text (multi-paragraph)
-- Stats row: 30+ years experience, 7+ koi varieties, 100% Japan imports
 - 17-image travel gallery grid (2–5 columns, responsive)
 - Click image → lightbox modal
   - Keyboard navigation: ← → Arrow keys, Escape to close
@@ -250,8 +254,10 @@ xl: 1920  // Extra large
 ### 4. Blog Highlight (`src/app/(home)/BlogHighlight/`)
 - 7 featured blog cards
 - Responsive grid: xs:12, sm:6, md:3 (4-up on desktop)
-- Each card: image, category chip, title, "Read More" link → `/blog/[slug]`
+- Each card: image, category chip (label: "Heading"), title, "Read More" link → `/blog/[slug]`
+- Blog list hardcoded in `BlogHighlight/index.tsx`
 - Hover effect: lift (`-4px`), shadow, image scale (1.05)
+- **Backend editable**: blog entries (title, slug, image)
 
 ### 5. Koi Varieties (`src/app/(home)/KoiVariety/`)
 - 7 hardcoded varieties: Kohaku, Sanke, Showa, Ogon, Asagi, Shusui, Chagoi
@@ -373,12 +379,16 @@ Place event images in `/public/img/events/`.
 1. Create `/src/app/blog/[new-slug]/page.tsx` — blog content
 2. Create `/src/app/blog/[new-slug]/layout.tsx` — page layout
 3. Add images to `/public/img/blogs/[new-slug]/`
-4. Add card entry to `BlogHighlight` component if featuring on home
+4. Add card entry to `BlogHighlight/index.tsx` `blogs` array
 
 ### Add a New Component
 1. Create `/src/components/ComponentName/index.tsx`
 2. Add `.styles.ts` if using Emotion styled components
 3. Type all props with a TypeScript interface
+
+### Add a Banner Carousel Image
+1. Place image file in `/public/img/koi-images/`
+2. Add path to `SLIDES` array in `src/app/(home)/Banner/index.tsx`
 
 ### Add a Koi Highlight Image
 1. Add entry to `/src/data/highlight.json`
@@ -386,7 +396,7 @@ Place event images in `/public/img/events/`.
 
 ### Styling Guidelines
 - Use theme tokens (`secondary.main` for gold, `primary.main` for navy)
-- Never hardcode hex colors in components
+- CI red `#E91D26` is used for section headings and the "KOIMART FARM" title — use it directly
 - Always implement responsive breakpoints (xs, sm, md minimum)
 - Follow existing animation patterns with `useInView` + MUI `Grow`
 - Use Next.js `Image` component for all images (with width, height, alt)
@@ -405,18 +415,159 @@ docker run -p 3000:3000 koimartfarm-ui
 - Min instances: 0 (scales to zero)
 - Secrets: all `NODEMAILER_*`, `TARGET_EMAIL`, `RESEND_API_KEY`
 
+---
+
+## Backend App Requirements (koimartfarm-backend)
+
+A separate admin backend is planned to manage 3 content sections of the frontend without requiring code changes. This is the specification for building that backend.
+
+### Purpose
+Allow authorized admins to edit live content on the koimartfarm-ui website via a simple dashboard, without touching the codebase.
+
+### 3 Editable Sections
+
+---
+
+#### Section 1 — Banner Carousel Images
+
+**What it controls**: The `SLIDES` array in `src/app/(home)/Banner/index.tsx`
+Currently hardcoded to 7 portrait koi images from `/public/img/koi-images/`.
+
+**Backend must support**:
+- Upload new koi portrait images (4:5 aspect ratio, JPG/PNG)
+- Reorder images (drag-and-drop or up/down buttons)
+- Delete images from the carousel
+- Preview before publishing
+
+**Suggested API**:
+```
+GET    /api/admin/carousel          → returns ordered list of image paths
+POST   /api/admin/carousel          → upload new image, returns new image path
+PUT    /api/admin/carousel/reorder  → body: { order: string[] } — update image order
+DELETE /api/admin/carousel/:filename → remove image
+```
+
+**Frontend integration**:
+The `Banner/index.tsx` `SLIDES` array should be replaced with a `fetch("/api/admin/carousel")` call (or read from a DB/JSON file managed by the backend).
+
+**Image storage**:
+- Store in `/public/img/koi-images/` (current location) or a CDN
+- Max recommended: 20 images, portrait 4:5 ratio
+
+---
+
+#### Section 2 — Events
+
+**What it controls**: `/src/data/events.json`
+Currently contains 2 events. The Event section reads this file directly.
+
+**Backend must support**:
+- Create a new event (date, title/detail, description, images)
+- Edit an existing event
+- Delete an event
+- Upload event images
+- Reorder events
+
+**Event data schema**:
+```typescript
+interface KoiEvent {
+  id: number;
+  date: string;        // "DD/MM/YYYY" format — display only
+  detail: string;      // Event name/title (Thai)
+  imgs?: string[];     // Array of image filenames in /public/img/events/
+  description?: string; // Optional longer Thai description
+}
+```
+
+**Suggested API**:
+```
+GET    /api/admin/events            → returns all events (array)
+POST   /api/admin/events            → create new event
+PUT    /api/admin/events/:id        → update event by id
+DELETE /api/admin/events/:id        → delete event
+POST   /api/admin/events/:id/images → upload image for event
+```
+
+**Frontend integration**:
+Replace the static `import events from "@/data/events.json"` in `Event/index.tsx` with a server-side fetch from the backend API or a shared database.
+
+---
+
+#### Section 3 — Blog Posts (Highlight Cards)
+
+**What it controls**: The `blogs` array in `src/app/(home)/BlogHighlight/index.tsx`
+Currently 7 hardcoded entries. Each maps to a static blog page at `/blog/[slug]`.
+
+**Backend must support**:
+- Add a new blog card (title, slug, thumbnail image)
+- Edit existing card (title or thumbnail)
+- Remove a card from the highlight list
+- Reorder cards
+- Optionally: manage full blog post content (title, body HTML/markdown, images)
+
+**Blog card schema**:
+```typescript
+interface BlogCard {
+  blogId: string;   // slug — maps to /blog/[blogId]
+  title: string;    // Thai title displayed on card
+  img: string;      // path to thumbnail, e.g. /img/blogs/[slug]/banner.png
+}
+```
+
+**Suggested API**:
+```
+GET    /api/admin/blogs             → returns ordered list of blog cards
+POST   /api/admin/blogs             → create new blog card
+PUT    /api/admin/blogs/:blogId     → update title or image
+DELETE /api/admin/blogs/:blogId     → remove from highlight list
+POST   /api/admin/blogs/:blogId/image → upload thumbnail image
+```
+
+**Frontend integration**:
+Replace the hardcoded `blogs` array in `BlogHighlight/index.tsx` with a server-side fetch. Blog page content (the actual `/blog/[slug]/page.tsx` files) can remain static or also be moved to a CMS.
+
+---
+
+### Authentication
+
+All `/api/admin/*` routes must be protected. Recommended approach:
+- Simple JWT-based auth with a single admin user
+- Login endpoint: `POST /api/admin/login` → `{ token }`
+- All other admin routes require `Authorization: Bearer <token>` header
+- Token expiry: 8 hours
+
+### Recommended Backend Stack
+
+Since the frontend is Next.js (Node.js), the backend can be:
+- **Option A**: Next.js API routes within the same project (simplest, already has Node runtime)
+- **Option B**: Separate Express.js / Fastify server (cleaner separation)
+- **Option C**: Separate Next.js app dedicated to admin dashboard + API
+
+### File / Image Storage
+
+- **Development**: Write directly to `/public/img/` in the frontend repo
+- **Production**: Use Firebase Storage or Cloudflare R2; return public CDN URLs to the frontend
+
+### Database Options
+
+Since the current data is JSON files:
+- **Simplest**: Keep JSON files, backend reads/writes them via `fs`
+- **Scalable**: SQLite (single-file, zero-config) or Firestore (matches Firebase deployment)
+
+---
+
 ## Anti-Patterns to Avoid
 
 1. **Don't** use CSS modules — use Emotion or MUI `sx`
 2. **Don't** add Redux or external state management — use local `useState`
-3. **Don't** hardcode colors — use theme tokens
+3. **Don't** hardcode colors other than CI red `#E91D26` — use theme tokens for everything else
 4. **Don't** skip responsive design — test xs, sm, md breakpoints minimum
 5. **Don't** forget `"use client"` directive on components with hooks or browser APIs
 6. **Don't** create new global CSS rules — scope all styles to components
 7. **Don't** skip TypeScript types — strict mode is enforced
 8. **Don't** use icon libraries other than `@mui/icons-material` and `react-icons`
 9. **Don't** set Tailwind `preflight: true` — it's intentionally disabled to avoid MUI conflicts
-10. **Don't** use the old red/gray color palette (`#E91D26`, `#E7E7E7`) — the current theme is Navy/Gold/Cream
+10. **Don't** use gray `#E7E7E7` or the old red for body/background — CI red `#E91D26` is only for headings and the main title
 
 ## Quality Checklist (Before Committing)
 
@@ -444,5 +595,5 @@ docker run -p 3000:3000 koimartfarm-ui
 
 ---
 
-**Last Updated:** 2026-02-25
+**Last Updated:** 2026-03-01
 **Project Version:** 0.0.0

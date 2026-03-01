@@ -33,7 +33,7 @@ function BlogHighlight() {
                 blogId={blog.blogId}
                 title={blog.title}
                 img={blog.img}
-                desc={"Headline"}
+                desc={"Heading"}
               />
             </Box>
           </Grow>
