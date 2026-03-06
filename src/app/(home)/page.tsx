@@ -9,8 +9,23 @@ import BlogHighlight from "./BlogHighlight";
 import KoiVariety from "./KoiVariety";
 import { useInView } from "react-intersection-observer";
 import Banner from "./Banner";
+import { useState, useEffect } from "react";
+import { supabase } from "../../lib/supabase";
+import type { KoiEvent } from "../../models/events";
 
 function Home() {
+  const [events, setEvents] = useState<KoiEvent[]>(eventDetails as KoiEvent[]);
+
+  useEffect(() => {
+    supabase
+      .from("events")
+      .select("*")
+      .order("sort_order")
+      .then(({ data }) => {
+        if (data && data.length > 0) setEvents(data as KoiEvent[]);
+      });
+  }, []);
+
   const { ref: eventRef, inView: eventInView } = useInView({
     triggerOnce: true,
     threshold: 0.2,
@@ -61,7 +76,7 @@ function Home() {
 
         <Grow in={eventInView} timeout={2500}>
           <Box sx={{ display: "flex", flexDirection: "column" }}>
-            <Event events={eventDetails.slice(0, 5)} />
+            <Event events={events.slice(0, 5)} />
           </Box>
         </Grow>
       </Box>

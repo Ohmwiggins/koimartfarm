@@ -3,8 +3,16 @@
 import { Box, Grid, Grow } from "@mui/material";
 import BlogCard from "./BlogCard";
 import { useInView } from "react-intersection-observer";
+import { useState, useEffect } from "react";
+import { supabase } from "../../../lib/supabase";
 
-const blogs = [
+interface BlogCardData {
+  blogId: string;
+  title: string;
+  img: string;
+}
+
+const FALLBACK_BLOGS: BlogCardData[] = [
   { blogId: "where-to-find-koi", title: "ไปตามหาปลาคาร์ฟที่ญี่ปุ่น ไปที่ไหนกันดี", img: "/img/blogs/where-to-find-koi/blog1-0.png" },
   { blogId: "how-to-choose-koi", title: "ธรรมเนียมการเลือกซื้อปลาที่ญี่ปุ่น", img: "/img/blogs/how-to-choose-koi/blog2-banner.png" },
   { blogId: "koi-appreciation", title: "การเลือกปลาจากรูปร่างเราดูกันอย่างไรบ้าง", img: "/img/blogs/koi-appreciation/blog3-banner.png" },
@@ -15,6 +23,26 @@ const blogs = [
 ];
 
 function BlogHighlight() {
+  const [blogs, setBlogs] = useState<BlogCardData[]>(FALLBACK_BLOGS);
+
+  useEffect(() => {
+    supabase
+      .from("blog_highlights")
+      .select("blog_id, title, img")
+      .order("sort_order")
+      .then(({ data }) => {
+        if (data && data.length > 0) {
+          setBlogs(
+            data.map((d: { blog_id: string; title: string; img: string }) => ({
+              blogId: d.blog_id,
+              title: d.title,
+              img: d.img,
+            }))
+          );
+        }
+      });
+  }, []);
+
   const { ref: blogHighlightRef, inView: blogHilightInView } = useInView({
     triggerOnce: true,
     threshold: 0.1,

@@ -20,6 +20,7 @@
 - **Material-UI** ^7.3.4 - Component library
 - **Emotion** ^11.14.0 - CSS-in-JS for styling
 - **Tailwind CSS** ^3.4.19 - Layout utilities (preflight: false)
+- **@supabase/supabase-js** ^2.98.0 - Database + Storage client
 - **Nodemailer** ^7.0.10 - Email sending for contact form
 - **react-intersection-observer** ^10.0.0 - Scroll animations
 - **react-social-media-embed** ^2.5.18 - Social media embeds
@@ -102,15 +103,18 @@ npm run lint            # Run ESLint
 ```
 
 ### Environment Variables
-Required for contact form functionality:
 ```env
-NODEMAILER_GMAIL_USER=
-NODEMAILER_APP_PASSWORD=
-TARGET_EMAIL=
+# Supabase — required for all 3 dynamic sections (Banner, Events, Blog)
+NEXT_PUBLIC_SUPABASE_URL=https://jzqfjmthvjdqaazwluro.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=          # public read-only key
+SUPABASE_SERVICE_ROLE_KEY=              # server-side / backend write key
+
+# Contact form
 RESEND_API_KEY=
 NODEMAILER_GOOGLE_CLIENT_ID=
 NODEMAILER_GOOGLE_CLIENT_SECRET=
 NODEMAILER_GOOGLE_REFRESH_TOKEN=
+TARGET_EMAIL=
 ```
 
 ## Design System
@@ -231,7 +235,9 @@ xl: 1920  // Extra large
 - Drag to pause — handles both mouse and touch events
 - Seamless infinite loop (duplicated images)
 - Height: 50vh (mobile) → 70vh (desktop)
-- Image source: `SLIDES` array hardcoded in `Banner/index.tsx` → `/public/img/koi-images/`
+- **Data source**: Supabase table `carousel_images` (ordered by `sort_order`)
+- Fallback: `FALLBACK_SLIDES` array in `Banner/index.tsx` if Supabase returns empty
+- Image files stored in Supabase Storage bucket: `koi-images`
 - "KOIMART FARM" title in CI red (`#E91D26`) + Thai subtitle below carousel
 - **Backend editable**: carousel image list
 
@@ -241,7 +247,9 @@ xl: 1920  // Extra large
 - Each card: date, detail text, and inner image carousel
   - Inner carousel: prev/next arrow buttons, pagination dots
 - Outer navigation: left/right scroll arrows (disabled at boundaries)
-- Data source: `/src/data/events.json`
+- **Data source**: Supabase table `events` (ordered by `sort_order`)
+- Fallback: `src/data/events.json` used as initial state before Supabase loads
+- Image files stored in Supabase Storage bucket: `events`
 - **Backend editable**: event entries (date, detail, images, description)
 
 ### 3. About Us / History (`src/app/(home)/KoiHistory/`)
@@ -255,7 +263,9 @@ xl: 1920  // Extra large
 - 7 featured blog cards
 - Responsive grid: xs:12, sm:6, md:3 (4-up on desktop)
 - Each card: image, category chip (label: "Heading"), title, "Read More" link → `/blog/[slug]`
-- Blog list hardcoded in `BlogHighlight/index.tsx`
+- **Data source**: Supabase table `blog_highlights` (ordered by `sort_order`)
+- Fallback: `FALLBACK_BLOGS` array in `BlogHighlight/index.tsx` if Supabase returns empty
+- Image files stored in Supabase Storage bucket: `blog-highlights`
 - Hover effect: lift (`-4px`), shadow, image scale (1.05)
 - **Backend editable**: blog entries (title, slug, image)
 
@@ -362,33 +372,52 @@ Currently 13 koi images.
 
 ## Common Tasks
 
-### Add a New Event
-Edit `/src/data/events.json`:
-```json
-{
-  "id": 3,
-  "date": "15/05/2026",
-  "detail": "Event Name",
-  "imgs": ["event-image.jpg"],
-  "description": "Optional Thai description"
-}
+### Add a Banner Carousel Image (via backend)
+The backend must perform **both** steps or the image will not appear on the frontend:
+1. Upload file to Supabase Storage bucket `koi-images`
+2. Insert a row into `carousel_images` table:
+```sql
+INSERT INTO carousel_images (url, sort_order)
+VALUES ('https://jzqfjmthvjdqaazwluro.supabase.co/storage/v1/object/public/koi-images/<filename>', <next_order>);
 ```
-Place event images in `/public/img/events/`.
+> Uploading to Storage without inserting the DB row = image never appears on frontend.
 
-### Add a Blog Post
+### Add a New Event (via backend)
+The backend must perform **both** steps:
+1. Upload event images to Supabase Storage bucket `events`
+2. Insert a row into `events` table:
+```sql
+INSERT INTO events (date, detail, imgs, description, sort_order)
+VALUES ('DD/MM/YYYY', 'Event Title', ARRAY['<storage_url_1>', '<storage_url_2>'], 'description', <next_order>);
+```
+`imgs` must be an array of **full Supabase Storage URLs** (not local paths).
+
+### Add a Blog Highlight Card (via backend)
+The backend must perform **both** steps:
+1. Upload thumbnail to Supabase Storage bucket `blog-highlights` (path: `<slug>/<filename>`)
+2. Insert a row into `blog_highlights` table:
+```sql
+INSERT INTO blog_highlights (blog_id, title, img, sort_order)
+VALUES ('<slug>', 'Thai Title', 'https://jzqfjmthvjdqaazwluro.supabase.co/storage/v1/object/public/blog-highlights/<slug>/<filename>', <next_order>);
+```
+
+### Add a Blog Post (static page)
 1. Create `/src/app/blog/[new-slug]/page.tsx` — blog content
 2. Create `/src/app/blog/[new-slug]/layout.tsx` — page layout
-3. Add images to `/public/img/blogs/[new-slug]/`
-4. Add card entry to `BlogHighlight/index.tsx` `blogs` array
+3. Then add the highlight card via backend (see above)
 
 ### Add a New Component
 1. Create `/src/components/ComponentName/index.tsx`
 2. Add `.styles.ts` if using Emotion styled components
 3. Type all props with a TypeScript interface
 
-### Add a Banner Carousel Image
-1. Place image file in `/public/img/koi-images/`
-2. Add path to `SLIDES` array in `src/app/(home)/Banner/index.tsx`
+### One-time image migration script
+`scripts/upload-images.mjs` — uploads all local `/public/img/` images to Supabase Storage
+and updates DB records. Run once with:
+```bash
+node --env-file=.env.local scripts/upload-images.mjs
+```
+Requires `SUPABASE_SERVICE_ROLE_KEY` in `.env.local`.
 
 ### Add a Koi Highlight Image
 1. Add entry to `/src/data/highlight.json`
@@ -430,103 +459,102 @@ Allow authorized admins to edit live content on the koimartfarm-ui website via a
 
 #### Section 1 — Banner Carousel Images
 
-**What it controls**: The `SLIDES` array in `src/app/(home)/Banner/index.tsx`
-Currently hardcoded to 7 portrait koi images from `/public/img/koi-images/`.
-
-**Backend must support**:
-- Upload new koi portrait images (4:5 aspect ratio, JPG/PNG)
-- Reorder images (drag-and-drop or up/down buttons)
-- Delete images from the carousel
-- Preview before publishing
-
-**Suggested API**:
+**Supabase table**: `carousel_images`
+```typescript
+interface CarouselImage {
+  id: number;
+  url: string;        // Full Supabase Storage public URL
+  sort_order: number;
+  created_at: string;
+}
 ```
-GET    /api/admin/carousel          → returns ordered list of image paths
-POST   /api/admin/carousel          → upload new image, returns new image path
-PUT    /api/admin/carousel/reorder  → body: { order: string[] } — update image order
-DELETE /api/admin/carousel/:filename → remove image
+**Supabase Storage bucket**: `koi-images` (public)
+**Public URL format**: `https://jzqfjmthvjdqaazwluro.supabase.co/storage/v1/object/public/koi-images/<filename>`
+
+**Backend upload flow** (BOTH steps required):
+1. `storage.from("koi-images").upload(filename, fileBuffer)` — upload to storage
+2. `db.from("carousel_images").insert({ url: publicUrl, sort_order })` — add DB record
+
+**Backend API**:
 ```
-
-**Frontend integration**:
-The `Banner/index.tsx` `SLIDES` array should be replaced with a `fetch("/api/admin/carousel")` call (or read from a DB/JSON file managed by the backend).
-
-**Image storage**:
-- Store in `/public/img/koi-images/` (current location) or a CDN
-- Max recommended: 20 images, portrait 4:5 ratio
+GET    /api/admin/carousel              → SELECT * FROM carousel_images ORDER BY sort_order
+POST   /api/admin/carousel              → upload to storage + INSERT carousel_images row
+PUT    /api/admin/carousel/reorder      → UPDATE sort_order for each id
+DELETE /api/admin/carousel/:id          → DELETE FROM carousel_images + storage.remove(filename)
+```
 
 ---
 
 #### Section 2 — Events
 
-**What it controls**: `/src/data/events.json`
-Currently contains 2 events. The Event section reads this file directly.
-
-**Backend must support**:
-- Create a new event (date, title/detail, description, images)
-- Edit an existing event
-- Delete an event
-- Upload event images
-- Reorder events
-
-**Event data schema**:
+**Supabase table**: `events`
 ```typescript
 interface KoiEvent {
   id: number;
-  date: string;        // "DD/MM/YYYY" format — display only
-  detail: string;      // Event name/title (Thai)
-  imgs?: string[];     // Array of image filenames in /public/img/events/
-  description?: string; // Optional longer Thai description
+  date: string;         // "DD/MM/YYYY" format — display only
+  detail: string;       // Event name/title (Thai)
+  imgs: string[];       // Array of full Supabase Storage public URLs
+  description: string;  // Optional longer Thai description
+  sort_order: number;
 }
 ```
+**Supabase Storage bucket**: `events` (public)
+**Public URL format**: `https://jzqfjmthvjdqaazwluro.supabase.co/storage/v1/object/public/events/<filename>`
 
-**Suggested API**:
-```
-GET    /api/admin/events            → returns all events (array)
-POST   /api/admin/events            → create new event
-PUT    /api/admin/events/:id        → update event by id
-DELETE /api/admin/events/:id        → delete event
-POST   /api/admin/events/:id/images → upload image for event
-```
+**Backend upload flow** (BOTH steps required):
+1. `storage.from("events").upload(filename, fileBuffer)` — upload image to storage
+2. Either `INSERT INTO events (imgs = ARRAY[url, ...])` for new event, or `UPDATE events SET imgs = array_append(imgs, url) WHERE id = :id` for existing event
 
-**Frontend integration**:
-Replace the static `import events from "@/data/events.json"` in `Event/index.tsx` with a server-side fetch from the backend API or a shared database.
+**Backend API**:
+```
+GET    /api/admin/events                → SELECT * FROM events ORDER BY sort_order
+POST   /api/admin/events                → INSERT into events (creates event, no images yet)
+PUT    /api/admin/events/:id            → UPDATE events SET date/detail/description/sort_order
+DELETE /api/admin/events/:id            → DELETE FROM events + remove storage files
+POST   /api/admin/events/:id/images     → upload to storage + array_append url to events.imgs
+DELETE /api/admin/events/:id/images/:filename → storage.remove + array_remove from events.imgs
+```
 
 ---
 
-#### Section 3 — Blog Posts (Highlight Cards)
+#### Section 3 — Blog Highlight Cards
 
-**What it controls**: The `blogs` array in `src/app/(home)/BlogHighlight/index.tsx`
-Currently 7 hardcoded entries. Each maps to a static blog page at `/blog/[slug]`.
-
-**Backend must support**:
-- Add a new blog card (title, slug, thumbnail image)
-- Edit existing card (title or thumbnail)
-- Remove a card from the highlight list
-- Reorder cards
-- Optionally: manage full blog post content (title, body HTML/markdown, images)
-
-**Blog card schema**:
+**Supabase table**: `blog_highlights`
 ```typescript
-interface BlogCard {
-  blogId: string;   // slug — maps to /blog/[blogId]
-  title: string;    // Thai title displayed on card
-  img: string;      // path to thumbnail, e.g. /img/blogs/[slug]/banner.png
+interface BlogHighlight {
+  id: number;
+  blog_id: string;    // slug — maps to /blog/[blog_id] static page
+  title: string;      // Thai title displayed on card
+  img: string;        // Full Supabase Storage public URL
+  sort_order: number;
 }
 ```
+**Supabase Storage bucket**: `blog-highlights` (public)
+**Public URL format**: `https://jzqfjmthvjdqaazwluro.supabase.co/storage/v1/object/public/blog-highlights/<slug>/<filename>`
 
-**Suggested API**:
-```
-GET    /api/admin/blogs             → returns ordered list of blog cards
-POST   /api/admin/blogs             → create new blog card
-PUT    /api/admin/blogs/:blogId     → update title or image
-DELETE /api/admin/blogs/:blogId     → remove from highlight list
-POST   /api/admin/blogs/:blogId/image → upload thumbnail image
-```
+**Backend upload flow** (BOTH steps required):
+1. `storage.from("blog-highlights").upload("<slug>/<filename>", fileBuffer)` — upload thumbnail
+2. `db.from("blog_highlights").insert({ blog_id, title, img: publicUrl, sort_order })` — add DB record
 
-**Frontend integration**:
-Replace the hardcoded `blogs` array in `BlogHighlight/index.tsx` with a server-side fetch. Blog page content (the actual `/blog/[slug]/page.tsx` files) can remain static or also be moved to a CMS.
+**Backend API**:
+```
+GET    /api/admin/blogs                 → SELECT * FROM blog_highlights ORDER BY sort_order
+POST   /api/admin/blogs                 → upload thumbnail to storage + INSERT blog_highlights row
+PUT    /api/admin/blogs/:blogId         → UPDATE title, img, or sort_order
+DELETE /api/admin/blogs/:blogId         → DELETE FROM blog_highlights + storage.remove(thumbnail)
+```
 
 ---
+
+### Supabase Connection (Backend)
+
+```typescript
+import { createClient } from "@supabase/supabase-js";
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY  // use service role — NOT anon key — for writes
+);
+```
 
 ### Authentication
 
@@ -536,23 +564,12 @@ All `/api/admin/*` routes must be protected. Recommended approach:
 - All other admin routes require `Authorization: Bearer <token>` header
 - Token expiry: 8 hours
 
-### Recommended Backend Stack
+### Critical Rule: Storage + DB must stay in sync
 
-Since the frontend is Next.js (Node.js), the backend can be:
-- **Option A**: Next.js API routes within the same project (simplest, already has Node runtime)
-- **Option B**: Separate Express.js / Fastify server (cleaner separation)
-- **Option C**: Separate Next.js app dedicated to admin dashboard + API
-
-### File / Image Storage
-
-- **Development**: Write directly to `/public/img/` in the frontend repo
-- **Production**: Use Firebase Storage or Cloudflare R2; return public CDN URLs to the frontend
-
-### Database Options
-
-Since the current data is JSON files:
-- **Simplest**: Keep JSON files, backend reads/writes them via `fs`
-- **Scalable**: SQLite (single-file, zero-config) or Firestore (matches Firebase deployment)
+When the backend uploads a file, it **must** write the DB record in the same request.
+If only the storage upload succeeds (DB insert fails), the file becomes orphaned and invisible to the frontend.
+If only the DB insert succeeds (storage upload fails), the frontend shows a broken image.
+Always do both atomically, or roll back the storage upload if the DB write fails.
 
 ---
 

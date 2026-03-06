@@ -4,10 +4,9 @@ import Image from "next/image";
 import { useState, useCallback, useEffect, useRef } from "react";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { supabase } from "../../../lib/supabase";
 
-// Individual 4:5 portrait koi images — add/remove here as needed.
-// The Admin Panel will manage this list dynamically in the future.
-const SLIDES = [
+const FALLBACK_SLIDES = [
   "/img/koi-images/Koi-image-01.png",
   "/img/koi-images/Koi-image-02.png",
   "/img/koi-images/Koi-image-03.png",
@@ -30,6 +29,22 @@ export default function Banner() {
   const totalWidthRef = useRef(0);       // width of ONE full set of slides (px)
 
   const [currentDot, setCurrentDot] = useState(0);
+  const [slides, setSlides] = useState<string[]>(FALLBACK_SLIDES);
+  const slidesRef = useRef<string[]>(FALLBACK_SLIDES);
+
+  useEffect(() => {
+    supabase
+      .from("carousel_images")
+      .select("url")
+      .order("sort_order")
+      .then(({ data }) => {
+        if (data && data.length > 0) {
+          const urls = data.map((d: { url: string }) => d.url);
+          slidesRef.current = urls;
+          setSlides(urls);
+        }
+      });
+  }, []);
 
   // ── Apply offset with seamless-loop wrapping ────────────────────────────
   const applyOffset = useCallback((offset: number) => {
@@ -46,7 +61,7 @@ export default function Banner() {
     // Keep dot indicator in sync
     const slideW = slideWidthRef.current;
     if (slideW > 0) {
-      const raw = Math.round(Math.abs(o) / slideW) % SLIDES.length;
+      const raw = Math.round(Math.abs(o) / slideW) % slidesRef.current.length;
       setCurrentDot(raw);
     }
   }, []);
@@ -70,7 +85,7 @@ export default function Banner() {
       const firstSlide = track.firstElementChild as HTMLElement | null;
       if (firstSlide) {
         slideWidthRef.current = firstSlide.offsetWidth;
-        totalWidthRef.current = firstSlide.offsetWidth * SLIDES.length;
+        totalWidthRef.current = firstSlide.offsetWidth * slidesRef.current.length;
       }
       rafRef.current = requestAnimationFrame(tick);
     }, 150);
@@ -79,7 +94,7 @@ export default function Banner() {
       clearTimeout(timer);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, [applyOffset]);
+  }, [applyOffset, slides]);
 
   // ── Pause / resume helpers ──────────────────────────────────────────────
   const pause = useCallback(() => {
@@ -189,7 +204,7 @@ export default function Banner() {
             willChange: "transform",
           }}
         >
-          {[...SLIDES, ...SLIDES].map((src, i) => (
+          {[...slides, ...slides].map((src, i) => (
             <Box
               key={i}
               sx={{
@@ -201,10 +216,10 @@ export default function Banner() {
             >
               <Image
                 src={src}
-                alt={`Koi image ${(i % SLIDES.length) + 1}`}
+                alt={`Koi image ${(i % slides.length) + 1}`}
                 fill
                 style={{ objectFit: "cover", pointerEvents: "none" }}
-                priority={i < SLIDES.length}
+                priority={i < slides.length}
                 draggable={false}
               />
             </Box>
@@ -271,7 +286,7 @@ export default function Banner() {
             pointerEvents: "none",
           }}
         >
-          {SLIDES.map((_, i) => (
+          {slides.map((_, i) => (
             <Box
               key={i}
               sx={{
