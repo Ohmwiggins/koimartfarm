@@ -29,8 +29,8 @@ export default function Banner() {
   const totalWidthRef = useRef(0);       // width of ONE full set of slides (px)
 
   const [currentDot, setCurrentDot] = useState(0);
-  const [slides, setSlides] = useState<string[]>(FALLBACK_SLIDES);
-  const slidesRef = useRef<string[]>(FALLBACK_SLIDES);
+  const [slides, setSlides] = useState<string[]>([]);
+  const slidesRef = useRef<string[]>([]);
 
   useEffect(() => {
     supabase
@@ -38,11 +38,11 @@ export default function Banner() {
       .select("url")
       .order("sort_order")
       .then(({ data }) => {
-        if (data && data.length > 0) {
-          const urls = data.map((d: { url: string }) => d.url);
-          slidesRef.current = urls;
-          setSlides(urls);
-        }
+        const urls = data && data.length > 0
+          ? data.map((d: { url: string }) => d.url)
+          : FALLBACK_SLIDES;
+        slidesRef.current = urls;
+        setSlides(urls);
       });
   }, []);
 

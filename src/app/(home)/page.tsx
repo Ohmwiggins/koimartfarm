@@ -14,7 +14,7 @@ import { supabase } from "../../lib/supabase";
 import type { KoiEvent } from "../../models/events";
 
 function Home() {
-  const [events, setEvents] = useState<KoiEvent[]>(eventDetails as KoiEvent[]);
+  const [events, setEvents] = useState<KoiEvent[]>([]);
 
   useEffect(() => {
     supabase
@@ -22,7 +22,7 @@ function Home() {
       .select("*")
       .order("sort_order")
       .then(({ data }) => {
-        if (data && data.length > 0) setEvents(data as KoiEvent[]);
+        setEvents(data && data.length > 0 ? (data as KoiEvent[]) : (eventDetails as KoiEvent[]));
       });
   }, []);
 

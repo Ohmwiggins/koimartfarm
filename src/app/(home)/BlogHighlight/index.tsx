@@ -23,7 +23,7 @@ const FALLBACK_BLOGS: BlogCardData[] = [
 ];
 
 function BlogHighlight() {
-  const [blogs, setBlogs] = useState<BlogCardData[]>(FALLBACK_BLOGS);
+  const [blogs, setBlogs] = useState<BlogCardData[]>([]);
 
   useEffect(() => {
     supabase
@@ -39,6 +39,8 @@ function BlogHighlight() {
               img: d.img,
             }))
           );
+        } else {
+          setBlogs(FALLBACK_BLOGS);
         }
       });
   }, []);
