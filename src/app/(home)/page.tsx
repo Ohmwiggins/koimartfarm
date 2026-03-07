@@ -2,7 +2,6 @@
 
 import { Box, Container, Grow } from "@mui/material";
 import Event from "./Event/index";
-import eventDetails from "../../data/events.json";
 import HeaderText from "../../components/HeaderText";
 import History from "./KoiHistory";
 import BlogHighlight from "./BlogHighlight";
@@ -22,7 +21,7 @@ function Home() {
       .select("*")
       .order("sort_order")
       .then(({ data }) => {
-        setEvents(data && data.length > 0 ? (data as KoiEvent[]) : (eventDetails as KoiEvent[]));
+        if (data) setEvents(data as KoiEvent[]);
       });
   }, []);
 

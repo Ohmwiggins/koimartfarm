@@ -177,6 +177,10 @@ function Event(props: EventProps) {
           {props.events.map((e) => (
             <Box
               key={e.id}
+              component="a"
+              href="https://www.koimart.shop/th/news"
+              target="_blank"
+              rel="noopener noreferrer"
               sx={{
                 scrollSnapAlign: "start",
                 flexShrink: 0,
@@ -187,11 +191,10 @@ function Event(props: EventProps) {
                 borderRadius: "16px",
                 border: "1px solid rgba(197, 165, 90, 0.35)",
                 overflow: "hidden",
-                // Forces a new stacking context so the browser honours the
-                // overflow-hidden clip at the rounded corners even when inner
-                // elements (position:relative / Next/Image fill) are composited
-                // on their own GPU layer.
                 isolation: "isolate",
+                textDecoration: "none",
+                cursor: "pointer",
+                "&:hover": { border: "1px solid rgba(197, 165, 90, 0.7)" },
               }}
             >
               {/* Image — left side, 4:5 ratio, stretches to card height */}

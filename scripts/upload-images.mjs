@@ -17,7 +17,7 @@ import { fileURLToPath } from "url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
 
-const SUPABASE_URL = "https://jzqfjmthvjdqaazwluro.supabase.co";
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "https://cnpaysvylgpmkitatsqf.supabase.co";
 const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 if (!SERVICE_ROLE_KEY) {

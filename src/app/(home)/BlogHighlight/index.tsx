@@ -12,16 +12,6 @@ interface BlogCardData {
   img: string;
 }
 
-const FALLBACK_BLOGS: BlogCardData[] = [
-  { blogId: "where-to-find-koi", title: "ไปตามหาปลาคาร์ฟที่ญี่ปุ่น ไปที่ไหนกันดี", img: "/img/blogs/where-to-find-koi/blog1-0.png" },
-  { blogId: "how-to-choose-koi", title: "ธรรมเนียมการเลือกซื้อปลาที่ญี่ปุ่น", img: "/img/blogs/how-to-choose-koi/blog2-banner.png" },
-  { blogId: "koi-appreciation", title: "การเลือกปลาจากรูปร่างเราดูกันอย่างไรบ้าง", img: "/img/blogs/koi-appreciation/blog3-banner.png" },
-  { blogId: "shape-quality-pattern", title: "รูปร่าง > คุณภาพ > แพตเทิร์น", img: "/img/blogs/shape-quality-pattern/blog4-banner.png" },
-  { blogId: "importing-koi-from-japan", title: "ไปซื้อปลาที่ญี่ปุ่น ควรไปกับใคร และมีค่าใช้จ่ายอะไรบ้าง", img: "/img/blogs/importing-koi-from-japan/blog5-banner.png" },
-  { blogId: "koi-hunting-tips-1", title: "Koi hunting tips 1", img: "/img/blogs/koi-hunting-tips-1/blog6-banner.png" },
-  { blogId: "koi-hunting-tips-2", title: "Koi hunting tips 2", img: "/img/blogs/koi-hunting-tips-2/blog7-banner.png" },
-];
-
 function BlogHighlight() {
   const [blogs, setBlogs] = useState<BlogCardData[]>([]);
 
@@ -31,7 +21,7 @@ function BlogHighlight() {
       .select("blog_id, title, img")
       .order("sort_order")
       .then(({ data }) => {
-        if (data && data.length > 0) {
+        if (data) {
           setBlogs(
             data.map((d: { blog_id: string; title: string; img: string }) => ({
               blogId: d.blog_id,
@@ -39,8 +29,6 @@ function BlogHighlight() {
               img: d.img,
             }))
           );
-        } else {
-          setBlogs(FALLBACK_BLOGS);
         }
       });
   }, []);
