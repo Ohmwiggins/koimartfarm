@@ -43,8 +43,9 @@ koimartfarm-ui/
 │   │   │   ├── BlogHighlight/        # 7 featured blog cards grid
 │   │   │   ├── EventHighlight/       # Related event component
 │   │   │   └── FaceBookPostHighlight/# Social media embed section
-│   │   ├── blog/                     # Static blog posts (7 posts)
-│   │   │   ├── where-to-find-koi/
+│   │   ├── blog/                     # Blog pages
+│   │   │   ├── [slug]/               # Dynamic route — fetches from blog_highlights by blog_id
+│   │   │   ├── where-to-find-koi/    # Legacy static page (takes precedence over [slug])
 │   │   │   ├── how-to-choose-koi/
 │   │   │   ├── koi-appreciation/
 │   │   │   ├── shape-quality-pattern/
@@ -105,7 +106,7 @@ npm run lint            # Run ESLint
 ### Environment Variables
 ```env
 # Supabase — required for all 3 dynamic sections (Banner, Events, Blog)
-NEXT_PUBLIC_SUPABASE_URL=https://jzqfjmthvjdqaazwluro.supabase.co
+NEXT_PUBLIC_SUPABASE_URL=https://cnpaysvylgpmkitatsqf.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=          # public read-only key
 SUPABASE_SERVICE_ROLE_KEY=              # server-side / backend write key
 
@@ -248,7 +249,7 @@ xl: 1920  // Extra large
   - Inner carousel: prev/next arrow buttons, pagination dots
 - Outer navigation: left/right scroll arrows (disabled at boundaries)
 - **Data source**: Supabase table `events` (ordered by `sort_order`)
-- Fallback: `src/data/events.json` used as initial state before Supabase loads
+- No fallback — data comes exclusively from Supabase
 - Image files stored in Supabase Storage bucket: `events`
 - **Backend editable**: event entries (date, detail, images, description)
 
@@ -264,7 +265,6 @@ xl: 1920  // Extra large
 - Responsive grid: xs:12, sm:6, md:3 (4-up on desktop)
 - Each card: image, category chip (label: "Heading"), title, "Read More" link → `/blog/[slug]`
 - **Data source**: Supabase table `blog_highlights` (ordered by `sort_order`)
-- Fallback: `FALLBACK_BLOGS` array in `BlogHighlight/index.tsx` if Supabase returns empty
 - Image files stored in Supabase Storage bucket: `blog-highlights`
 - Hover effect: lift (`-4px`), shadow, image scale (1.05)
 - **Backend editable**: blog entries (title, slug, image)
@@ -276,7 +276,7 @@ xl: 1920  // Extra large
 
 ## Blog Pages
 
-All blog pages are static, located in `/src/app/blog/[slug]/`. Each has `page.tsx` + `layout.tsx`.
+Blog pages use a dynamic route `/src/app/blog/[slug]/` that fetches `title` and `img` from the `blog_highlights` table by `blog_id`. 7 legacy static pages still exist and take precedence when their slug matches.
 
 | Slug | Topic |
 |------|-------|
@@ -378,7 +378,7 @@ The backend must perform **both** steps or the image will not appear on the fron
 2. Insert a row into `carousel_images` table:
 ```sql
 INSERT INTO carousel_images (url, sort_order)
-VALUES ('https://jzqfjmthvjdqaazwluro.supabase.co/storage/v1/object/public/koi-images/<filename>', <next_order>);
+VALUES ('https://cnpaysvylgpmkitatsqf.supabase.co/storage/v1/object/public/koi-images/<filename>', <next_order>);
 ```
 > Uploading to Storage without inserting the DB row = image never appears on frontend.
 
@@ -398,7 +398,7 @@ The backend must perform **both** steps:
 2. Insert a row into `blog_highlights` table:
 ```sql
 INSERT INTO blog_highlights (blog_id, title, img, sort_order)
-VALUES ('<slug>', 'Thai Title', 'https://jzqfjmthvjdqaazwluro.supabase.co/storage/v1/object/public/blog-highlights/<slug>/<filename>', <next_order>);
+VALUES ('<slug>', 'Thai Title', 'https://cnpaysvylgpmkitatsqf.supabase.co/storage/v1/object/public/blog-highlights/<slug>/<filename>', <next_order>);
 ```
 
 ### Add a Blog Post (static page)
@@ -464,12 +464,12 @@ Allow authorized admins to edit live content on the koimartfarm-ui website via a
 interface CarouselImage {
   id: number;
   url: string;        // Full Supabase Storage public URL
-  sort_order: number;
+  sort_order: number; // Ascending display order
   created_at: string;
 }
 ```
 **Supabase Storage bucket**: `koi-images` (public)
-**Public URL format**: `https://jzqfjmthvjdqaazwluro.supabase.co/storage/v1/object/public/koi-images/<filename>`
+**Public URL format**: `https://cnpaysvylgpmkitatsqf.supabase.co/storage/v1/object/public/koi-images/<filename>`
 
 **Backend upload flow** (BOTH steps required):
 1. `storage.from("koi-images").upload(filename, fileBuffer)` — upload to storage
@@ -494,12 +494,12 @@ interface KoiEvent {
   date: string;         // "DD/MM/YYYY" format — display only
   detail: string;       // Event name/title (Thai)
   imgs: string[];       // Array of full Supabase Storage public URLs
-  description: string;  // Optional longer Thai description
-  sort_order: number;
+  description: string;  // Thai description (may be empty string)
+  sort_order: number;   // Ascending display order
 }
 ```
 **Supabase Storage bucket**: `events` (public)
-**Public URL format**: `https://jzqfjmthvjdqaazwluro.supabase.co/storage/v1/object/public/events/<filename>`
+**Public URL format**: `https://cnpaysvylgpmkitatsqf.supabase.co/storage/v1/object/public/events/<filename>`
 
 **Backend upload flow** (BOTH steps required):
 1. `storage.from("events").upload(filename, fileBuffer)` — upload image to storage
@@ -523,14 +523,15 @@ DELETE /api/admin/events/:id/images/:filename → storage.remove + array_remove 
 ```typescript
 interface BlogHighlight {
   id: number;
-  blog_id: string;    // slug — maps to /blog/[blog_id] static page
+  blog_id: string;    // slug — maps to /blog/[blog_id] dynamic page
   title: string;      // Thai title displayed on card
-  img: string;        // Full Supabase Storage public URL
-  sort_order: number;
+  img: string;        // Full Supabase Storage public URL (thumbnail)
+  sort_order: number; // Ascending display order
+  created_at: string;
 }
 ```
 **Supabase Storage bucket**: `blog-highlights` (public)
-**Public URL format**: `https://jzqfjmthvjdqaazwluro.supabase.co/storage/v1/object/public/blog-highlights/<slug>/<filename>`
+**Public URL format**: `https://cnpaysvylgpmkitatsqf.supabase.co/storage/v1/object/public/blog-highlights/<slug>/<filename>`
 
 **Backend upload flow** (BOTH steps required):
 1. `storage.from("blog-highlights").upload("<slug>/<filename>", fileBuffer)` — upload thumbnail
