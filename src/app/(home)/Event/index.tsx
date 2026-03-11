@@ -7,7 +7,7 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import type { KoiEvent } from "../../../models/events";
 
 type EventProps = {
@@ -113,51 +113,45 @@ function EventImageCarousel({ imgs }: { imgs: string[] }) {
   );
 }
 
-const PAGE_SIZE = 2;
+const CARD_SCROLL_PX = 340; // approx height of one card + gap
 
 function Event(props: EventProps) {
-  const [start, setStart] = useState(0);
-  const [animKey, setAnimKey] = useState(0);
-  const [direction, setDirection] = useState<"up" | "down">("down");
-  const visible = props.events.slice(start, start + PAGE_SIZE);
-  const hasPrev = start > 0;
-  const hasNext = start + PAGE_SIZE < props.events.length;
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [atTop, setAtTop] = useState(true);
+  const [atBottom, setAtBottom] = useState(false);
+
+  const handleScroll = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    setAtTop(el.scrollTop <= 4);
+    setAtBottom(el.scrollTop + el.clientHeight >= el.scrollHeight - 4);
+  };
 
   const goNext = () => {
-    setDirection("down");
-    setStart((s) => s + PAGE_SIZE);
-    setAnimKey((k) => k + 1);
+    scrollRef.current?.scrollBy({ top: CARD_SCROLL_PX, behavior: "smooth" });
   };
 
   const goPrev = () => {
-    setDirection("up");
-    setStart((s) => s - PAGE_SIZE);
-    setAnimKey((k) => k + 1);
+    scrollRef.current?.scrollBy({ top: -CARD_SCROLL_PX, behavior: "smooth" });
   };
 
   return (
     <Container maxWidth="lg">
       <Box sx={{ py: 5 }}>
       <Box
-        key={animKey}
+        ref={scrollRef}
+        onScroll={handleScroll}
         sx={{
           display: "grid",
           gridTemplateColumns: "1fr",
           gap: 3,
-          animation: direction === "down"
-            ? "slideInFromBottom 0.4s ease"
-            : "slideInFromTop 0.4s ease",
-          "@keyframes slideInFromBottom": {
-            from: { opacity: 0, transform: "translateY(32px)" },
-            to:   { opacity: 1, transform: "translateY(0)" },
-          },
-          "@keyframes slideInFromTop": {
-            from: { opacity: 0, transform: "translateY(-32px)" },
-            to:   { opacity: 1, transform: "translateY(0)" },
-          },
+          maxHeight: `${CARD_SCROLL_PX * 2}px`,
+          overflowY: "scroll",
+          scrollbarWidth: "none",
+          "&::-webkit-scrollbar": { display: "none" },
         }}
       >
-        {visible.map((e) => (
+        {props.events.map((e) => (
           <Box
             key={e.id}
             sx={{
@@ -247,17 +241,17 @@ function Event(props: EventProps) {
           ))}
       </Box>
 
-      {/* Prev / Next buttons */}
+      {/* Scroll buttons */}
       <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1.5, mt: 4 }}>
         <Button
           onClick={goPrev}
-          disabled={!hasPrev}
+          disabled={atTop}
           startIcon={<KeyboardArrowUpIcon />}
           variant="outlined"
           sx={{
             borderRadius: "9999px",
-            borderColor: hasPrev ? "rgba(197,165,90,0.7)" : "rgba(197,165,90,0.2)",
-            color: hasPrev ? "secondary.main" : "rgba(197,165,90,0.3)",
+            borderColor: !atTop ? "rgba(197,165,90,0.7)" : "rgba(197,165,90,0.2)",
+            color: !atTop ? "secondary.main" : "rgba(197,165,90,0.3)",
             px: 3,
             py: 0.75,
             fontSize: 13,
@@ -278,19 +272,14 @@ function Event(props: EventProps) {
           Previous
         </Button>
 
-        {/* Page indicator */}
-        <Typography sx={{ fontSize: 12, color: "text.secondary", fontFamily: "var(--font-inter)", opacity: 0.6 }}>
-          {Math.floor(start / PAGE_SIZE) + 1} / {Math.ceil(props.events.length / PAGE_SIZE)}
-        </Typography>
-
         <Button
           onClick={goNext}
-          disabled={!hasNext}
+          disabled={atBottom}
           endIcon={<KeyboardArrowDownIcon />}
           variant="contained"
           sx={{
             borderRadius: "9999px",
-            backgroundColor: hasNext ? "#0F1B2D" : "rgba(15,27,45,0.15)",
+            backgroundColor: !atBottom ? "#0F1B2D" : "rgba(15,27,45,0.15)",
             color: "#FAF8F5",
             px: 3,
             py: 0.75,
