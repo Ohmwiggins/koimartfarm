@@ -1,11 +1,13 @@
 "use client";
 
-import { Box, Container, IconButton, Typography } from "@mui/material";
+import { Box, Button, Container, IconButton, Typography } from "@mui/material";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import Image from "next/image";
-import { useState, useRef } from "react";
+import { useState } from "react";
 import type { KoiEvent } from "../../../models/events";
 
 type EventProps = {
@@ -111,100 +113,74 @@ function EventImageCarousel({ imgs }: { imgs: string[] }) {
   );
 }
 
-function Event(props: EventProps) {
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(true);
+const PAGE_SIZE = 2;
 
-  const checkScroll = () => {
-    if (!scrollContainerRef.current) return;
-    const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
-    setCanScrollLeft(scrollLeft > 0);
-    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 5);
+function Event(props: EventProps) {
+  const [start, setStart] = useState(0);
+  const [animKey, setAnimKey] = useState(0);
+  const [direction, setDirection] = useState<"up" | "down">("down");
+  const visible = props.events.slice(start, start + PAGE_SIZE);
+  const hasPrev = start > 0;
+  const hasNext = start + PAGE_SIZE < props.events.length;
+
+  const goNext = () => {
+    setDirection("down");
+    setStart((s) => s + PAGE_SIZE);
+    setAnimKey((k) => k + 1);
   };
 
-  const scroll = (direction: "left" | "right") => {
-    if (!scrollContainerRef.current) return;
-    const scrollAmount = scrollContainerRef.current.clientWidth * 0.9;
-    scrollContainerRef.current.scrollBy({
-      left: direction === "left" ? -scrollAmount : scrollAmount,
-      behavior: "smooth",
-    });
-    setTimeout(checkScroll, 300);
+  const goPrev = () => {
+    setDirection("up");
+    setStart((s) => s - PAGE_SIZE);
+    setAnimKey((k) => k + 1);
   };
 
   return (
     <Container maxWidth="lg">
-      <Box sx={{ position: "relative" }}>
-        {/* Left Arrow */}
-        {canScrollLeft && (
-          <IconButton
-            onClick={() => scroll("left")}
+      <Box sx={{ py: 5 }}>
+      <Box
+        key={animKey}
+        sx={{
+          display: "grid",
+          gridTemplateColumns: "1fr",
+          gap: 3,
+          animation: direction === "down"
+            ? "slideInFromBottom 0.4s ease"
+            : "slideInFromTop 0.4s ease",
+          "@keyframes slideInFromBottom": {
+            from: { opacity: 0, transform: "translateY(32px)" },
+            to:   { opacity: 1, transform: "translateY(0)" },
+          },
+          "@keyframes slideInFromTop": {
+            from: { opacity: 0, transform: "translateY(-32px)" },
+            to:   { opacity: 1, transform: "translateY(0)" },
+          },
+        }}
+      >
+        {visible.map((e) => (
+          <Box
+            key={e.id}
             sx={{
-              position: "absolute",
-              left: { xs: -12, sm: -20 },
-              top: "50%",
-              transform: "translateY(-50%)",
-              zIndex: 2,
-              backgroundColor: "rgba(15,27,45,0.85)",
-              color: "#C5A55A",
-              width: { xs: 36, sm: 44 },
-              height: { xs: 36, sm: 44 },
-              "&:hover": {
-                backgroundColor: "rgba(15,27,45,0.95)",
-                color: "#FAF8F5",
-              },
+              display: "flex",
+              flexDirection: "row",
+              maxWidth: 900,
+              mx: "auto",
+              width: "100%",
+              backgroundColor: "background.paper",
+              borderRadius: "16px",
+              border: "1px solid rgba(197, 165, 90, 0.35)",
+              overflow: "hidden",
+              isolation: "isolate",
             }}
           >
-            <ArrowBackIosNewIcon />
-          </IconButton>
-        )}
-
-        {/* Events Container — py:5 (40px) gives shadow room without clipping */}
-        <Box
-          ref={scrollContainerRef}
-          onScroll={checkScroll}
-          sx={{
-            display: "flex",
-            gap: 3,
-            overflowX: "auto",
-            scrollSnapType: "x mandatory",
-            scrollbarWidth: "none",
-            "&::-webkit-scrollbar": { display: "none" },
-            py: 5,
-          }}
-        >
-          {props.events.map((e) => (
-            <Box
-              key={e.id}
-              component="a"
-              href="https://www.koimart.shop/th/news"
-              target="_blank"
-              rel="noopener noreferrer"
-              sx={{
-                scrollSnapAlign: "start",
-                flexShrink: 0,
-                width: { xs: "85%", sm: "calc(50% - 12px)" },
-                display: "flex",
-                flexDirection: "row",
-                backgroundColor: "background.paper",
-                borderRadius: "16px",
-                border: "1px solid rgba(197, 165, 90, 0.35)",
-                overflow: "hidden",
-                isolation: "isolate",
-                textDecoration: "none",
-                cursor: "pointer",
-                "&:hover": { border: "1px solid rgba(197, 165, 90, 0.7)" },
-              }}
-            >
               {/* Image — left side, 4:5 ratio, stretches to card height */}
               {e.imgs && e.imgs.length > 0 && (
                 <Box
                   sx={{
-                    width: { xs: "45%", sm: "42%" },
+                    width: "25%",
                     flexShrink: 0,
                     position: "relative",
-                    aspectRatio: "4/5",
+                    aspectRatio: "3/4",
                     alignSelf: "stretch",
                   }}
                 >
@@ -269,31 +245,74 @@ function Event(props: EventProps) {
               </Box>
             </Box>
           ))}
-        </Box>
+      </Box>
 
-        {/* Right Arrow */}
-        {canScrollRight && (
-          <IconButton
-            onClick={() => scroll("right")}
-            sx={{
-              position: "absolute",
-              right: { xs: -12, sm: -20 },
-              top: "50%",
-              transform: "translateY(-50%)",
-              zIndex: 2,
-              backgroundColor: "rgba(15,27,45,0.85)",
-              color: "#C5A55A",
-              width: { xs: 36, sm: 44 },
-              height: { xs: 36, sm: 44 },
-              "&:hover": {
-                backgroundColor: "rgba(15,27,45,0.95)",
-                color: "#FAF8F5",
-              },
-            }}
-          >
-            <ArrowForwardIosIcon />
-          </IconButton>
-        )}
+      {/* Prev / Next buttons */}
+      <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1.5, mt: 4 }}>
+        <Button
+          onClick={goPrev}
+          disabled={!hasPrev}
+          startIcon={<KeyboardArrowUpIcon />}
+          variant="outlined"
+          sx={{
+            borderRadius: "9999px",
+            borderColor: hasPrev ? "rgba(197,165,90,0.7)" : "rgba(197,165,90,0.2)",
+            color: hasPrev ? "secondary.main" : "rgba(197,165,90,0.3)",
+            px: 3,
+            py: 0.75,
+            fontSize: 13,
+            fontWeight: 600,
+            letterSpacing: "0.06em",
+            textTransform: "uppercase",
+            fontFamily: "var(--font-inter)",
+            "&:hover": {
+              backgroundColor: "rgba(197,165,90,0.08)",
+              borderColor: "secondary.main",
+            },
+            "&.Mui-disabled": {
+              borderColor: "rgba(197,165,90,0.15)",
+              color: "rgba(197,165,90,0.25)",
+            },
+          }}
+        >
+          Previous
+        </Button>
+
+        {/* Page indicator */}
+        <Typography sx={{ fontSize: 12, color: "text.secondary", fontFamily: "var(--font-inter)", opacity: 0.6 }}>
+          {Math.floor(start / PAGE_SIZE) + 1} / {Math.ceil(props.events.length / PAGE_SIZE)}
+        </Typography>
+
+        <Button
+          onClick={goNext}
+          disabled={!hasNext}
+          endIcon={<KeyboardArrowDownIcon />}
+          variant="contained"
+          sx={{
+            borderRadius: "9999px",
+            backgroundColor: hasNext ? "#0F1B2D" : "rgba(15,27,45,0.15)",
+            color: "#FAF8F5",
+            px: 3,
+            py: 0.75,
+            fontSize: 13,
+            fontWeight: 600,
+            letterSpacing: "0.06em",
+            textTransform: "uppercase",
+            fontFamily: "var(--font-inter)",
+            boxShadow: "none",
+            "&:hover": {
+              backgroundColor: "#1A2A42",
+              boxShadow: "none",
+            },
+            "&.Mui-disabled": {
+              backgroundColor: "rgba(15,27,45,0.1)",
+              color: "rgba(250,248,245,0.3)",
+            },
+          }}
+        >
+          Next
+        </Button>
+      </Box>
       </Box>
     </Container>
   );
