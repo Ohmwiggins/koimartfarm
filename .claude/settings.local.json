@@ -1,0 +1,14 @@
+{
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
+  "permissions": {
+    "allow": [
+      "Bash(node:*)",
+      "Bash(source:*)",
+      "Bash(supabase:*)",
+      "Bash(npx:*)",
+      "Read(//Users/new_norawich/.claude/**)"
+    ]
+  }
+}
