@@ -1,108 +1,20 @@
+"use client";
+
 import { Box, Grid, Grow } from "@mui/material";
 import KoiVarietyBox from "./KoiVarietyBox";
 import { useInView } from "react-intersection-observer";
+import { useState, useEffect } from "react";
+import { supabase } from "../../../lib/supabase";
 
-const koiVarieties = [
-  {
-    img: "/img/varieties/Kohaku.png",
-    type: "Kohaku (โคฮากุ)",
-    characteristic: [
-      "พื้นลำตัวสีขาว (Shiroji)",
-      "ลวดลายสีแดง (Hi) ชัดเจน",
-      "เป็นสายพันธุ์คลาสสิกและได้รับความนิยมสูงสุด",
-    ],
-    meaning: [
-      "ความโชคดี",
-      "ความสำเร็จ",
-      "ความเจริญรุ่งเรือง",
-      "การเริ่มต้นใหม่",
-    ],
-  },
-  {
-    img: "/img/varieties/Sanke.png",
-    type: "Sanke / Taisho Sanke (ซันเก้)",
-    characteristic: [
-      "พื้นสีขาว",
-      "ลายแดงผสมจุดดำ",
-      "สีดำเป็นลักษณะจุดแต้ม ไม่ครอบงำทั้งตัว",
-    ],
-    meaning: [
-      "ความสมดุล",
-      "การเติบโตอย่างมั่นคง",
-      "ความก้าวหน้าแบบมีระบบ",
-      "โชคลาภ",
-    ],
-  },
-  {
-    img: "/img/varieties/Showa.png",
-    type: "Showa / Showa Sanshoku (โชว่า)",
-    characteristic: [
-      "พื้นสีดำเป็นหลัก",
-      "มีลายแดงและขาวแทรก",
-      "ลวดลายดูทรงพลังและหนักแน่น",
-    ],
-    meaning: [
-      "พลัง",
-      "อำนาจ",
-      "ความแข็งแกร่ง",
-      "การฝ่าฟันอุปสรรค",
-      "จิตวิญญาณนักสู้",
-    ],
-  },
-  {
-    img: "/img/varieties/Ogon.png",
-    type: "Yamabuki Ogon (ยามาบูกิ โอกอน)",
-    characteristic: [
-      "สีเหลืองทองทั้งตัว",
-      "ผิวเงาแบบโลหะ (Metallic)",
-      "เรียบหรูและโดดเด่น",
-    ],
-    meaning: ["เงินทอง", "ความมั่งคั่ง", "ความอุดมสมบูรณ์", "การเรียกทรัพย์"],
-  },
-  {
-    img: "/img/varieties/Asagi.png",
-    type: "Asagi (อาซากิ)",
-    characteristic: [
-      "หลังเป็นลายเกล็ดน้ำเงินเทาแบบตาข่าย",
-      "ท้อง แก้ม และครีบมีสีแดงส้มไล่ขึ้น",
-    ],
-    meaning: ["ความสงบ", "ความสุขุม", "ความมั่นคง", "ปัญญา", "ความลุ่มลึก"],
-  },
-  {
-    img: "/img/varieties/Shusui.png",
-    type: "Shusui (ชูซุย)",
-    characteristic: [
-      "ไม่มีเกล็ด (Doitsu)",
-      "มีแถวเกล็ดใหญ่เรียงตามแนวสันหลัง",
-      "สีแดงด้านข้างลำตัว",
-    ],
-    meaning: [
-      "เอกลักษณ์",
-      "ความแตกต่าง",
-      "ความคิดสร้างสรรค์",
-      "การปรับตัว",
-      "แนวคิดสมัยใหม่",
-    ],
-  },
-  {
-    img: "/img/varieties/Chagoi.png",
-    type: "Chagoi (ชากอย)",
-    characteristic: [
-      "สีโทนน้ำตาลชา / เขียวมะกอก / ทองน้ำตาล",
-      "โตเร็ว แข็งแรง",
-      "นิสัยเชื่องและเข้าหาคนง่าย",
-    ],
-    meaning: [
-      "ความอบอุ่น",
-      "มิตรภาพ",
-      "ความอุดมสมบูรณ์",
-      "ความสัมพันธ์ที่ดี",
-      "ความกลมกลืน",
-    ],
-  },
-];
+interface KoiVarietyRow {
+  name_en: string;
+  name_th: string;
+  img: string;
+  characteristics: string[];
+  symbolism: string[];
+}
 
-const KoiVarietyItem = ({ koi }: { koi: (typeof koiVarieties)[0] }) => {
+const KoiVarietyItem = ({ koi }: { koi: KoiVarietyRow }) => {
   const { ref, inView } = useInView({
     triggerOnce: true,
     threshold: 0.2,
@@ -115,9 +27,9 @@ const KoiVarietyItem = ({ koi }: { koi: (typeof koiVarieties)[0] }) => {
           <Box>
             <KoiVarietyBox
               img={koi.img}
-              type={koi.type}
-              characteristic={koi.characteristic}
-              meaning={koi.meaning}
+              type={`${koi.name_en} (${koi.name_th})`}
+              characteristic={koi.characteristics}
+              meaning={koi.symbolism}
             />
           </Box>
         </Grow>
@@ -127,10 +39,23 @@ const KoiVarietyItem = ({ koi }: { koi: (typeof koiVarieties)[0] }) => {
 };
 
 function KoiVariety() {
+  const [varieties, setVarieties] = useState<KoiVarietyRow[]>([]);
+
+  useEffect(() => {
+    supabase
+      .from("koi_varieties")
+      .select("name_en, name_th, img, characteristics, symbolism")
+      .order("sort_order")
+      .then(({ data, error }) => {
+        console.log("[koi_varieties] data:", data, "error:", error);
+        if (data) setVarieties(data as KoiVarietyRow[]);
+      });
+  }, []);
+
   return (
     <Box sx={{ paddingX: { xs: 2, sm: 0 } }}>
       <Grid container spacing={4}>
-        {koiVarieties.map((koi, index) => (
+        {varieties.map((koi, index) => (
           <KoiVarietyItem key={index} koi={koi} />
         ))}
       </Grid>

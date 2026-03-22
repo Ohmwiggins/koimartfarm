@@ -4,7 +4,6 @@ import { Box, Container, Grid, Typography } from "@mui/material";
 import { ContactUsLayout } from "./Footer.styles";
 import HeaderText from "../HeaderText";
 import Image from "next/image";
-import ContactForm from "./ContactForm";
 import GavelIcon from "@mui/icons-material/Gavel";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
@@ -127,7 +126,7 @@ function Footer() {
           </Grid>
 
           {/* Map */}
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid size={{ xs: 12, md: 8 }}>
             <ContactUsLayout>
               <Box
                 sx={{
@@ -147,11 +146,6 @@ function Footer() {
                 ></iframe>
               </Box>
             </ContactUsLayout>
-          </Grid>
-
-          {/* Contact form */}
-          <Grid size={{ xs: 12, md: 6 }}>
-            <ContactForm />
           </Grid>
 
           {/* Links grid — 4-col 2-row layout */}

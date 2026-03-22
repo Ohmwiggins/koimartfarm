@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Grid, Grow } from "@mui/material";
+import { Box, Grid, Grow, Pagination, useMediaQuery, useTheme } from "@mui/material";
 import BlogCard from "./BlogCard";
 import { useInView } from "react-intersection-observer";
 import { useState, useEffect } from "react";
@@ -14,6 +14,11 @@ interface BlogCardData {
 
 function BlogHighlight() {
   const [blogs, setBlogs] = useState<BlogCardData[]>([]);
+  const [page, setPage] = useState(1);
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const perPage = isMobile ? 4 : 8;
 
   useEffect(() => {
     supabase
@@ -33,31 +38,58 @@ function BlogHighlight() {
       });
   }, []);
 
+  const totalPages = Math.ceil(blogs.length / perPage);
+  const paginated = blogs.slice((page - 1) * perPage, page * perPage);
+
   const { ref: blogHighlightRef, inView: blogHilightInView } = useInView({
     triggerOnce: true,
     threshold: 0.1,
   });
+
   return (
-    <Grid
-      container
-      spacing={{ xs: 2, md: 3 }}
-      ref={blogHighlightRef}
-    >
-      {blogs.map((blog, index) => (
-        <Grid key={blog.blogId} size={{ xs: 12, sm: 6, md: 3 }}>
-          <Grow in={blogHilightInView} timeout={800 + index * 150}>
-            <Box sx={{ display: "flex", height: "100%" }}>
-              <BlogCard
-                blogId={blog.blogId}
-                title={blog.title}
-                img={blog.img}
-                desc={"Heading"}
-              />
-            </Box>
-          </Grow>
-        </Grid>
-      ))}
-    </Grid>
+    <Box>
+      <Grid container spacing={{ xs: 2, md: 3 }} ref={blogHighlightRef}>
+        {paginated.map((blog, index) => (
+          <Grid key={blog.blogId} size={{ xs: 12, sm: 6, md: 3 }}>
+            <Grow in={blogHilightInView} timeout={800 + index * 150}>
+              <Box sx={{ display: "flex", height: "100%" }}>
+                <BlogCard
+                  blogId={blog.blogId}
+                  title={blog.title}
+                  img={blog.img}
+                  desc={"Heading"}
+                />
+              </Box>
+            </Grow>
+          </Grid>
+        ))}
+      </Grid>
+
+      {totalPages > 1 && (
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 5 }}>
+          <Pagination
+            count={totalPages}
+            page={page}
+            onChange={(_, value) => {
+              setPage(value);
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+            sx={{
+              "& .MuiPaginationItem-root": {
+                color: "primary.main",
+                fontFamily: "var(--font-inter)",
+                fontWeight: 600,
+              },
+              "& .MuiPaginationItem-root.Mui-selected": {
+                backgroundColor: "secondary.main",
+                color: "#fff",
+                "&:hover": { backgroundColor: "secondary.light" },
+              },
+            }}
+          />
+        </Box>
+      )}
+    </Box>
   );
 }
 

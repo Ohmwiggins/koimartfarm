@@ -171,11 +171,12 @@ function Event(props: EventProps) {
               {e.imgs && e.imgs.length > 0 && (
                 <Box
                   sx={{
-                    width: "25%",
+                    width: { xs: "35%", sm: "25%" },
                     flexShrink: 0,
                     position: "relative",
                     aspectRatio: "3/4",
-                    alignSelf: "stretch",
+                    alignSelf: "flex-start",
+                    minHeight: { xs: 120, sm: 160 },
                   }}
                 >
                   <EventImageCarousel imgs={e.imgs} />
