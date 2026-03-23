@@ -175,7 +175,7 @@ function Event(props: EventProps) {
                     flexShrink: 0,
                     position: "relative",
                     aspectRatio: "3/4",
-                    alignSelf: "flex-start",
+                    alignSelf: "center",
                     minHeight: { xs: 120, sm: 160 },
                   }}
                 >
