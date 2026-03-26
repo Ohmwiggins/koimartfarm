@@ -10,11 +10,13 @@ function BlogCard({
   title,
   img,
   desc,
+  content,
 }: {
   blogId: string;
   title: string;
   img: string;
   desc: string;
+  content: string;
 }) {
   return (
     <Card
@@ -66,22 +68,29 @@ function BlogCard({
             textTransform: "uppercase",
             lineHeight: 1.5,
             fontFamily: "var(--font-inter)",
+            display: "-webkit-box",
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: "vertical",
+            overflow: "hidden",
           }}
         >
           {desc}
         </Typography>
 
-        {/* Title — 15px, semibold */}
+        {/* Content — 14px, 2-line clamp with ellipsis */}
         <Typography
           sx={{
-            fontWeight: 600,
-            fontSize: 15,
-            lineHeight: 1.4,
-            color: "primary.main",
+            fontSize: 14,
+            lineHeight: 1.6,
+            color: "text.secondary",
             flexGrow: 1,
+            display: "-webkit-box",
+            WebkitLineClamp: 1,
+            WebkitBoxOrient: "vertical",
+            overflow: "hidden",
           }}
         >
-          {title}
+          {content}
         </Typography>
       </CardContent>
 

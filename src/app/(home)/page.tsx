@@ -5,7 +5,6 @@ import Event from "./Event/index";
 import HeaderText from "../../components/HeaderText";
 import History from "./KoiHistory";
 import BlogHighlight from "./BlogHighlight";
-import KoiVariety from "./KoiVariety";
 import { useInView } from "react-intersection-observer";
 import Banner from "./Banner";
 import { useState, useEffect } from "react";
@@ -36,11 +35,6 @@ function Home() {
   });
 
   const { ref: historyRef, inView: historyInView } = useInView({
-    triggerOnce: true,
-    threshold: 0.2,
-  });
-
-  const { ref: varietyRef, inView: varietyInView } = useInView({
     triggerOnce: true,
     threshold: 0.2,
   });
@@ -117,20 +111,6 @@ function Home() {
         </Container>
       </Box>
 
-      {/* Koi Varieties */}
-      <Box ref={varietyRef} sx={{ backgroundColor: "background.elevation1", paddingY: 10 }}>
-        <Container maxWidth="lg" sx={{ display: "flex", flexDirection: "column" }}>
-          <Grow in={varietyInView} timeout={1500}>
-            <Box sx={{ display: "flex", justifyContent: "center" }}>
-              <HeaderText title="Koi Varieties" color="#E91D26" />
-            </Box>
-          </Grow>
-
-          <Box sx={{ paddingY: 5 }}>
-            <KoiVariety />
-          </Box>
-        </Container>
-      </Box>
     </Box>
   );
 }
