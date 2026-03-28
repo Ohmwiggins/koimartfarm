@@ -10,6 +10,7 @@ interface BlogCardData {
   blogId: string;
   title: string;
   img: string;
+  content: string;
 }
 
 function BlogHighlight() {
@@ -23,16 +24,26 @@ function BlogHighlight() {
   useEffect(() => {
     supabase
       .from("blog_highlights")
-      .select("blog_id, title, img")
+      .select("blog_id, title, img, content")
       .order("sort_order")
       .then(({ data }) => {
         if (data) {
           setBlogs(
-            data.map((d: { blog_id: string; title: string; img: string }) => ({
-              blogId: d.blog_id,
-              title: d.title,
-              img: d.img,
-            }))
+            data.map((d: { blog_id: string; title: string; img: string; content: string }) => {
+              let preview = "";
+              try {
+                const blocks: { type: string; content: string }[] = JSON.parse(d.content ?? "[]");
+                preview = blocks.find((b) => b.type === "paragraph")?.content ?? "";
+              } catch {
+                preview = d.content ?? "";
+              }
+              return {
+                blogId: d.blog_id,
+                title: d.title,
+                img: d.img,
+                content: preview,
+              };
+            })
           );
         }
       });
@@ -57,7 +68,8 @@ function BlogHighlight() {
                   blogId={blog.blogId}
                   title={blog.title}
                   img={blog.img}
-                  desc={"Heading"}
+                  desc={blog.title}
+                  content={blog.content}
                 />
               </Box>
             </Grow>
@@ -72,7 +84,6 @@ function BlogHighlight() {
             page={page}
             onChange={(_, value) => {
               setPage(value);
-              window.scrollTo({ top: 0, behavior: "smooth" });
             }}
             sx={{
               "& .MuiPaginationItem-root": {

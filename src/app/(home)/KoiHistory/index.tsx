@@ -157,12 +157,12 @@ function History() {
           .map((imgSrc, index) => (
             <Fade key={(galleryPage - 1) * perPage + index} in={travelImgInView} timeout={index * 250}>
               <div onClick={() => handleOpen((galleryPage - 1) * perPage + index)} className="group relative cursor-pointer overflow-hidden rounded-xl aspect-square">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <Image
                   src={imgSrc}
                   alt="KoiMartFarm Japan"
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  style={{ display: "block" }}
+                  fill
+                  sizes="(max-width: 600px) 50vw, (max-width: 960px) 33vw, 25vw"
+                  className="object-cover transition-transform duration-500 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-navy/0 group-hover:bg-navy/30 transition-all duration-300" />
               </div>
@@ -205,12 +205,15 @@ function History() {
             <ArrowForwardIosIcon fontSize="large" />
           </IconButton>
           {selectedImageIndex !== null && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={galleryImages[selectedImageIndex]}
-              alt="KoiMartFarm History"
-              style={{ maxHeight: "90vh", maxWidth: "80vw", objectFit: "contain", borderRadius: "12px" }}
-            />
+            <Box sx={{ position: "relative", width: "80vw", height: "90vh" }}>
+              <Image
+                src={galleryImages[selectedImageIndex]}
+                alt="KoiMartFarm History"
+                fill
+                sizes="80vw"
+                style={{ objectFit: "contain", borderRadius: "12px" }}
+              />
+            </Box>
           )}
         </Box>
       </Modal>
