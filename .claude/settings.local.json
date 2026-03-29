@@ -10,7 +10,8 @@
       "Bash(npx:*)",
       "Read(//Users/new_norawich/.claude/**)",
       "Bash(npm run:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(git checkout:*)"
     ]
   }
 }

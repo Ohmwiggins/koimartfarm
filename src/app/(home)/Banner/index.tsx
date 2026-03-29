@@ -6,12 +6,31 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { supabase } from "../../../lib/supabase";
 
-type MediaType = "image" | "video" | "youtube";
+type MediaType = "image" | "video" | "youtube" | "fallback";
+
+interface PlatformInfo {
+  label: string;
+  color: string;
+  bg: string;
+  symbol: string;
+}
+
+function getPlatformInfo(url: string): PlatformInfo {
+  if (/facebook\.com|fb\.watch/.test(url))
+    return { label: "Facebook", color: "#1877F2", bg: "#0A1220", symbol: "f" };
+  if (/instagram\.com/.test(url))
+    return { label: "Instagram", color: "#E1306C", bg: "#0A1220", symbol: "IG" };
+  if (/tiktok\.com|vm\.tiktok\.com/.test(url))
+    return { label: "TikTok", color: "#010101", bg: "#0A1220", symbol: "TT" };
+  return { label: "Video", color: "#C5A55A", bg: "#0A1220", symbol: "▶" };
+}
 
 function getMediaType(url: string): MediaType {
+  if (url.startsWith("/")) return "image";
   if (/youtube\.com\/(watch|embed|shorts)|youtu\.be\//.test(url)) return "youtube";
   if (/\.(mp4|webm|mov|avi|mkv|m4v)(\?|$)/i.test(url)) return "video";
-  return "image";
+  if (/\.(jpe?g|png|webp|gif|avif|svg)(\?|$)/i.test(url)) return "image";
+  return "fallback"; // social platforms & unknowns → branded link card
 }
 
 function getYouTubeEmbedUrl(url: string): string {
@@ -187,7 +206,7 @@ export default function Banner() {
   const onTouchEnd = useCallback(() => resumeLater(), [resumeLater]);
 
   return (
-    <Box sx={{ paddingTop: "60px", backgroundColor: "background.default" }}>
+    <Box sx={{ paddingTop: "64px", backgroundColor: "background.default" }}>
       {/* ── Strip carousel ─────────────────────────────────────────────── */}
       <Box
         sx={{
@@ -223,6 +242,7 @@ export default function Banner() {
         >
           {[...slides, ...slides].map((src, i) => {
             const mediaType = getMediaType(src);
+            const platform = mediaType === "fallback" ? getPlatformInfo(src) : null;
             return (
               <Box
                 key={i}
@@ -239,7 +259,7 @@ export default function Banner() {
                     src={src}
                     alt={`Koi image ${(i % slides.length) + 1}`}
                     fill
-                    style={{ objectFit: "cover", pointerEvents: "none" }}
+                    style={{ objectFit: "cover", objectPosition: "center bottom", pointerEvents: "none" }}
                     priority={i < slides.length}
                     draggable={false}
                   />
@@ -272,6 +292,58 @@ export default function Banner() {
                       pointerEvents: "none",
                     }}
                   />
+                )}
+                {mediaType === "fallback" && platform && (
+                  <Box
+                    component="a"
+                    href={src}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      width: "100%",
+                      height: "100%",
+                      backgroundColor: platform.bg,
+                      textDecoration: "none",
+                      gap: 2,
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        width: 56,
+                        height: 56,
+                        borderRadius: "50%",
+                        backgroundColor: platform.color,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: 24,
+                        fontWeight: 700,
+                        fontFamily: "Georgia, serif",
+                        color: "#fff",
+                        flexShrink: 0,
+                      }}
+                    >
+                      {platform.symbol}
+                    </Box>
+                    <Box
+                      sx={{
+                        px: 3,
+                        py: 1,
+                        borderRadius: "9999px",
+                        backgroundColor: platform.color,
+                        color: "#fff",
+                        fontSize: 13,
+                        fontFamily: "var(--font-inter)",
+                        fontWeight: 600,
+                      }}
+                    >
+                      Watch on {platform.label} ↗
+                    </Box>
+                  </Box>
                 )}
               </Box>
             );
