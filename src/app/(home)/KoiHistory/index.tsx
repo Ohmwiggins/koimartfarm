@@ -6,7 +6,30 @@ import { useState, useEffect, useCallback } from "react";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import CloseIcon from "@mui/icons-material/Close";
+import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled";
 import { supabase } from "../../../lib/supabase";
+
+function isVideo(url: string): boolean {
+  return /\.(mp4|webm|mov|avi|mkv|m4v)(\?|$)/i.test(url);
+}
+
+function isYouTube(url: string): boolean {
+  return /youtube\.com\/(watch|embed|shorts)|youtu\.be\//.test(url);
+}
+
+function getYouTubeId(url: string): string {
+  const m =
+    url.match(/youtube\.com\/watch\?v=([^&]+)/) ??
+    url.match(/youtu\.be\/([^?]+)/) ??
+    url.match(/youtube\.com\/embed\/([^?/]+)/) ??
+    url.match(/youtube\.com\/shorts\/([^?]+)/);
+  return m?.[1] ?? "";
+}
+
+function getYouTubeEmbedUrl(url: string): string {
+  const id = getYouTubeId(url);
+  return `https://www.youtube.com/embed/${id}?autoplay=1`;
+}
 
 interface AboutContent {
   lead: string;
@@ -157,14 +180,42 @@ function History() {
           .map((imgSrc, index) => (
             <Fade key={(galleryPage - 1) * perPage + index} in={travelImgInView} timeout={index * 250}>
               <div onClick={() => handleOpen((galleryPage - 1) * perPage + index)} className="group relative cursor-pointer overflow-hidden rounded-xl aspect-square">
-                <Image
-                  src={imgSrc}
-                  alt="KoiMartFarm Japan"
-                  fill
-                  sizes="(max-width: 600px) 50vw, (max-width: 960px) 33vw, 25vw"
-                  className="object-cover transition-transform duration-500 group-hover:scale-110"
-                />
+                {isVideo(imgSrc) ? (
+                  <video
+                    src={imgSrc}
+                    muted
+                    loop
+                    playsInline
+                    autoPlay
+                    style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.5s" }}
+                    className="group-hover:scale-110"
+                  />
+                ) : isYouTube(imgSrc) ? (
+                  <iframe
+                    src={`${getYouTubeEmbedUrl(imgSrc)}&mute=1&loop=1&playlist=${getYouTubeId(imgSrc)}&controls=0`}
+                    allow="autoplay; encrypted-media"
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      border: "none",
+                      pointerEvents: "none",
+                    }}
+                  />
+                ) : (
+                  <Image
+                    src={imgSrc}
+                    alt="KoiMartFarm Japan"
+                    fill
+                    sizes="(max-width: 600px) 50vw, (max-width: 960px) 33vw, 25vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                )}
                 <div className="absolute inset-0 bg-navy/0 group-hover:bg-navy/30 transition-all duration-300" />
+                {(isVideo(imgSrc) || isYouTube(imgSrc)) && (
+                  <Box sx={{ position: "absolute", bottom: 8, right: 8, opacity: 0.9, pointerEvents: "none" }}>
+                    <PlayCircleFilledIcon fontSize="small" sx={{ color: "#C5A55A" }} />
+                  </Box>
+                )}
               </div>
             </Fade>
           ))}
@@ -205,14 +256,32 @@ function History() {
             <ArrowForwardIosIcon fontSize="large" />
           </IconButton>
           {selectedImageIndex !== null && (
-            <Box sx={{ position: "relative", width: "80vw", height: "90vh" }}>
-              <Image
-                src={galleryImages[selectedImageIndex]}
-                alt="KoiMartFarm History"
-                fill
-                sizes="80vw"
-                style={{ objectFit: "contain", borderRadius: "12px" }}
-              />
+            <Box sx={{ position: "relative", width: "80vw", height: "90vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              {isVideo(galleryImages[selectedImageIndex]) ? (
+                <video
+                  key={galleryImages[selectedImageIndex]}
+                  src={galleryImages[selectedImageIndex]}
+                  controls
+                  autoPlay
+                  style={{ maxWidth: "100%", maxHeight: "100%", borderRadius: "12px", objectFit: "contain" }}
+                />
+              ) : isYouTube(galleryImages[selectedImageIndex]) ? (
+                <iframe
+                  key={galleryImages[selectedImageIndex]}
+                  src={getYouTubeEmbedUrl(galleryImages[selectedImageIndex])}
+                  allow="autoplay; encrypted-media"
+                  allowFullScreen
+                  style={{ width: "80vw", height: "80vh", border: "none", borderRadius: "12px" }}
+                />
+              ) : (
+                <Image
+                  src={galleryImages[selectedImageIndex]}
+                  alt="KoiMartFarm History"
+                  fill
+                  sizes="80vw"
+                  style={{ objectFit: "contain", borderRadius: "12px" }}
+                />
+              )}
             </Box>
           )}
         </Box>

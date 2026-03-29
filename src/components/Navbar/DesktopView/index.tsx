@@ -22,7 +22,7 @@ function NavbarDesktop() {
         alt="Koimart Farm Logo"
         width={200}
         height={200}
-        style={{ width: 64, height: "auto", display: "block" }}
+        style={{ width: 48, height: "auto", display: "block" }}
       />
 
       <Box>

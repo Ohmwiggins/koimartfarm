@@ -4,79 +4,87 @@ import { Box, Container, Grid, Typography } from "@mui/material";
 import { ContactUsLayout } from "./Footer.styles";
 import HeaderText from "../HeaderText";
 import Image from "next/image";
-import GavelIcon from "@mui/icons-material/Gavel";
-import StorefrontIcon from "@mui/icons-material/Storefront";
-import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
-import { FaFacebook } from "react-icons/fa";
-import { SiTiktok, SiLine } from "react-icons/si";
-import type React from "react";
 
 type LinkItem = {
   label: string;
   url: string;
-  iconBg: string;
-  glowColor: string;
-  icon: React.ReactNode;
+  img: string;
 };
 
-const links: LinkItem[] = [
+const group1Links: LinkItem[] = [
   {
-    label: "FB Koimartfarm",
-    url: "https://www.facebook.com/share/1B2sCbqi7t/",
-    iconBg: "#1877F2",
-    glowColor: "rgba(24,119,242,0.4)",
-    icon: <FaFacebook size={24} color="#fff" />,
-  },
-  {
-    label: "KOIMARTAUCTION.COM",
-    url: "https://share.google/7jZMZbbEFF0uwkufT",
-    iconBg: "#C5A55A",
-    glowColor: "rgba(197,165,90,0.4)",
-    icon: <GavelIcon sx={{ fontSize: 24, color: "#fff" }} />,
-  },
-  {
-    label: "KOIMART.SHOP",
-    url: "https://share.google/9T9E51QzXTDsgiooD",
-    iconBg: "#C5A55A",
-    glowColor: "rgba(197,165,90,0.4)",
-    icon: <StorefrontIcon sx={{ fontSize: 24, color: "#fff" }} />,
-  },
-  {
-    label: "KOIMART APP",
-    url: "https://play.google.com/store/apps/details?id=com.koimartfarm",
-    iconBg: "#C5A55A",
-    glowColor: "rgba(197,165,90,0.4)",
-    icon: <PhoneAndroidIcon sx={{ fontSize: 24, color: "#fff" }} />,
-  },
-  {
-    label: "TikTok Koimartfarm",
-    url: "https://www.tiktok.com/@koimart.farm?_r=1&_t=ZS-942iRQfm3QW",
-    iconBg: "#010101",
-    glowColor: "rgba(105,201,208,0.4)",
-    icon: <SiTiktok size={24} color="#fff" />,
-  },
-  {
-    label: "Line OpenChat",
+    label: "Line OpenChat Koimart Square",
     url: "https://line.me/ti/g2/5OnDbvvr0Sz3jW7Dvt7wECbG4l1dJQFjwfcNcA?utm_source=invitation&utm_medium=link_copy&utm_campaign=default",
-    iconBg: "#06C755",
-    glowColor: "rgba(6,199,85,0.4)",
-    icon: <SiLine size={24} color="#fff" />,
+    img: "/img/contacts/line.png",
   },
   {
-    label: "FB PONDSCAPE",
-    url: "https://www.facebook.com/share/17wVcVXZs7/",
-    iconBg: "#1877F2",
-    glowColor: "rgba(24,119,242,0.4)",
-    icon: <FaFacebook size={24} color="#fff" />,
+    label: "FB Messenger Koimartfarm",
+    url: "https://m.me/koimartfarm",
+    img: "/img/contacts/messenger.png",
   },
   {
-    label: "FB MATALATHAILAND",
-    url: "https://www.facebook.com/share/1GYPNwgkRm/",
-    iconBg: "#1877F2",
-    glowColor: "rgba(24,119,242,0.4)",
-    icon: <FaFacebook size={24} color="#fff" />,
+    label: "Instagram @Koimartfarm",
+    url: "https://www.instagram.com/tong.koimart?igsh=MXMyenMzNHp0dnV3Yg==",
+    img: "/img/contacts/instagram.png",
+  },
+  {
+    label: "TikTok Koimart.farm",
+    url: "https://www.tiktok.com/@koimart.farm?_r=1&_t=ZS-942iRQfm3QW",
+    img: "/img/contacts/tiktok.png",
   },
 ];
+
+const group2Links: LinkItem[] = [
+  {
+    label: "Facebook Pondscape",
+    url: "https://www.facebook.com/share/17wVcVXZs7/",
+    img: "/img/contacts/pondscape.png",
+  },
+  {
+    label: "Website Koimart.shop",
+    url: "https://share.google/9T9E51QzXTDsgiooD",
+    img: "/img/contacts/koimartshop.png",
+  },
+  {
+    label: "Website Koimartauction",
+    url: "https://share.google/7jZMZbbEFF0uwkufT",
+    img: "/img/contacts/koimartauction.png",
+  },
+  {
+    label: "Facebook Matalathailand",
+    url: "https://www.facebook.com/share/1GYPNwgkRm/",
+    img: "/img/contacts/matalathailand.png",
+  },
+];
+
+function BannerCard({ label, url, img }: LinkItem) {
+  return (
+    <Box
+      onClick={() => window.open(url, "_blank")}
+      sx={{
+        borderRadius: "14px",
+        overflow: "hidden",
+        cursor: "pointer",
+        transition: "all 0.3s ease",
+        border: "1px solid rgba(255,255,255,0.07)",
+        "&:hover": {
+          transform: "translateY(-4px)",
+          boxShadow: "0 12px 36px rgba(0,0,0,0.4)",
+          border: "1px solid rgba(255,255,255,0.14)",
+        },
+      }}
+    >
+      <Image
+        src={img}
+        alt={label}
+        width={4805}
+        height={1164}
+        unoptimized
+        style={{ width: "100%", height: "auto", display: "block" }}
+      />
+    </Box>
+  );
+}
 
 function Footer() {
   return (
@@ -109,18 +117,12 @@ function Footer() {
           container
           columnSpacing={5}
           rowSpacing={1}
-          sx={{
-            justifyContent: "center",
-          }}
+          sx={{ justifyContent: "center" }}
         >
           {/* Section header */}
           <Grid
             size={12}
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              marginBottom: 6,
-            }}
+            sx={{ display: "flex", justifyContent: "center", marginBottom: 6 }}
           >
             <HeaderText title="Contact Us" color="#FAF8F5" />
           </Grid>
@@ -148,77 +150,56 @@ function Footer() {
             </ContactUsLayout>
           </Grid>
 
-          {/* Links grid — 4-col 2-row layout */}
+          {/* Links — two groups with phone number divider */}
           <Grid id="links" size={12} sx={{ my: 8 }}>
+            {/* Group 1: Line, Messenger, IG, TikTok */}
             <Grid container spacing={2}>
-              {links.map(({ label, url, icon, iconBg, glowColor }) => (
-                  <Grid key={label} size={{ xs: 12, sm: 6, md: 3 }}>
-                    <Box
-                      onClick={() => window.open(url, "_blank")}
-                      sx={{
-                        display: "flex",
-                        flexDirection: "row",
-                        alignItems: "center",
-                        gap: 2.5,        /* 20px — clear icon/text separation */
-                        px: 3,           /* 24px */
-                        py: 2.5,         /* 20px */
-                        minHeight: 80,   /* Uniform card height */
-                        borderRadius: "14px",
-                        border: "1px solid rgba(255,255,255,0.07)",
-                        background: "rgba(255,255,255,0.04)",
-                        backdropFilter: "blur(12px)",
-                        WebkitBackdropFilter: "blur(12px)",
-                        cursor: "pointer",
-                        transition: "all 0.3s ease",
-                        position: "relative",
-                        overflow: "hidden",
-                        "&:hover": {
-                          transform: "translateY(-4px)",
-                          zIndex: 2,
-                          border: "1px solid rgba(255,255,255,0.14)",
-                          background: "rgba(255,255,255,0.07)",
-                          boxShadow: `0 12px 36px ${glowColor}`,
-                          "& .link-icon-wrap": {
-                            boxShadow: `0 0 20px ${glowColor}`,
-                          },
-                        },
-                      }}
-                    >
-                      {/* Icon — 52×52 container, 24×24 icon */}
-                      <Box
-                        className="link-icon-wrap"
-                        sx={{
-                          width: 52,
-                          height: 52,
-                          borderRadius: "12px",
-                          backgroundColor: iconBg,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          flexShrink: 0,
-                          transition: "box-shadow 0.3s ease",
-                        }}
-                      >
-                        {icon}
-                      </Box>
-                      <Typography
-                        sx={{
-                          color: "rgba(255,255,255,0.92)",
-                          fontWeight: 600,
-                          fontSize: 17,
-                          letterSpacing: "0.01em",
-                          lineHeight: 1.4,
-                          fontFamily: "var(--font-inter)",
-                          whiteSpace: "nowrap",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                        }}
-                      >
-                        {label}
-                      </Typography>
-                    </Box>
-                  </Grid>
-                ))}
+              {group1Links.map((item) => (
+                <Grid key={item.label} size={{ xs: 12, sm: 6, md: 3 }}>
+                  <BannerCard {...item} />
+                </Grid>
+              ))}
+            </Grid>
+
+            {/* Phone number divider */}
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2, my: 3 }}>
+              <Box
+                sx={{
+                  flex: 1,
+                  height: "1px",
+                  background:
+                    "linear-gradient(90deg, transparent, rgba(197,165,90,0.4))",
+                }}
+              />
+              <Typography
+                sx={{
+                  color: "#C5A55A",
+                  fontFamily: "var(--font-inter)",
+                  fontWeight: 700,
+                  fontSize: { xs: 18, md: 22 },
+                  letterSpacing: "0.06em",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                📞 02-964-9595
+              </Typography>
+              <Box
+                sx={{
+                  flex: 1,
+                  height: "1px",
+                  background:
+                    "linear-gradient(90deg, rgba(197,165,90,0.4), transparent)",
+                }}
+              />
+            </Box>
+
+            {/* Group 2: Pondscape, Koimart.shop, Koimartauction, Matalathailand */}
+            <Grid container spacing={2}>
+              {group2Links.map((item) => (
+                <Grid key={item.label} size={{ xs: 12, sm: 6, md: 3 }}>
+                  <BannerCard {...item} />
+                </Grid>
+              ))}
             </Grid>
           </Grid>
 

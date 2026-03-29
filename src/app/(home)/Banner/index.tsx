@@ -6,6 +6,42 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { supabase } from "../../../lib/supabase";
 
+type MediaType = "image" | "video" | "youtube" | "fallback";
+
+interface PlatformInfo {
+  label: string;
+  color: string;
+  bg: string;
+  symbol: string;
+}
+
+function getPlatformInfo(url: string): PlatformInfo {
+  if (/facebook\.com|fb\.watch/.test(url))
+    return { label: "Facebook", color: "#1877F2", bg: "#0A1220", symbol: "f" };
+  if (/instagram\.com/.test(url))
+    return { label: "Instagram", color: "#E1306C", bg: "#0A1220", symbol: "IG" };
+  if (/tiktok\.com|vm\.tiktok\.com/.test(url))
+    return { label: "TikTok", color: "#010101", bg: "#0A1220", symbol: "TT" };
+  return { label: "Video", color: "#C5A55A", bg: "#0A1220", symbol: "▶" };
+}
+
+function getMediaType(url: string): MediaType {
+  if (url.startsWith("/")) return "image";
+  if (/youtube\.com\/(watch|embed|shorts)|youtu\.be\//.test(url)) return "youtube";
+  if (/\.(mp4|webm|mov|avi|mkv|m4v)(\?|$)/i.test(url)) return "video";
+  if (/\.(jpe?g|png|webp|gif|avif|svg)(\?|$)/i.test(url)) return "image";
+  return "fallback"; // social platforms & unknowns → branded link card
+}
+
+function getYouTubeEmbedUrl(url: string): string {
+  const watchMatch = url.match(/youtube\.com\/watch\?v=([^&]+)/);
+  const shortMatch = url.match(/youtu\.be\/([^?]+)/);
+  const embedMatch = url.match(/youtube\.com\/embed\/([^?/]+)/);
+  const shortsMatch = url.match(/youtube\.com\/shorts\/([^?]+)/);
+  const videoId = (watchMatch ?? shortMatch ?? embedMatch ?? shortsMatch)?.[1] ?? "";
+  return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&rel=0`;
+}
+
 const FALLBACK_SLIDES = [
   "/img/koi-images/Koi-image-01.png",
   "/img/koi-images/Koi-image-02.png",
@@ -170,7 +206,7 @@ export default function Banner() {
   const onTouchEnd = useCallback(() => resumeLater(), [resumeLater]);
 
   return (
-    <Box sx={{ paddingTop: "60px", backgroundColor: "background.default" }}>
+    <Box sx={{ paddingTop: "64px", backgroundColor: "background.default" }}>
       {/* ── Strip carousel ─────────────────────────────────────────────── */}
       <Box
         sx={{
@@ -204,26 +240,114 @@ export default function Banner() {
             willChange: "transform",
           }}
         >
-          {[...slides, ...slides].map((src, i) => (
-            <Box
-              key={i}
-              sx={{
-                position: "relative",
-                height: "100%",
-                aspectRatio: "4/5",
-                flexShrink: 0,
-              }}
-            >
-              <Image
-                src={src}
-                alt={`Koi image ${(i % slides.length) + 1}`}
-                fill
-                style={{ objectFit: "cover", pointerEvents: "none" }}
-                priority={i < slides.length}
-                draggable={false}
-              />
-            </Box>
-          ))}
+          {[...slides, ...slides].map((src, i) => {
+            const mediaType = getMediaType(src);
+            const platform = mediaType === "fallback" ? getPlatformInfo(src) : null;
+            return (
+              <Box
+                key={i}
+                sx={{
+                  position: "relative",
+                  height: "100%",
+                  aspectRatio: "4/5",
+                  flexShrink: 0,
+                  overflow: "hidden",
+                }}
+              >
+                {mediaType === "image" && (
+                  <Image
+                    src={src}
+                    alt={`Koi image ${(i % slides.length) + 1}`}
+                    fill
+                    style={{ objectFit: "cover", objectPosition: "center bottom", pointerEvents: "none" }}
+                    priority={i < slides.length}
+                    draggable={false}
+                  />
+                )}
+                {mediaType === "video" && (
+                  <video
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      pointerEvents: "none",
+                    }}
+                  >
+                    <source src={src} />
+                  </video>
+                )}
+                {mediaType === "youtube" && (
+                  <iframe
+                    src={getYouTubeEmbedUrl(src)}
+                    allow="autoplay; encrypted-media"
+                    allowFullScreen
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      border: "none",
+                      pointerEvents: "none",
+                    }}
+                  />
+                )}
+                {mediaType === "fallback" && platform && (
+                  <Box
+                    component="a"
+                    href={src}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      width: "100%",
+                      height: "100%",
+                      backgroundColor: platform.bg,
+                      textDecoration: "none",
+                      gap: 2,
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        width: 56,
+                        height: 56,
+                        borderRadius: "50%",
+                        backgroundColor: platform.color,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: 24,
+                        fontWeight: 700,
+                        fontFamily: "Georgia, serif",
+                        color: "#fff",
+                        flexShrink: 0,
+                      }}
+                    >
+                      {platform.symbol}
+                    </Box>
+                    <Box
+                      sx={{
+                        px: 3,
+                        py: 1,
+                        borderRadius: "9999px",
+                        backgroundColor: platform.color,
+                        color: "#fff",
+                        fontSize: 13,
+                        fontFamily: "var(--font-inter)",
+                        fontWeight: 600,
+                      }}
+                    >
+                      Watch on {platform.label} ↗
+                    </Box>
+                  </Box>
+                )}
+              </Box>
+            );
+          })}
         </Box>
 
         {/* ── Prev arrow ───────────────────────────────────────────────── */}
