@@ -6,6 +6,23 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { supabase } from "../../../lib/supabase";
 
+type MediaType = "image" | "video" | "youtube";
+
+function getMediaType(url: string): MediaType {
+  if (/youtube\.com\/(watch|embed|shorts)|youtu\.be\//.test(url)) return "youtube";
+  if (/\.(mp4|webm|mov|avi|mkv|m4v)(\?|$)/i.test(url)) return "video";
+  return "image";
+}
+
+function getYouTubeEmbedUrl(url: string): string {
+  const watchMatch = url.match(/youtube\.com\/watch\?v=([^&]+)/);
+  const shortMatch = url.match(/youtu\.be\/([^?]+)/);
+  const embedMatch = url.match(/youtube\.com\/embed\/([^?/]+)/);
+  const shortsMatch = url.match(/youtube\.com\/shorts\/([^?]+)/);
+  const videoId = (watchMatch ?? shortMatch ?? embedMatch ?? shortsMatch)?.[1] ?? "";
+  return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&rel=0`;
+}
+
 const FALLBACK_SLIDES = [
   "/img/koi-images/Koi-image-01.png",
   "/img/koi-images/Koi-image-02.png",
@@ -204,26 +221,61 @@ export default function Banner() {
             willChange: "transform",
           }}
         >
-          {[...slides, ...slides].map((src, i) => (
-            <Box
-              key={i}
-              sx={{
-                position: "relative",
-                height: "100%",
-                aspectRatio: "4/5",
-                flexShrink: 0,
-              }}
-            >
-              <Image
-                src={src}
-                alt={`Koi image ${(i % slides.length) + 1}`}
-                fill
-                style={{ objectFit: "cover", pointerEvents: "none" }}
-                priority={i < slides.length}
-                draggable={false}
-              />
-            </Box>
-          ))}
+          {[...slides, ...slides].map((src, i) => {
+            const mediaType = getMediaType(src);
+            return (
+              <Box
+                key={i}
+                sx={{
+                  position: "relative",
+                  height: "100%",
+                  aspectRatio: "4/5",
+                  flexShrink: 0,
+                  overflow: "hidden",
+                }}
+              >
+                {mediaType === "image" && (
+                  <Image
+                    src={src}
+                    alt={`Koi image ${(i % slides.length) + 1}`}
+                    fill
+                    style={{ objectFit: "cover", pointerEvents: "none" }}
+                    priority={i < slides.length}
+                    draggable={false}
+                  />
+                )}
+                {mediaType === "video" && (
+                  <video
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      pointerEvents: "none",
+                    }}
+                  >
+                    <source src={src} />
+                  </video>
+                )}
+                {mediaType === "youtube" && (
+                  <iframe
+                    src={getYouTubeEmbedUrl(src)}
+                    allow="autoplay; encrypted-media"
+                    allowFullScreen
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      border: "none",
+                      pointerEvents: "none",
+                    }}
+                  />
+                )}
+              </Box>
+            );
+          })}
         </Box>
 
         {/* ── Prev arrow ───────────────────────────────────────────────── */}
