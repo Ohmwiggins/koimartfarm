@@ -93,7 +93,7 @@ function Footer() {
       sx={{
         background:
           "linear-gradient(165deg, #0A1220 0%, #0F1B2D 40%, #1A2A42 100%)",
-        paddingY: 10,
+        paddingY: 6,
         position: "relative",
         overflow: "hidden",
       }}

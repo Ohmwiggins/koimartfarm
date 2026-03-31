@@ -55,7 +55,7 @@ function Home() {
         id="events"
         ref={eventRef}
         sx={{
-          paddingY: 12,
+          paddingY: 6,
           backgroundColor: "background.default",
           display: "flex",
           flexDirection: "column",
@@ -69,13 +69,13 @@ function Home() {
 
         <Grow in={eventInView} timeout={2500}>
           <Box sx={{ display: "flex", flexDirection: "column" }}>
-            <Event events={events.slice(0, 5)} />
+            <Event events={events} />
           </Box>
         </Grow>
       </Box>
 
       {/* Blog */}
-      <Box ref={blogRef} sx={{ backgroundColor: "background.elevation1", paddingY: 12 }}>
+      <Box ref={blogRef} sx={{ backgroundColor: "background.elevation1", paddingY: 6 }}>
         <Container
           id="blog"
           maxWidth="xl"
@@ -87,14 +87,14 @@ function Home() {
             </Box>
           </Grow>
 
-          <Box sx={{ paddingY: 5 }}>
+          <Box sx={{ paddingY: 3 }}>
             <BlogHighlight />
           </Box>
         </Container>
       </Box>
 
       {/* About Us */}
-      <Box id="about" ref={historyRef} sx={{ backgroundColor: "background.default", paddingY: 10 }}>
+      <Box id="about" ref={historyRef} sx={{ backgroundColor: "background.default", paddingY: 6 }}>
         <Container
           maxWidth="lg"
           sx={{ display: "flex", flexDirection: "column" }}
@@ -105,7 +105,7 @@ function Home() {
             </Box>
           </Grow>
 
-          <Box sx={{ paddingY: 5 }}>
+          <Box sx={{ paddingY: 3 }}>
             <History />
           </Box>
         </Container>

@@ -19,7 +19,8 @@ function BlogHighlight() {
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const perPage = isMobile ? 4 : 8;
+  const isTablet = useMediaQuery(theme.breakpoints.between("sm", "lg"));
+  const perPage = isMobile || isTablet ? 4 : 8;
 
   useEffect(() => {
     supabase
