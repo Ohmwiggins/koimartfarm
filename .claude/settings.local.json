@@ -12,7 +12,8 @@
       "Bash(npm run:*)",
       "Bash(curl:*)",
       "Bash(git checkout:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git push:*)"
     ]
   }
 }

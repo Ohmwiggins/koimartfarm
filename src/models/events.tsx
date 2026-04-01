@@ -4,4 +4,5 @@ export interface KoiEvent {
   detail: string;
   imgs?: string[];
   description?: string;
+  videos?: string[];
 }

@@ -8,17 +8,42 @@ import Image from "next/image";
 import { useState } from "react";
 import type { KoiEvent } from "../../../models/events";
 
+function isVideo(url: string): boolean {
+  return /\.(mp4|webm|mov|avi|mkv|m4v)(\?|$)/i.test(url);
+}
+
+function isYouTube(url: string): boolean {
+  return /youtube\.com\/(watch|embed|shorts)|youtu\.be\//.test(url);
+}
+
+function getYouTubeId(url: string): string {
+  const m =
+    url.match(/youtube\.com\/watch\?v=([^&]+)/) ??
+    url.match(/youtu\.be\/([^?]+)/) ??
+    url.match(/youtube\.com\/embed\/([^?/]+)/) ??
+    url.match(/youtube\.com\/shorts\/([^?]+)/);
+  return m?.[1] ?? "";
+}
+
+function getYouTubeEmbedUrl(url: string): string {
+  const id = getYouTubeId(url);
+  return `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}&controls=1`;
+}
+
 type EventProps = {
   events: KoiEvent[];
 };
 
-function EventImageCarousel({ imgs }: { imgs: string[] }) {
+function EventMediaCarousel({ imgs, videos }: { imgs: string[]; videos?: string[] }) {
   const [index, setIndex] = useState(0);
 
-  if (imgs.length === 0) return null;
+  const media = [...(videos ?? []), ...(imgs ?? [])];
+
+  if (media.length === 0) return null;
 
   const hasPrev = index > 0;
-  const hasNext = index < imgs.length - 1;
+  const hasNext = index < media.length - 1;
+  const current = media[index];
 
   return (
     <Box
@@ -27,14 +52,35 @@ function EventImageCarousel({ imgs }: { imgs: string[] }) {
         height: "100%",
         position: "relative",
         overflow: "hidden",
+        backgroundColor: "#0A1220",
       }}
     >
-      <Image
-        src={imgs[index]}
-        alt={`event image ${index + 1}`}
-        fill
-        style={{ objectFit: "cover" }}
-      />
+      {isYouTube(current) ? (
+        <iframe
+          src={getYouTubeEmbedUrl(current)}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          style={{ width: "100%", height: "100%", border: "none" }}
+        />
+      ) : isVideo(current) ? (
+        <video
+          key={current}
+          src={current}
+          autoPlay
+          muted
+          loop
+          playsInline
+          controls
+          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+        />
+      ) : (
+        <Image
+          src={current}
+          alt={`event media ${index + 1}`}
+          fill
+          style={{ objectFit: "cover" }}
+        />
+      )}
 
       {hasPrev && (
         <IconButton
@@ -76,7 +122,8 @@ function EventImageCarousel({ imgs }: { imgs: string[] }) {
         </IconButton>
       )}
 
-      {imgs.length > 1 && (
+      {/* Dot indicators */}
+      {media.length > 1 && (
         <Box
           sx={{
             position: "absolute",
@@ -88,7 +135,7 @@ function EventImageCarousel({ imgs }: { imgs: string[] }) {
             gap: 0.75,
           }}
         >
-          {imgs.map((_, i) => (
+          {media.map((_, i) => (
             <Box
               key={i}
               onClick={(e) => { e.stopPropagation(); setIndex(i); }}
@@ -136,7 +183,8 @@ function Event({ events }: EventProps) {
                 isolation: "isolate",
               }}
             >
-              {e.imgs && e.imgs.length > 0 && (
+              {/* Media — left side (images + videos) */}
+              {((e.imgs && e.imgs.length > 0) || (e.videos && e.videos.length > 0)) && (
                 <Box
                   sx={{
                     width: { xs: "35%", sm: "25%" },
@@ -147,7 +195,7 @@ function Event({ events }: EventProps) {
                     minHeight: { xs: 120, sm: 160 },
                   }}
                 >
-                  <EventImageCarousel imgs={e.imgs} />
+                  <EventMediaCarousel imgs={e.imgs ?? []} videos={e.videos} />
                 </Box>
               )}
 
