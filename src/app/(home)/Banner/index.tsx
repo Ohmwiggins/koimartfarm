@@ -1,6 +1,5 @@
 "use client";
 import { Box, IconButton, Typography, Grow } from "@mui/material";
-import Image from "next/image";
 import { useState, useCallback, useEffect, useRef } from "react";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
@@ -249,18 +248,18 @@ export default function Banner() {
                 sx={{
                   position: "relative",
                   height: "100%",
-                  aspectRatio: "4/5",
                   flexShrink: 0,
                   overflow: "hidden",
+                  display: "flex",
+                  alignItems: "center",
                 }}
               >
                 {mediaType === "image" && (
-                  <Image
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
                     src={src}
                     alt={`Koi image ${(i % slides.length) + 1}`}
-                    fill
-                    style={{ objectFit: "cover", objectPosition: "center bottom", pointerEvents: "none" }}
-                    priority={i < slides.length}
+                    style={{ height: "100%", width: "auto", display: "block", pointerEvents: "none", userSelect: "none" }}
                     draggable={false}
                   />
                 )}
@@ -271,9 +270,9 @@ export default function Banner() {
                     loop
                     playsInline
                     style={{
-                      width: "100%",
                       height: "100%",
-                      objectFit: "cover",
+                      width: "auto",
+                      display: "block",
                       pointerEvents: "none",
                     }}
                   >
@@ -286,8 +285,8 @@ export default function Banner() {
                     allow="autoplay; encrypted-media"
                     allowFullScreen
                     style={{
-                      width: "100%",
                       height: "100%",
+                      aspectRatio: "16/9",
                       border: "none",
                       pointerEvents: "none",
                     }}
