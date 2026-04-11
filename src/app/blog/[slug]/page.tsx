@@ -10,7 +10,7 @@ const supabase = createClient(
 
 interface ContentBlock {
   id: string;
-  type: "paragraph" | "heading" | "image";
+  type: "paragraph" | "heading" | "image" | "video";
   content: string;
 }
 
@@ -45,6 +45,53 @@ function renderBlocks(blocks: ContentBlock[]) {
       );
     }
 
+    if (block.type === "video") {
+      const youtubeMatch = block.content.match(
+        /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/
+      );
+      if (youtubeMatch) {
+        return (
+          <Box key={block.id} sx={{ my: 4, textAlign: "center" }}>
+            <Box
+              sx={{
+                position: "relative",
+                width: "100%",
+                maxWidth: 800,
+                mx: "auto",
+                aspectRatio: "16/9",
+              }}
+            >
+              <iframe
+                src={`https://www.youtube.com/embed/${youtubeMatch[1]}`}
+                title="YouTube video"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "100%",
+                  borderRadius: 8,
+                  border: "none",
+                }}
+              />
+            </Box>
+          </Box>
+        );
+      }
+      // Direct video file URL
+      return (
+        <Box key={block.id} sx={{ my: 4, textAlign: "center" }}>
+          <video
+            src={block.content}
+            controls
+            style={{ maxWidth: "100%", borderRadius: 8 }}
+          />
+        </Box>
+      );
+    }
+
     // paragraph — split on \n\n for sub-paragraphs
     return (
       <Box key={block.id}>
@@ -67,11 +114,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   const { data: post } = await supabase
     .from("blog_highlights")
-    .select("blog_id, title, content")
+    .select("blog_id, title, content, published")
     .eq("blog_id", slug)
     .single();
 
-  if (!post) notFound();
+  if (!post || !post.published) notFound();
 
   let blocks: ContentBlock[] = [];
   if (post.content) {

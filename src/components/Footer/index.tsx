@@ -181,7 +181,7 @@ function Footer() {
                   whiteSpace: "nowrap",
                 }}
               >
-                📞 02-964-9595
+                📞 083-615-5250
               </Typography>
               <Box
                 sx={{

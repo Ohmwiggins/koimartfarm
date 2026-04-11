@@ -26,6 +26,7 @@ function BlogHighlight() {
     supabase
       .from("blog_highlights")
       .select("blog_id, title, img, content")
+      .eq("published", true)
       .order("sort_order")
       .then(({ data }) => {
         if (data) {
