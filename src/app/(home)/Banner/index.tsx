@@ -5,7 +5,7 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { supabase } from "../../../lib/supabase";
 
-type MediaType = "image" | "video" | "youtube" | "fallback";
+type MediaType = "image" | "video" | "youtube" | "gdrive" | "fallback";
 
 interface PlatformInfo {
   label: string;
@@ -27,9 +27,18 @@ function getPlatformInfo(url: string): PlatformInfo {
 function getMediaType(url: string): MediaType {
   if (url.startsWith("/")) return "image";
   if (/youtube\.com\/(watch|embed|shorts)|youtu\.be\//.test(url)) return "youtube";
+  if (/drive\.google\.com/.test(url)) return "gdrive";
   if (/\.(mp4|webm|mov|avi|mkv|m4v)(\?|$)/i.test(url)) return "video";
   if (/\.(jpe?g|png|webp|gif|avif|svg)(\?|$)/i.test(url)) return "image";
   return "fallback"; // social platforms & unknowns → branded link card
+}
+
+function getGDriveInfo(url: string): { embedUrl: string; aspectRatio: string } {
+  const [cleanUrl, fragment] = url.split("#");
+  const aspectRatio = fragment === "portrait" ? "9/16" : "16/9";
+  const fileIdMatch = cleanUrl.match(/\/file\/d\/([^/?]+)/) ?? cleanUrl.match(/[?&]id=([^&]+)/);
+  const fileId = fileIdMatch?.[1] ?? "";
+  return { embedUrl: `https://drive.google.com/file/d/${fileId}/preview`, aspectRatio };
 }
 
 function getYouTubeEmbedUrl(url: string): string {
@@ -292,6 +301,22 @@ export default function Banner() {
                     }}
                   />
                 )}
+                {mediaType === "gdrive" && (() => {
+                  const { embedUrl, aspectRatio } = getGDriveInfo(src);
+                  return (
+                    <iframe
+                      src={embedUrl}
+                      allow="autoplay; encrypted-media"
+                      allowFullScreen
+                      style={{
+                        height: "100%",
+                        aspectRatio,
+                        border: "none",
+                        pointerEvents: "auto",
+                      }}
+                    />
+                  );
+                })()}
                 {mediaType === "fallback" && platform && (
                   <Box
                     component="a"
