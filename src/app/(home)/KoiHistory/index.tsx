@@ -182,7 +182,7 @@ function History() {
               <div onClick={() => handleOpen((galleryPage - 1) * perPage + index)} className="group relative cursor-pointer overflow-hidden rounded-xl aspect-square">
                 {isVideo(imgSrc) ? (
                   <video
-                    src={imgSrc}
+                    src={`${imgSrc}#t=0.001`}
                     muted
                     loop
                     playsInline
@@ -260,9 +260,10 @@ function History() {
               {isVideo(galleryImages[selectedImageIndex]) ? (
                 <video
                   key={galleryImages[selectedImageIndex]}
-                  src={galleryImages[selectedImageIndex]}
+                  src={`${galleryImages[selectedImageIndex]}#t=0.001`}
                   controls
                   autoPlay
+                  playsInline
                   style={{ maxWidth: "100%", maxHeight: "100%", borderRadius: "12px", objectFit: "contain" }}
                 />
               ) : isYouTube(galleryImages[selectedImageIndex]) ? (

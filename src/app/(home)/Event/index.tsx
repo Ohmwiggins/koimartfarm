@@ -15,7 +15,6 @@ import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import CloseIcon from "@mui/icons-material/Close";
-import Image from "next/image";
 import { forwardRef, useState, useRef } from "react";
 import type { TransitionProps } from "@mui/material/transitions";
 import type { KoiEvent } from "../../../models/events";
@@ -54,40 +53,41 @@ const SlideUp = forwardRef(function Transition(
 
 function EventMediaCarousel({ imgs, videos }: { imgs: string[]; videos?: string[] }) {
   const [index, setIndex] = useState(0);
-  const media = [...(videos ?? []), ...(imgs ?? [])];
+  const media = [...(imgs ?? []), ...(videos ?? [])];
+  const len = media.length;
 
-  if (media.length === 0) return null;
+  if (len === 0) return null;
 
   const hasPrev = index > 0;
-  const hasNext = index < media.length - 1;
+  const hasNext = index < len - 1;
   const current = media[index];
 
   return (
-    <Box sx={{ width: "100%", height: "100%", position: "relative", overflow: "hidden" }}>
+    <Box
+      sx={{ width: "100%", height: "100%", position: "relative" }}
+    >
       {isYouTube(current) ? (
         <iframe
           src={getYouTubeEmbedUrl(current)}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
-          style={{ width: "100%", height: "100%", border: "none" }}
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", border: "none" }}
         />
       ) : isVideo(current) ? (
         <video
           key={current}
-          src={current}
-          autoPlay
+          src={`${current}#t=0.001`}
           muted
-          loop
           playsInline
-          controls
-          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
         />
       ) : (
-        <Image
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
           src={current}
           alt={`event media ${index + 1}`}
-          fill
-          style={{ objectFit: "cover" }}
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
+          draggable={false}
         />
       )}
 
@@ -142,7 +142,7 @@ function EventMediaCarousel({ imgs, videos }: { imgs: string[]; videos?: string[
 function ModalCarousel({ imgs, videos }: { imgs: string[]; videos?: string[] }) {
   const [index, setIndex] = useState(0);
   const touchStartX = useRef(0);
-  const media = [...(videos ?? []), ...(imgs ?? [])];
+  const media = [...(imgs ?? []), ...(videos ?? [])];
 
   if (media.length === 0) return null;
 
@@ -190,7 +190,7 @@ function ModalCarousel({ imgs, videos }: { imgs: string[]; videos?: string[] }) 
         <Box sx={{ borderRadius: "12px", overflow: "hidden", boxShadow: "0 8px 32px rgba(10,18,32,0.18)" }}>
           <video
             key={current}
-            src={current}
+            src={`${current}#t=0.001`}
             autoPlay
             muted
             loop
@@ -378,7 +378,7 @@ function Event({ events }: EventProps) {
   const paginated = events.slice((page - 1) * PER_PAGE, page * PER_PAGE);
 
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="md">
       <Box sx={{ py: 5 }}>
         <Box sx={{ display: "grid", gridTemplateColumns: "1fr", gap: 3 }}>
           {paginated.map((e) => (
@@ -388,8 +388,6 @@ function Event({ events }: EventProps) {
               sx={{
                 display: "flex",
                 flexDirection: "row",
-                maxWidth: 900,
-                mx: "auto",
                 width: "100%",
                 backgroundColor: "background.paper",
                 borderRadius: "16px",
@@ -405,23 +403,24 @@ function Event({ events }: EventProps) {
                 },
               }}
             >
-              {/* thumbnail — same ratio as before */}
-              {e.imgs && e.imgs.length > 0 && (
+              {/* thumbnail — fixed size on the left */}
+              {(e.imgs && e.imgs.length > 0) || (e.videos && e.videos.length > 0) ? (
                 <Box sx={{
-                  width: { xs: "35%", sm: "25%" },
+                  width: { xs: 200, sm: 255 },
+                  height: { xs: 267, sm: 340 },
                   flexShrink: 0,
-                  position: "relative",
-                  aspectRatio: "3/4",
                   alignSelf: "center",
-                  minHeight: { xs: 120, sm: 160 },
+                  position: "relative",
+                  backgroundColor: "#0A1220",
+                  overflow: "hidden",
                 }}>
                   <EventMediaCarousel imgs={e.imgs ?? []} videos={e.videos} />
                 </Box>
-              )}
+              ) : null}
 
               {/* info */}
               <Box sx={{
-                p: { xs: 2, sm: 3 }, flex: 1,
+                p: { xs: 2.5, sm: 4 }, flex: 1,
                 display: "flex", flexDirection: "column", justifyContent: "center", minWidth: 0,
               }}>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 0.75, mb: 1.5 }}>
@@ -436,7 +435,7 @@ function Event({ events }: EventProps) {
                 </Box>
 
                 <Typography sx={{
-                  fontWeight: 700, fontSize: { xs: 15, sm: 17 },
+                  fontWeight: 700, fontSize: { xs: 16, sm: 19 },
                   color: "primary.main", mb: 1.5, lineHeight: 1.35,
                 }}>
                   {e.detail}
@@ -444,10 +443,10 @@ function Event({ events }: EventProps) {
 
                 {e.description && (
                   <Typography sx={{
-                    fontSize: { xs: 12, sm: 13 }, color: "text.secondary",
-                    lineHeight: 1.6,
+                    fontSize: { xs: 13, sm: 14 }, color: "text.secondary",
+                    lineHeight: 1.7,
                     display: "-webkit-box",
-                    WebkitLineClamp: 2,
+                    WebkitLineClamp: 3,
                     WebkitBoxOrient: "vertical",
                     overflow: "hidden",
                   }}>
@@ -456,9 +455,9 @@ function Event({ events }: EventProps) {
                 )}
 
                 <Typography sx={{
-                  mt: 1.5, fontSize: 11, fontWeight: 600,
+                  mt: 2, fontSize: 11, fontWeight: 700,
                   color: "secondary.main", fontFamily: "var(--font-inter)",
-                  letterSpacing: "0.06em", textTransform: "uppercase", opacity: 0.75,
+                  letterSpacing: "0.08em", textTransform: "uppercase",
                 }}>
                   View Details →
                 </Typography>

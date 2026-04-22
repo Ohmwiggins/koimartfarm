@@ -84,8 +84,9 @@ function renderBlocks(blocks: ContentBlock[]) {
       return (
         <Box key={block.id} sx={{ my: 4, textAlign: "center" }}>
           <video
-            src={block.content}
+            src={`${block.content}#t=0.001`}
             controls
+            playsInline
             style={{ maxWidth: "100%", borderRadius: 8 }}
           />
         </Box>
