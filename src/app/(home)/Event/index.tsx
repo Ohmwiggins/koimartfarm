@@ -54,7 +54,7 @@ const SlideUp = forwardRef(function Transition(
 
 function EventMediaCarousel({ imgs, videos }: { imgs: string[]; videos?: string[] }) {
   const [index, setIndex] = useState(0);
-  const media = [...(videos ?? []), ...(imgs ?? [])];
+  const media = [...(imgs ?? []), ...(videos ?? [])];
 
   if (media.length === 0) return null;
 
@@ -142,7 +142,7 @@ function EventMediaCarousel({ imgs, videos }: { imgs: string[]; videos?: string[
 function ModalCarousel({ imgs, videos }: { imgs: string[]; videos?: string[] }) {
   const [index, setIndex] = useState(0);
   const touchStartX = useRef(0);
-  const media = [...(videos ?? []), ...(imgs ?? [])];
+  const media = [...(imgs ?? []), ...(videos ?? [])];
 
   if (media.length === 0) return null;
 
