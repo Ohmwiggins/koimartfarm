@@ -74,7 +74,7 @@ function EventMediaCarousel({ imgs, videos }: { imgs: string[]; videos?: string[
       ) : isVideo(current) ? (
         <video
           key={current}
-          src={current}
+          src={`${current}#t=0.001`}
           autoPlay
           muted
           loop
@@ -190,7 +190,7 @@ function ModalCarousel({ imgs, videos }: { imgs: string[]; videos?: string[] }) 
         <Box sx={{ borderRadius: "12px", overflow: "hidden", boxShadow: "0 8px 32px rgba(10,18,32,0.18)" }}>
           <video
             key={current}
-            src={current}
+            src={`${current}#t=0.001`}
             autoPlay
             muted
             loop

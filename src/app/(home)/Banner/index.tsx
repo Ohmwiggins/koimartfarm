@@ -285,7 +285,7 @@ export default function Banner() {
                       pointerEvents: "none",
                     }}
                   >
-                    <source src={src} />
+                    <source src={`${src}#t=0.001`} />
                   </video>
                 )}
                 {mediaType === "youtube" && (
