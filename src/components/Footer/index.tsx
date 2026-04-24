@@ -13,6 +13,11 @@ type LinkItem = {
 
 const group1Links: LinkItem[] = [
   {
+    label: "Koimart Farm",
+    url: "https://lin.ee/nTAFJe2",
+    img: "/img/contacts/group891.png",
+  },
+  {
     label: "Line OpenChat Koimart Square",
     url: "https://line.me/ti/g2/5OnDbvvr0Sz3jW7Dvt7wECbG4l1dJQFjwfcNcA?utm_source=invitation&utm_medium=link_copy&utm_campaign=default",
     img: "/img/contacts/line.png",
@@ -152,14 +157,16 @@ function Footer() {
 
           {/* Links — two groups with phone number divider */}
           <Grid id="links" size={12} sx={{ my: 8 }}>
-            {/* Group 1: Line, Messenger, IG, TikTok */}
-            <Grid container spacing={2}>
+            {/* Group 1: 5 cards */}
+            <Box sx={{
+              display: "grid",
+              gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)", md: "repeat(3, 1fr)", lg: "repeat(5, 1fr)" },
+              gap: 2,
+            }}>
               {group1Links.map((item) => (
-                <Grid key={item.label} size={{ xs: 12, sm: 6, md: 3 }}>
-                  <BannerCard {...item} />
-                </Grid>
+                <BannerCard key={item.label} {...item} />
               ))}
-            </Grid>
+            </Box>
 
             {/* Phone number divider */}
             <Box sx={{ display: "flex", alignItems: "center", gap: 2, my: 3 }}>
