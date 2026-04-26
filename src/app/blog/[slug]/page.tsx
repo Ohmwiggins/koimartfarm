@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@supabase/supabase-js";
 import { Box, Container, Typography } from "@mui/material";
 import PageHeader from "../../../components/PageHeader";
+import Linkify from "../../../components/Linkify";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -102,7 +103,7 @@ function renderBlocks(blocks: ContentBlock[]) {
             variant="body1"
             sx={{ mb: 2, whiteSpace: "pre-line", lineHeight: 1.9 }}
           >
-            {para}
+            <Linkify>{para}</Linkify>
           </Typography>
         ))}
       </Box>

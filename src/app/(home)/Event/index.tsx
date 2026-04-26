@@ -16,6 +16,7 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import CloseIcon from "@mui/icons-material/Close";
 import { forwardRef, useState, useRef } from "react";
+import Linkify from "../../../components/Linkify";
 import type { TransitionProps } from "@mui/material/transitions";
 import type { KoiEvent } from "../../../models/events";
 
@@ -352,7 +353,7 @@ function EventModal({ event, open, onClose }: { event: KoiEvent | null; open: bo
                     lineHeight: 1.9, fontFamily: "var(--font-prompt)",
                     whiteSpace: "pre-line",
                   }}>
-                    {event.description}
+                    <Linkify>{event.description}</Linkify>
                   </Typography>
                 </>
               )}
