@@ -11,6 +11,7 @@ export const metadata: Metadata = {
     template: "%s - Koi Mart Farm",
   },
   description: "…",
+  metadataBase: new URL("https://www.koimartfarm.com"),
 };
 
 export default function RootLayout({
