@@ -1,5 +1,5 @@
 "use client";
-import { Box, Fade, Grow, Grid, Typography, Modal, IconButton, Pagination, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Fade, Grow, Grid, Typography, Modal, IconButton, Pagination, Skeleton, useMediaQuery, useTheme } from "@mui/material";
 import Image from "next/image";
 import { useInView } from "react-intersection-observer";
 import { useState, useEffect, useCallback } from "react";
@@ -48,7 +48,9 @@ function History() {
   const { ref: travelImgRef, inView: travelImgInView } = useInView({ triggerOnce: true, threshold: 0.2 });
 
   const [galleryImages, setGalleryImages] = useState<string[]>([]);
+  const [galleryLoading, setGalleryLoading] = useState(true);
   const [content, setContent] = useState<AboutContent | null>(null);
+  const [contentLoading, setContentLoading] = useState(true);
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
   const [galleryPage, setGalleryPage] = useState(1);
 
@@ -61,9 +63,9 @@ function History() {
       .from("about_gallery")
       .select("url")
       .order("sort_order")
-      .then(({ data, error }) => {
-        console.log("[about_gallery] data:", data, "error:", error);
+      .then(({ data }) => {
         if (data) setGalleryImages(data.map((d: { url: string }) => d.url));
+        setGalleryLoading(false);
       });
 
     supabase
@@ -74,6 +76,7 @@ function History() {
       .then(({ data, error }) => {
         if (error) console.error("[about_text]", error);
         if (data?.content) setContent(parseContent(data.content));
+        setContentLoading(false);
       });
   }, []);
 
@@ -150,6 +153,18 @@ function History() {
                 &ldquo;
               </Typography>
 
+              {contentLoading && (
+                <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+                  <Skeleton animation="wave" width="90%" height={26} />
+                  <Skeleton animation="wave" width="75%" height={26} sx={{ mb: 2 }} />
+                  <Skeleton animation="wave" width="100%" />
+                  <Skeleton animation="wave" width="100%" />
+                  <Skeleton animation="wave" width="95%" />
+                  <Skeleton animation="wave" width="100%" />
+                  <Skeleton animation="wave" width="60%" />
+                </Box>
+              )}
+
               {content && (
                 <>
                   {content.lead && (
@@ -175,6 +190,15 @@ function History() {
 
       {/* Travel photo gallery */}
       <div ref={travelImgRef} className="mt-16 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-4">
+        {galleryLoading &&
+          Array.from({ length: perPage }).map((_, i) => (
+            <Skeleton
+              key={i}
+              variant="rectangular"
+              animation="wave"
+              sx={{ width: "100%", height: "auto", aspectRatio: "1 / 1", borderRadius: "12px" }}
+            />
+          ))}
         {galleryImages
           .slice((galleryPage - 1) * perPage, galleryPage * perPage)
           .map((imgSrc, index) => (

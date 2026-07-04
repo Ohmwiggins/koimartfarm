@@ -13,6 +13,7 @@ import type { KoiEvent } from "../../models/events";
 
 function Home() {
   const [events, setEvents] = useState<KoiEvent[]>([]);
+  const [eventsLoading, setEventsLoading] = useState(true);
 
   useEffect(() => {
     supabase
@@ -21,6 +22,7 @@ function Home() {
       .order("sort_order")
       .then(({ data }) => {
         if (data) setEvents(data as KoiEvent[]);
+        setEventsLoading(false);
       });
   }, []);
 
@@ -69,7 +71,7 @@ function Home() {
 
         <Grow in={eventInView} timeout={2500}>
           <Box sx={{ display: "flex", flexDirection: "column" }}>
-            <Event events={events} />
+            <Event events={events} loading={eventsLoading} />
           </Box>
         </Grow>
       </Box>

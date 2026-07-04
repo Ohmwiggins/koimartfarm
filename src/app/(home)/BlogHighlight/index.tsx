@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Grid, Grow, Pagination, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Grid, Grow, Pagination, Skeleton, useMediaQuery, useTheme } from "@mui/material";
 import BlogCard from "./BlogCard";
 import { useInView } from "react-intersection-observer";
 import { useState, useEffect } from "react";
@@ -15,6 +15,7 @@ interface BlogCardData {
 
 function BlogHighlight() {
   const [blogs, setBlogs] = useState<BlogCardData[]>([]);
+  const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
 
   const theme = useTheme();
@@ -48,6 +49,7 @@ function BlogHighlight() {
             })
           );
         }
+        setLoading(false);
       });
   }, []);
 
@@ -58,6 +60,32 @@ function BlogHighlight() {
     triggerOnce: true,
     threshold: 0.1,
   });
+
+  if (loading) {
+    return (
+      <Grid container spacing={{ xs: 2, md: 3 }}>
+        {Array.from({ length: perPage }).map((_, i) => (
+          <Grid key={i} size={{ xs: 12, sm: 6, md: 3 }}>
+            <Box
+              sx={{
+                borderRadius: "16px",
+                overflow: "hidden",
+                border: "1px solid rgba(197,165,90,0.25)",
+                backgroundColor: "background.paper",
+              }}
+            >
+              <Skeleton variant="rectangular" animation="wave" height={200} />
+              <Box sx={{ p: 2 }}>
+                <Skeleton animation="wave" width="85%" height={28} />
+                <Skeleton animation="wave" width="100%" />
+                <Skeleton animation="wave" width="60%" />
+              </Box>
+            </Box>
+          </Grid>
+        ))}
+      </Grid>
+    );
+  }
 
   return (
     <Box>

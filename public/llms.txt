@@ -4,7 +4,7 @@
 
 Koi Mart Farm Co., LTD (บริษัท คอยมาร์ท ฟาร์ม จำกัด) is Thailand's premier importer and distributor of premium Fancy Carp (Nishikigoi / ปลาคาร์พ / 錦鯉) sourced directly from champion-level Japanese koi farms. Founded by Boonsak Supatorn (บวรศักดิ์ ศุภทนต์) as Founder & CEO of KOIMART GROUP.
 
-**Official website:** https://www.koimartfarm.com/
+**Official website:** https://koimartfarm.com/
 **Phone:** +66-83-615-5250 (local: 083-615-5250)
 **Address:** 46/81 Moo 2 Chaengwattana 28, Bangtalad, Pak Kret, Nonthaburi 11120, Thailand
 **Hours:** Daily 09:00–18:00 ICT (UTC+7)
@@ -13,8 +13,8 @@ Koi Mart Farm Co., LTD (บริษัท คอยมาร์ท ฟาร์
 
 ## Key Pages
 
-- [Home](https://www.koimartfarm.com/): Main landing page — events, blog highlights, farm history, koi gallery
-- [Koi Varieties Guide](https://www.koimartfarm.com/blog/koi-varieties): Complete guide to all available varieties with characteristics and cultural symbolism
+- [Home](https://koimartfarm.com/): Main landing page — events, blog highlights, farm history, koi gallery
+- [Koi Varieties Guide](https://koimartfarm.com/blog/koi-varieties): Complete guide to all available varieties with characteristics and cultural symbolism
 
 
 ## Japanese Source Farms
@@ -124,20 +124,20 @@ Knowledge articles and guides published by Koi Mart Farm (all in Thai unless not
 
 | Title | Slug / URL | Topic |
 |-------|-----------|-------|
-| รูปร่าง > คุณภาพ > แพตเทิร์น | [/blog/shape-quality-pattern](https://www.koimartfarm.com/blog/shape-quality-pattern) | Koi quality evaluation: body shape, color quality, pattern — in that priority order |
-| Koi Varieties (EN/TH) | [/blog/koi-varieties](https://www.koimartfarm.com/blog/koi-varieties) | Complete guide to 7 Fancy Carp varieties with symbolism |
-| ซื้อปลาที่ญี่ปุ่น: ขั้นตอนนำเข้า | [/blog/where-to-find-koi](https://www.koimartfarm.com/blog/where-to-find-koi) | Import process steps and timeline from Japan purchase to delivery |
-| ธรรมเนียมการเลือกซื้อปลาที่ญี่ปุ่น | [/blog/how-to-choose-koi](https://www.koimartfarm.com/blog/how-to-choose-koi) | Customs and etiquette when selecting koi at Japanese farms |
-| การเลือกปลาจากรูปร่าง | [/blog/koi-appreciation](https://www.koimartfarm.com/blog/koi-appreciation) | How to assess body shape and proportion when selecting koi |
-| ไปซื้อปลาที่ญี่ปุ่น ควรไปกับใคร | [/blog/importing-koi-from-japan](https://www.koimartfarm.com/blog/importing-koi-from-japan) | Who to travel with and what costs to expect on a Japan buying trip |
-| Koi Hunting Tips 1 | [/blog/koi-hunting-tips-1](https://www.koimartfarm.com/blog/koi-hunting-tips-1) | Practical tips for hunting quality koi in Japan |
-| Koi Hunting Tips 2 | [/blog/koi-hunting-tips-2](https://www.koimartfarm.com/blog/koi-hunting-tips-2) | Practical tips for hunting quality koi in Japan (part 2) |
-| ไปตามหาปลาญี่ปุ่น ไปไหนกันดี | [/blog/koi-hunting-tips](https://www.koimartfarm.com/blog/koi-hunting-tips) | Recommended destinations in Japan for sourcing premium Nishikigoi |
-| กว่าจะเป็น Grand Champion | [/blog/grand-champion](https://www.koimartfarm.com/blog/grand-champion) | The journey of a Nishikigoi from pond to Grand Champion title |
-| Tosai ตอนที่ 1 | [/blog/tosai](https://www.koimartfarm.com/blog/tosai) | Young koi (Tosai) — selection and quality assessment, part 1 |
-| Tosai ตอนที่ 2 | [/blog/tosai-2](https://www.koimartfarm.com/blog/tosai-2) | Tosai series part 2 |
-| Tosai ตอนที่ 3 | [/blog/tosai-3](https://www.koimartfarm.com/blog/tosai-3) | Tosai series part 3 |
-| Tosai ตอนที่ 4 | [/blog/tosai-4](https://www.koimartfarm.com/blog/tosai-4) | Tosai series part 4 |
+| รูปร่าง > คุณภาพ > แพตเทิร์น | [/blog/shape-quality-pattern](https://koimartfarm.com/blog/shape-quality-pattern) | Koi quality evaluation: body shape, color quality, pattern — in that priority order |
+| Koi Varieties (EN/TH) | [/blog/koi-varieties](https://koimartfarm.com/blog/koi-varieties) | Complete guide to 7 Fancy Carp varieties with symbolism |
+| ซื้อปลาที่ญี่ปุ่น: ขั้นตอนนำเข้า | [/blog/where-to-find-koi](https://koimartfarm.com/blog/where-to-find-koi) | Import process steps and timeline from Japan purchase to delivery |
+| ธรรมเนียมการเลือกซื้อปลาที่ญี่ปุ่น | [/blog/how-to-choose-koi](https://koimartfarm.com/blog/how-to-choose-koi) | Customs and etiquette when selecting koi at Japanese farms |
+| การเลือกปลาจากรูปร่าง | [/blog/koi-appreciation](https://koimartfarm.com/blog/koi-appreciation) | How to assess body shape and proportion when selecting koi |
+| ไปซื้อปลาที่ญี่ปุ่น ควรไปกับใคร | [/blog/importing-koi-from-japan](https://koimartfarm.com/blog/importing-koi-from-japan) | Who to travel with and what costs to expect on a Japan buying trip |
+| Koi Hunting Tips 1 | [/blog/koi-hunting-tips-1](https://koimartfarm.com/blog/koi-hunting-tips-1) | Practical tips for hunting quality koi in Japan |
+| Koi Hunting Tips 2 | [/blog/koi-hunting-tips-2](https://koimartfarm.com/blog/koi-hunting-tips-2) | Practical tips for hunting quality koi in Japan (part 2) |
+| ไปตามหาปลาญี่ปุ่น ไปไหนกันดี | [/blog/koi-hunting-tips](https://koimartfarm.com/blog/koi-hunting-tips) | Recommended destinations in Japan for sourcing premium Nishikigoi |
+| กว่าจะเป็น Grand Champion | [/blog/grand-champion](https://koimartfarm.com/blog/grand-champion) | The journey of a Nishikigoi from pond to Grand Champion title |
+| Tosai ตอนที่ 1 | [/blog/tosai](https://koimartfarm.com/blog/tosai) | Young koi (Tosai) — selection and quality assessment, part 1 |
+| Tosai ตอนที่ 2 | [/blog/tosai-2](https://koimartfarm.com/blog/tosai-2) | Tosai series part 2 |
+| Tosai ตอนที่ 3 | [/blog/tosai-3](https://koimartfarm.com/blog/tosai-3) | Tosai series part 3 |
+| Tosai ตอนที่ 4 | [/blog/tosai-4](https://koimartfarm.com/blog/tosai-4) | Tosai series part 4 |
 
 
 ## About the Founder

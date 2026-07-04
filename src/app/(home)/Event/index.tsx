@@ -8,6 +8,7 @@ import {
   Divider,
   IconButton,
   Pagination,
+  Skeleton,
   Slide,
   Typography,
 } from "@mui/material";
@@ -369,14 +370,65 @@ function EventModal({ event, open, onClose }: { event: KoiEvent | null; open: bo
 
 const PER_PAGE = 2;
 
-type EventProps = { events: KoiEvent[] };
+function EventCardSkeleton() {
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "row",
+        width: "100%",
+        backgroundColor: "background.paper",
+        borderRadius: "16px",
+        border: "1px solid rgba(197,165,90,0.25)",
+        overflow: "hidden",
+      }}
+    >
+      <Skeleton
+        variant="rectangular"
+        animation="wave"
+        sx={{ width: { xs: 200, sm: 255 }, height: { xs: 267, sm: 340 }, flexShrink: 0 }}
+      />
+      <Box
+        sx={{
+          p: { xs: 2.5, sm: 4 },
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          gap: 1,
+          minWidth: 0,
+        }}
+      >
+        <Skeleton animation="wave" width="35%" />
+        <Skeleton animation="wave" width="80%" height={30} />
+        <Skeleton animation="wave" width="100%" />
+        <Skeleton animation="wave" width="90%" />
+        <Skeleton animation="wave" width="25%" sx={{ mt: 1 }} />
+      </Box>
+    </Box>
+  );
+}
 
-function Event({ events }: EventProps) {
+type EventProps = { events: KoiEvent[]; loading?: boolean };
+
+function Event({ events, loading = false }: EventProps) {
   const [page, setPage] = useState(1);
   const [selected, setSelected] = useState<KoiEvent | null>(null);
 
   const totalPages = Math.ceil(events.length / PER_PAGE);
   const paginated = events.slice((page - 1) * PER_PAGE, page * PER_PAGE);
+
+  if (loading) {
+    return (
+      <Container maxWidth="md">
+        <Box sx={{ py: 5, display: "grid", gridTemplateColumns: "1fr", gap: 3 }}>
+          {Array.from({ length: PER_PAGE }).map((_, i) => (
+            <EventCardSkeleton key={i} />
+          ))}
+        </Box>
+      </Container>
+    );
+  }
 
   return (
     <Container maxWidth="md">

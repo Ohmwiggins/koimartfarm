@@ -1,5 +1,5 @@
 # robots.txt — Koi Mart Farm
-# https://www.koimartfarm.com/
+# https://koimartfarm.com/
 
 # ─── Default: allow all crawlers ─────────────────────────────────────────
 User-agent: *
@@ -99,4 +99,4 @@ User-agent: BraveBot
 Allow: /
 
 # ─── Sitemaps ────────────────────────────────────────────────────────────
-Sitemap: https://www.koimartfarm.com/sitemap.xml
+Sitemap: https://koimartfarm.com/sitemap.xml

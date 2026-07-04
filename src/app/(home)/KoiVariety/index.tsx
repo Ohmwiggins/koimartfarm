@@ -46,8 +46,7 @@ function KoiVariety() {
       .from("koi_varieties")
       .select("name_en, name_th, img, characteristics, symbolism")
       .order("sort_order")
-      .then(({ data, error }) => {
-        console.log("[koi_varieties] data:", data, "error:", error);
+      .then(({ data }) => {
         if (data) setVarieties(data as KoiVarietyRow[]);
       });
   }, []);

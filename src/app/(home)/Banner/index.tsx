@@ -1,9 +1,10 @@
 "use client";
-import { Box, IconButton, Typography, Grow } from "@mui/material";
+import { Box, CircularProgress, IconButton, Skeleton, Typography, Grow } from "@mui/material";
 import { useState, useCallback, useEffect, useRef } from "react";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { supabase } from "../../../lib/supabase";
+import { notifyAppReady } from "../../../lib/appReady";
 
 type MediaType = "image" | "video" | "youtube" | "gdrive" | "fallback";
 
@@ -74,6 +75,7 @@ export default function Banner() {
 
   const [currentDot, setCurrentDot] = useState(0);
   const [slides, setSlides] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
   const slidesRef = useRef<string[]>([]);
 
   useEffect(() => {
@@ -87,7 +89,13 @@ export default function Banner() {
           : FALLBACK_SLIDES;
         slidesRef.current = urls;
         setSlides(urls);
+        setLoading(false);
+        notifyAppReady();
       });
+
+    // Safety net: never leave the wrapper's splash up if the fetch stalls
+    const readyFallback = setTimeout(notifyAppReady, 8000);
+    return () => clearTimeout(readyFallback);
   }, []);
 
   // ── Apply offset with seamless-loop wrapping ────────────────────────────
@@ -234,6 +242,39 @@ export default function Banner() {
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
       >
+        {/* Skeleton strip while carousel data loads — same footprint as the real slides */}
+        {loading && (
+          <>
+            <Box sx={{ display: "flex", flexDirection: "row", height: "100%", width: "max-content", gap: "2px" }}>
+              {Array.from({ length: 6 }).map((_, i) => (
+                <Skeleton
+                  key={i}
+                  variant="rectangular"
+                  animation="wave"
+                  sx={{
+                    height: "100%",
+                    aspectRatio: "4/5",
+                    flexShrink: 0,
+                    bgcolor: "rgba(255,255,255,0.06)",
+                  }}
+                />
+              ))}
+            </Box>
+            <Box
+              sx={{
+                position: "absolute",
+                inset: 0,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                pointerEvents: "none",
+              }}
+            >
+              <CircularProgress size={40} thickness={3.5} sx={{ color: "secondary.main" }} />
+            </Box>
+          </>
+        )}
+
         {/*
          * Track — SLIDES duplicated once for a seamless infinite loop.
          * Each slide: height 100% + aspectRatio 4/5 → portrait, no gaps.
@@ -375,6 +416,7 @@ export default function Banner() {
         </Box>
 
         {/* ── Prev arrow ───────────────────────────────────────────────── */}
+        {!loading && (
         <IconButton
           onClick={() => jumpBy("prev")}
           aria-label="Previous image"
@@ -396,8 +438,10 @@ export default function Banner() {
         >
           <ArrowBackIosNewIcon />
         </IconButton>
+        )}
 
         {/* ── Next arrow ───────────────────────────────────────────────── */}
+        {!loading && (
         <IconButton
           onClick={() => jumpBy("next")}
           aria-label="Next image"
@@ -419,6 +463,7 @@ export default function Banner() {
         >
           <ArrowForwardIosIcon />
         </IconButton>
+        )}
 
         {/* ── Dot indicators ───────────────────────────────────────────── */}
         <Box

@@ -32,7 +32,6 @@ function ContactForm() {
       });
 
       const json = await res.json();
-      console.log(json);
       if (!json.ok) throw new Error(json.error || "Failed");
       resetAllFields();
     } catch (e) {
