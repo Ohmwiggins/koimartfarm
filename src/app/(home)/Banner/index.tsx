@@ -132,18 +132,22 @@ export default function Banner() {
       rafRef.current = requestAnimationFrame(tick);
     };
 
-    // Measure after first render paint
-    const timer = setTimeout(() => {
+    // Slide widths come from each image's intrinsic aspect ratio, so they are
+    // 0 until the image file loads — re-measure whenever any slide resizes
+    // instead of once on a timer, or a cold first visit never starts scrolling.
+    const measure = () => {
       const firstSlide = track.firstElementChild as HTMLElement | null;
-      if (firstSlide) {
-        slideWidthRef.current = firstSlide.offsetWidth;
-        totalWidthRef.current = firstSlide.offsetWidth * slidesRef.current.length;
-      }
-      rafRef.current = requestAnimationFrame(tick);
-    }, 150);
+      slideWidthRef.current = firstSlide?.offsetWidth ?? 0;
+      totalWidthRef.current = track.scrollWidth / 2; // slides are duplicated once
+    };
+
+    const observer = new ResizeObserver(measure);
+    Array.from(track.children).forEach((slide) => observer.observe(slide));
+    measure();
+    rafRef.current = requestAnimationFrame(tick);
 
     return () => {
-      clearTimeout(timer);
+      observer.disconnect();
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
   }, [applyOffset, slides]);
