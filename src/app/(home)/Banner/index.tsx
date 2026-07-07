@@ -78,7 +78,7 @@ export default function Banner() {
   const [loading, setLoading] = useState(true);
   const slidesRef = useRef<string[]>([]);
 
-  useEffect(() => {
+  const fetchSlides = useCallback(() => {
     supabase
       .from("carousel_images")
       .select("url")
@@ -87,16 +87,40 @@ export default function Banner() {
         const urls = data && data.length > 0
           ? data.map((d: { url: string }) => d.url)
           : FALLBACK_SLIDES;
-        slidesRef.current = urls;
-        setSlides(urls);
+        // Skip the state update when nothing changed, so routine tab
+        // switches don't restart the scroll loop
+        if (JSON.stringify(slidesRef.current) !== JSON.stringify(urls)) {
+          slidesRef.current = urls;
+          setSlides(urls);
+        }
         setLoading(false);
         notifyAppReady();
       });
+  }, []);
+
+  useEffect(() => {
+    fetchSlides();
+
+    // A tab restored from bfcache (or re-focused after sitting idle) keeps
+    // its old slide list — the effect doesn't re-run, so refetch on those
+    // signals or admin deletions never show up in already-open tabs.
+    const onPageShow = (e: PageTransitionEvent) => {
+      if (e.persisted) fetchSlides();
+    };
+    const onVisibilityChange = () => {
+      if (document.visibilityState === "visible") fetchSlides();
+    };
+    window.addEventListener("pageshow", onPageShow);
+    document.addEventListener("visibilitychange", onVisibilityChange);
 
     // Safety net: never leave the wrapper's splash up if the fetch stalls
     const readyFallback = setTimeout(notifyAppReady, 8000);
-    return () => clearTimeout(readyFallback);
-  }, []);
+    return () => {
+      window.removeEventListener("pageshow", onPageShow);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+      clearTimeout(readyFallback);
+    };
+  }, [fetchSlides]);
 
   // ── Apply offset with seamless-loop wrapping ────────────────────────────
   const applyOffset = useCallback((offset: number) => {
