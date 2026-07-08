@@ -1,6 +1,6 @@
 "use client";
 import { Box, CircularProgress, IconButton, Skeleton, Typography, Grow } from "@mui/material";
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { supabase } from "../../../lib/supabase";
@@ -78,6 +78,17 @@ export default function Banner() {
   const [loading, setLoading] = useState(true);
   const slidesRef = useRef<string[]>([]);
 
+  // A single slide is shown static and centered — no scroll, drag, arrows, or dots
+  const isSingle = slides.length === 1;
+
+  // With few slides one loop pass can be narrower than the viewport, which
+  // breaks the seamless wrap — repeat the set until it has at least 7 slides
+  const loopSlides = useMemo(() => {
+    if (slides.length <= 1) return slides;
+    const repeat = Math.max(1, Math.ceil(7 / slides.length));
+    return Array.from({ length: repeat }).flatMap(() => slides);
+  }, [slides]);
+
   const fetchSlides = useCallback(() => {
     supabase
       .from("carousel_images")
@@ -147,6 +158,13 @@ export default function Banner() {
     const track = trackRef.current;
     if (!track) return;
 
+    // Single slide: static display — stop the loop and clear any leftover offset
+    if (slides.length <= 1) {
+      offsetRef.current = 0;
+      track.style.transform = "";
+      return;
+    }
+
     const SPEED = 1.2;
 
     const tick = () => {
@@ -206,6 +224,7 @@ export default function Banner() {
   // ── Mouse drag ──────────────────────────────────────────────────────────
   const onMouseDown = useCallback(
     (e: React.MouseEvent) => {
+      if (slidesRef.current.length <= 1) return;
       isDragging.current = true;
       dragStartX.current = e.clientX;
       dragStartOffset.current = offsetRef.current;
@@ -231,6 +250,7 @@ export default function Banner() {
   // ── Touch drag ──────────────────────────────────────────────────────────
   const onTouchStart = useCallback(
     (e: React.TouchEvent) => {
+      if (slidesRef.current.length <= 1) return;
       dragStartX.current = e.touches[0].clientX;
       dragStartOffset.current = offsetRef.current;
       pause();
@@ -240,6 +260,7 @@ export default function Banner() {
 
   const onTouchMove = useCallback(
     (e: React.TouchEvent) => {
+      if (slidesRef.current.length <= 1) return;
       applyOffset(
         dragStartOffset.current + (e.touches[0].clientX - dragStartX.current)
       );
@@ -257,8 +278,8 @@ export default function Banner() {
           position: "relative",
           height: { xs: "50vh", md: "70vh" },
           overflow: "hidden",
-          cursor: "grab",
-          "&:active": { cursor: "grabbing" },
+          cursor: isSingle ? "default" : "grab",
+          "&:active": { cursor: isSingle ? "default" : "grabbing" },
           userSelect: "none",
           backgroundColor: "primary.dark",
         }}
@@ -313,11 +334,12 @@ export default function Banner() {
             display: "flex",
             flexDirection: "row",
             height: "100%",
-            width: "max-content",
+            width: isSingle ? "100%" : "max-content",
+            justifyContent: isSingle ? "center" : "flex-start",
             willChange: "transform",
           }}
         >
-          {[...slides, ...slides].map((src, i) => {
+          {(isSingle ? slides : [...loopSlides, ...loopSlides]).map((src, i) => {
             const mediaType = getMediaType(src);
             const platform = mediaType === "fallback" ? getPlatformInfo(src) : null;
             return (
@@ -444,7 +466,7 @@ export default function Banner() {
         </Box>
 
         {/* ── Prev arrow ───────────────────────────────────────────────── */}
-        {!loading && (
+        {!loading && !isSingle && (
         <IconButton
           onClick={() => jumpBy("prev")}
           aria-label="Previous image"
@@ -469,7 +491,7 @@ export default function Banner() {
         )}
 
         {/* ── Next arrow ───────────────────────────────────────────────── */}
-        {!loading && (
+        {!loading && !isSingle && (
         <IconButton
           onClick={() => jumpBy("next")}
           aria-label="Next image"
@@ -507,7 +529,7 @@ export default function Banner() {
             pointerEvents: "none",
           }}
         >
-          {slides.map((_, i) => (
+          {!isSingle && slides.map((_, i) => (
             <Box
               key={i}
               sx={{
