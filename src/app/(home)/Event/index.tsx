@@ -430,6 +430,47 @@ function Event({ events, loading = false }: EventProps) {
     );
   }
 
+  if (events.length === 0) {
+    return (
+      <Container maxWidth="md">
+        <Box
+          sx={{
+            py: 8,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 1.5,
+            textAlign: "center",
+            border: "1px dashed rgba(197,165,90,0.4)",
+            borderRadius: "16px",
+            my: 5,
+          }}
+        >
+          <Typography
+            sx={{
+              fontFamily: "var(--font-prompt)",
+              fontSize: { xs: 20, sm: 24 },
+              fontWeight: 500,
+              color: "#0F1B2D",
+            }}
+          >
+            ติดตามกิจกรรมเร็ว ๆ นี้
+          </Typography>
+          <Typography
+            sx={{
+              fontFamily: "var(--font-inter)",
+              fontSize: { xs: 14, sm: 15 },
+              color: "#C5A55A",
+              letterSpacing: "0.04em",
+            }}
+          >
+            Stay tuned for upcoming events
+          </Typography>
+        </Box>
+      </Container>
+    );
+  }
+
   return (
     <Container maxWidth="md">
       <Box sx={{ py: 5 }}>
