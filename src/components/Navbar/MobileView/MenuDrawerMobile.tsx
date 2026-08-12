@@ -11,6 +11,7 @@ import NavBarIconButton from "./NavBarIconButton";
 import { MenuButtonDrawer } from "./MenuDrawerMobile.styles";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { NAV_PAGES } from "../../../lib/seo";
 
 function MenuDrawerMobile({
   isMenuOpen,
@@ -81,24 +82,15 @@ function MenuDrawerMobile({
       <Box
         sx={{ display: "flex", flexDirection: "column", marginTop: 7, gap: 3 }}
       >
-        <MenuButtonDrawer href="/" onClick={() => setIsMenuOpen(false)}>
-          Home
-        </MenuButtonDrawer>
-        <MenuButtonDrawer href="/#events" onClick={() => setIsMenuOpen(false)}>
-          Events
-        </MenuButtonDrawer>
-        <MenuButtonDrawer href="/#blog" onClick={() => setIsMenuOpen(false)}>
-          Blog
-        </MenuButtonDrawer>
-        <MenuButtonDrawer href="/#about" onClick={() => setIsMenuOpen(false)}>
-          About Us
-        </MenuButtonDrawer>
-        <MenuButtonDrawer href="/#contact" onClick={() => setIsMenuOpen(false)}>
-          Contact
-        </MenuButtonDrawer>
-        <MenuButtonDrawer href="/#links" onClick={() => setIsMenuOpen(false)}>
-          Links
-        </MenuButtonDrawer>
+        {NAV_PAGES.map((page) => (
+          <MenuButtonDrawer
+            key={page.path}
+            href={page.path}
+            onClick={() => setIsMenuOpen(false)}
+          >
+            {page.label}
+          </MenuButtonDrawer>
+        ))}
       </Box>
     </Drawer>
   );

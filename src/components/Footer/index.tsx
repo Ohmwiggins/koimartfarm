@@ -4,6 +4,7 @@ import { Box, Container, Grid, Typography } from "@mui/material";
 import { ContactUsLayout } from "./Footer.styles";
 import HeaderText from "../HeaderText";
 import Image from "next/image";
+import { SECTION_DESCRIPTIONS } from "../../lib/seo";
 
 type LinkItem = {
   label: string;
@@ -129,7 +130,12 @@ function Footer() {
             size={12}
             sx={{ display: "flex", justifyContent: "center", marginBottom: 6 }}
           >
-            <HeaderText title="Contact Us" color="#FAF8F5" />
+            <HeaderText
+              title="Contact Us"
+              color="#FAF8F5"
+              description={SECTION_DESCRIPTIONS.contact}
+              descriptionColor="rgba(250, 248, 245, 0.7)"
+            />
           </Grid>
 
           {/* Map */}

@@ -14,7 +14,11 @@ Koi Mart Farm Co., LTD (บริษัท คอยมาร์ท ฟาร์
 ## Key Pages
 
 - [Home](https://koimartfarm.com/): Main landing page — events, blog highlights, farm history, koi gallery
+- [Events](https://koimartfarm.com/events): Koi auctions, shows, and Japan koi-selection trips
+- [Blog](https://koimartfarm.com/blog): All articles on choosing, judging and importing Japanese koi
 - [Koi Varieties Guide](https://koimartfarm.com/blog/koi-varieties): Complete guide to all available varieties with characteristics and cultural symbolism
+- [About Us](https://koimartfarm.com/about): Founder Boonsak Supatorn's story and the farm's history
+- [Contact](https://koimartfarm.com/contact): Address, phone, opening hours, map and enquiry form
 
 
 ## Japanese Source Farms

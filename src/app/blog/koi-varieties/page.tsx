@@ -1,8 +1,10 @@
 import { notFound } from "next/navigation";
 import { createClient } from "@supabase/supabase-js";
-import { Box, Container, Grid } from "@mui/material";
+import { Box, Container, Grid, Typography } from "@mui/material";
 import PageHeader from "../../../components/PageHeader";
 import KoiVarietyBox from "../../(home)/KoiVariety/KoiVarietyBox";
+import { BreadcrumbJsonLd } from "../../../components/StructuredData";
+import { SECTION_DESCRIPTIONS } from "../../../lib/seo";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -60,8 +62,28 @@ export default async function KoiVarietiesPage() {
 
   return (
     <Container maxWidth="lg">
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Blog", path: "/blog" },
+          { name: "Koi Varieties", path: "/blog/koi-varieties" },
+        ]}
+      />
+
       <Box sx={{ marginX: "8%" }}>
         <PageHeader text={post.title} />
+        <Typography
+          variant="body1"
+          component="p"
+          sx={{
+            fontFamily: "var(--font-prompt)",
+            fontWeight: 300,
+            color: "text.secondary",
+            lineHeight: 1.8,
+            maxWidth: 720,
+          }}
+        >
+          {SECTION_DESCRIPTIONS.koiVarieties}
+        </Typography>
       </Box>
 
       <Box sx={{ marginY: 6, paddingX: { xs: 2, sm: 0 } }}>

@@ -1,11 +1,8 @@
-import type { Metadata } from "next";
 import PageMargin from "../../../components/PageMargin";
 import { Box } from "@mui/material";
 
-export const metadata: Metadata = {
-  title: "Blog",
-  description: "…",
-};
+// Metadata is per-post — see `generateMetadata` in ./page.tsx. Defining it here
+// would statically override every post with the same title and description.
 
 export default function BlogLayout({
   children,

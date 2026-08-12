@@ -1,5 +1,5 @@
 "use client";
-import { Box, Fade, Grow, Grid, Typography, Modal, IconButton, Pagination, Skeleton, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Fade, Grow, Grid, Typography, Modal, IconButton, Pagination, useMediaQuery, useTheme } from "@mui/material";
 import Image from "next/image";
 import { useInView } from "react-intersection-observer";
 import { useState, useEffect, useCallback } from "react";
@@ -7,7 +7,7 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import CloseIcon from "@mui/icons-material/Close";
 import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled";
-import { supabase } from "../../../lib/supabase";
+import type { AboutContent } from "../../../lib/about";
 
 function isVideo(url: string): boolean {
   return /\.(mp4|webm|mov|avi|mkv|m4v)(\?|$)/i.test(url);
@@ -31,54 +31,23 @@ function getYouTubeEmbedUrl(url: string): string {
   return `https://www.youtube.com/embed/${id}?autoplay=1`;
 }
 
-interface AboutContent {
-  lead: string;
-  paragraphs: string[];
+interface HistoryProps {
+  /** Fetched on the server so the About copy ships in the initial HTML. */
+  content: AboutContent | null;
+  galleryImages: string[];
 }
 
-function parseContent(raw: string): AboutContent {
-  const parts = raw.split(/\n\n+/).map((s) => s.trim()).filter(Boolean);
-  const [lead = "", ...paragraphs] = parts;
-  return { lead, paragraphs };
-}
-
-function History() {
+function History({ content, galleryImages }: HistoryProps) {
   const { ref: imageRef, inView: imageInView } = useInView({ triggerOnce: true, threshold: 0.2 });
   const { ref: textRef, inView: textInView } = useInView({ triggerOnce: true, threshold: 0.2 });
   const { ref: travelImgRef, inView: travelImgInView } = useInView({ triggerOnce: true, threshold: 0.2 });
 
-  const [galleryImages, setGalleryImages] = useState<string[]>([]);
-  const [galleryLoading, setGalleryLoading] = useState(true);
-  const [content, setContent] = useState<AboutContent | null>(null);
-  const [contentLoading, setContentLoading] = useState(true);
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
   const [galleryPage, setGalleryPage] = useState(1);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const perPage = isMobile ? 4 : 8;
-
-  useEffect(() => {
-    supabase
-      .from("about_gallery")
-      .select("url")
-      .order("sort_order")
-      .then(({ data }) => {
-        if (data) setGalleryImages(data.map((d: { url: string }) => d.url));
-        setGalleryLoading(false);
-      });
-
-    supabase
-      .from("about_text")
-      .select("content")
-      .limit(1)
-      .single()
-      .then(({ data, error }) => {
-        if (error) console.error("[about_text]", error);
-        if (data?.content) setContent(parseContent(data.content));
-        setContentLoading(false);
-      });
-  }, []);
 
   const handleOpen = useCallback((index: number) => setSelectedImageIndex(index), []);
   const handleClose = useCallback(() => setSelectedImageIndex(null), []);
@@ -153,18 +122,6 @@ function History() {
                 &ldquo;
               </Typography>
 
-              {contentLoading && (
-                <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-                  <Skeleton animation="wave" width="90%" height={26} />
-                  <Skeleton animation="wave" width="75%" height={26} sx={{ mb: 2 }} />
-                  <Skeleton animation="wave" width="100%" />
-                  <Skeleton animation="wave" width="100%" />
-                  <Skeleton animation="wave" width="95%" />
-                  <Skeleton animation="wave" width="100%" />
-                  <Skeleton animation="wave" width="60%" />
-                </Box>
-              )}
-
               {content && (
                 <>
                   {content.lead && (
@@ -190,15 +147,6 @@ function History() {
 
       {/* Travel photo gallery */}
       <div ref={travelImgRef} className="mt-16 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-4">
-        {galleryLoading &&
-          Array.from({ length: perPage }).map((_, i) => (
-            <Skeleton
-              key={i}
-              variant="rectangular"
-              animation="wave"
-              sx={{ width: "100%", height: "auto", aspectRatio: "1 / 1", borderRadius: "12px" }}
-            />
-          ))}
         {galleryImages
           .slice((galleryPage - 1) * perPage, galleryPage * perPage)
           .map((imgSrc, index) => (
