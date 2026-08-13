@@ -1,45 +1,32 @@
-"use client";
-
-import { Box, Container, Grow } from "@mui/material";
+import { Box, Container } from "@mui/material";
 import Event from "./Event/index";
 import HeaderText from "../../components/HeaderText";
 import History from "./KoiHistory";
 import BlogHighlight from "./BlogHighlight";
-import { useInView } from "react-intersection-observer";
 import Banner from "./Banner";
-import { useState, useEffect } from "react";
-import { supabase } from "../../lib/supabase";
-import type { KoiEvent } from "../../models/events";
+import RevealSection from "../../components/RevealSection";
+import SectionLink from "../../components/SectionLink";
+import {
+  getAboutContent,
+  getAboutGallery,
+  getBlogHighlights,
+  getEvents,
+} from "../../lib/queries";
+import { SECTION_DESCRIPTIONS } from "../../lib/seo";
 
-function Home() {
-  const [events, setEvents] = useState<KoiEvent[]>([]);
-  const [eventsLoading, setEventsLoading] = useState(true);
+export const revalidate = 3600;
 
-  useEffect(() => {
-    supabase
-      .from("events")
-      .select("*")
-      .order("sort_order")
-      .then(({ data }) => {
-        if (data) setEvents(data as KoiEvent[]);
-        setEventsLoading(false);
-      });
-  }, []);
+/** The home page previews each section; the dedicated pages hold the full lists. */
+const HOME_EVENT_COUNT = 6;
+const HOME_BLOG_COUNT = 8;
 
-  const { ref: eventRef, inView: eventInView } = useInView({
-    triggerOnce: true,
-    threshold: 0.2,
-  });
-
-  const { ref: blogRef, inView: blogInView } = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  });
-
-  const { ref: historyRef, inView: historyInView } = useInView({
-    triggerOnce: true,
-    threshold: 0.2,
-  });
+async function Home() {
+  const [events, blogs, about, gallery] = await Promise.all([
+    getEvents(),
+    getBlogHighlights(),
+    getAboutContent(),
+    getAboutGallery(),
+  ]);
 
   return (
     <Box
@@ -55,7 +42,6 @@ function Home() {
       {/* Events */}
       <Box
         id="events"
-        ref={eventRef}
         sx={{
           paddingY: 6,
           backgroundColor: "background.default",
@@ -63,56 +49,74 @@ function Home() {
           flexDirection: "column",
         }}
       >
-        <Grow in={eventInView} timeout={1500}>
-          <Box sx={{ display: "flex", justifyContent: "center" }}>
-            <HeaderText title="Events" color="#E91D26" />
-          </Box>
-        </Grow>
+        {/* Heading and description stay outside RevealSection so they are
+            always visible to crawlers on first paint. */}
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+          <HeaderText
+            title="Events"
+            color="#E91D26"
+            description={SECTION_DESCRIPTIONS.events}
+          />
+        </Box>
 
-        <Grow in={eventInView} timeout={2500}>
-          <Box sx={{ display: "flex", flexDirection: "column" }}>
-            <Event events={events} loading={eventsLoading} />
-          </Box>
-        </Grow>
+        <RevealSection timeout={2500}>
+          <Event events={events.slice(0, HOME_EVENT_COUNT)} />
+        </RevealSection>
+
+        {events.length > HOME_EVENT_COUNT && (
+          <SectionLink href="/events" label="ดูกิจกรรมทั้งหมด" />
+        )}
       </Box>
 
       {/* Blog */}
-      <Box ref={blogRef} sx={{ backgroundColor: "background.elevation1", paddingY: 6 }}>
+      <Box sx={{ backgroundColor: "background.elevation1", paddingY: 6 }}>
         <Container
           id="blog"
           maxWidth="xl"
           sx={{ display: "flex", flexDirection: "column" }}
         >
-          <Grow in={blogInView} timeout={1500}>
-            <Box sx={{ display: "flex", justifyContent: "center" }}>
-              <HeaderText title="Blog" color="#E91D26" />
-            </Box>
-          </Grow>
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <HeaderText
+              title="Blog"
+              color="#E91D26"
+              description={SECTION_DESCRIPTIONS.blog}
+            />
+          </Box>
 
           <Box sx={{ paddingY: 3 }}>
-            <BlogHighlight />
+            <BlogHighlight blogs={blogs.slice(0, HOME_BLOG_COUNT)} />
           </Box>
+
+          {blogs.length > HOME_BLOG_COUNT && (
+            <SectionLink href="/blog" label="อ่านบทความทั้งหมด" />
+          )}
         </Container>
       </Box>
 
       {/* About Us */}
-      <Box id="about" ref={historyRef} sx={{ backgroundColor: "background.default", paddingY: 6 }}>
+      <Box
+        id="about"
+        sx={{ backgroundColor: "background.default", paddingY: 6 }}
+      >
         <Container
           maxWidth="lg"
           sx={{ display: "flex", flexDirection: "column" }}
         >
-          <Grow in={historyInView} timeout={1000}>
-            <Box sx={{ display: "flex", justifyContent: "center" }}>
-              <HeaderText title="About Us" color="#E91D26" />
-            </Box>
-          </Grow>
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <HeaderText
+              title="About Us"
+              color="#E91D26"
+              description={SECTION_DESCRIPTIONS.about}
+            />
+          </Box>
 
           <Box sx={{ paddingY: 3 }}>
-            <History />
+            <History content={about} galleryImages={gallery} />
           </Box>
+
+          <SectionLink href="/about" label="อ่านเรื่องราวทั้งหมด" />
         </Container>
       </Box>
-
     </Box>
   );
 }

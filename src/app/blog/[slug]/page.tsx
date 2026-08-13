@@ -1,22 +1,62 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { createClient } from "@supabase/supabase-js";
 import { Box, Container, Typography } from "@mui/material";
 import PageHeader from "../../../components/PageHeader";
 import Linkify from "../../../components/Linkify";
+import { BreadcrumbJsonLd } from "../../../components/StructuredData";
+import { extractPreview, toMetaDescription } from "../../../lib/blog";
+import type { ContentBlock } from "../../../lib/blog";
+import { SECTION_DESCRIPTIONS } from "../../../lib/seo";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
-interface ContentBlock {
-  id: string;
-  type: "paragraph" | "heading" | "image" | "video";
-  content: string;
-}
-
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
+}
+
+export const revalidate = 3600;
+
+export async function generateMetadata({
+  params,
+}: BlogPostPageProps): Promise<Metadata> {
+  const { slug } = await params;
+
+  const { data: post } = await supabase
+    .from("blog_highlights")
+    .select("title, content, img, published")
+    .eq("blog_id", slug)
+    .single();
+
+  if (!post || !post.published) {
+    return { title: "ไม่พบบทความ", robots: { index: false, follow: true } };
+  }
+
+  const description =
+    toMetaDescription(extractPreview(post.content)) || SECTION_DESCRIPTIONS.blog;
+  const url = `/blog/${slug}`;
+
+  return {
+    title: post.title,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      type: "article",
+      url,
+      title: post.title,
+      description,
+      ...(post.img ? { images: [{ url: post.img, alt: post.title }] } : {}),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description,
+      ...(post.img ? { images: [post.img] } : {}),
+    },
+  };
 }
 
 function renderBlocks(blocks: ContentBlock[]) {
@@ -133,6 +173,13 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   return (
     <Container maxWidth="lg">
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Blog", path: "/blog" },
+          { name: post.title, path: `/blog/${slug}` },
+        ]}
+      />
+
       <Box sx={{ marginX: "8%" }}>
         <PageHeader text={post.title} />
       </Box>

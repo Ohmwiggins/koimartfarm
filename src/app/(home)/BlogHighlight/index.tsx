@@ -3,55 +3,22 @@
 import { Box, Grid, Grow, Pagination, Skeleton, useMediaQuery, useTheme } from "@mui/material";
 import BlogCard from "./BlogCard";
 import { useInView } from "react-intersection-observer";
-import { useState, useEffect } from "react";
-import { supabase } from "../../../lib/supabase";
+import { useState } from "react";
+import type { BlogCardData } from "../../../lib/blog";
 
-interface BlogCardData {
-  blogId: string;
-  title: string;
-  img: string;
-  content: string;
+interface BlogHighlightProps {
+  /** Fetched on the server so the cards are present in the initial HTML. */
+  blogs: BlogCardData[];
+  loading?: boolean;
 }
 
-function BlogHighlight() {
-  const [blogs, setBlogs] = useState<BlogCardData[]>([]);
-  const [loading, setLoading] = useState(true);
+function BlogHighlight({ blogs, loading = false }: BlogHighlightProps) {
   const [page, setPage] = useState(1);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTablet = useMediaQuery(theme.breakpoints.between("sm", "lg"));
   const perPage = isMobile || isTablet ? 4 : 8;
-
-  useEffect(() => {
-    supabase
-      .from("blog_highlights")
-      .select("blog_id, title, img, content")
-      .eq("published", true)
-      .order("sort_order")
-      .then(({ data }) => {
-        if (data) {
-          setBlogs(
-            data.map((d: { blog_id: string; title: string; img: string; content: string }) => {
-              let preview = "";
-              try {
-                const blocks: { type: string; content: string }[] = JSON.parse(d.content ?? "[]");
-                preview = blocks.find((b) => b.type === "paragraph")?.content ?? "";
-              } catch {
-                preview = d.content ?? "";
-              }
-              return {
-                blogId: d.blog_id,
-                title: d.title,
-                img: d.img,
-                content: preview,
-              };
-            })
-          );
-        }
-        setLoading(false);
-      });
-  }, []);
 
   const totalPages = Math.ceil(blogs.length / perPage);
   const paginated = blogs.slice((page - 1) * perPage, page * perPage);

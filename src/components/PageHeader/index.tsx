@@ -72,6 +72,7 @@ function PageHeader({ text }: { text: string }) {
       {/* Article title */}
       <Typography
         variant="h3"
+        component="h1"
         sx={{
           fontFamily: "var(--font-prompt)",
           color: "primary.main",

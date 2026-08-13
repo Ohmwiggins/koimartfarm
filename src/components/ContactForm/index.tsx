@@ -1,5 +1,7 @@
+"use client";
+
 import { Box, Typography } from "@mui/material";
-import { ContactUsLayout, TextInputField } from "./Footer.styles";
+import { ContactUsLayout, TextInputField } from "../Footer/Footer.styles";
 import FilledButton from "../FilledButton";
 import { useState } from "react";
 

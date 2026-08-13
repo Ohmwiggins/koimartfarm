@@ -3,6 +3,7 @@
 import { Box, Container } from "@mui/material";
 import { MenuButtonDesktop } from "./NavbarDesktop.styles";
 import Image from "next/image";
+import { NAV_PAGES } from "../../../lib/seo";
 
 function NavbarDesktop() {
   return (
@@ -26,12 +27,11 @@ function NavbarDesktop() {
       />
 
       <Box>
-        <MenuButtonDesktop href="/">Home</MenuButtonDesktop>
-        <MenuButtonDesktop href="/#events">Events</MenuButtonDesktop>
-        <MenuButtonDesktop href="/#blog">Blog</MenuButtonDesktop>
-        <MenuButtonDesktop href="/#about">About Us</MenuButtonDesktop>
-        <MenuButtonDesktop href="/#contact">Contact</MenuButtonDesktop>
-        <MenuButtonDesktop href="/#links">Links</MenuButtonDesktop>
+        {NAV_PAGES.map((page) => (
+          <MenuButtonDesktop key={page.path} href={page.path}>
+            {page.label}
+          </MenuButtonDesktop>
+        ))}
       </Box>
     </Container>
   );

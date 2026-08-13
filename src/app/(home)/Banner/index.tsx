@@ -559,6 +559,7 @@ export default function Banner() {
         <Grow in timeout={1500}>
           <Box>
             <Typography
+              component="h1"
               sx={{
                 fontFamily: "var(--font-playfair)",
                 fontSize: { xs: 38, sm: 56, md: 72 },
