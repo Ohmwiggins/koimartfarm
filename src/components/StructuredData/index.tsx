@@ -6,6 +6,7 @@ import {
   LOGO_IMAGE,
   NAV_PAGES,
   OG_IMAGE,
+  OPENING_HOURS,
   PHONE,
   SITE_DESCRIPTION,
   SITE_NAME,
@@ -51,20 +52,12 @@ const localBusiness = {
   geo: { "@type": "GeoCoordinates", ...GEO },
   hasMap:
     "https://maps.google.com/?q=46/81+Moo+2+Chaengwattana+28+Bangtalad+Pak+Kret+Nonthaburi+11120",
-  openingHoursSpecification: {
+  openingHoursSpecification: OPENING_HOURS.map((h) => ({
     "@type": "OpeningHoursSpecification",
-    dayOfWeek: [
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-      "Sunday",
-    ],
-    opens: "09:00",
-    closes: "18:00",
-  },
+    dayOfWeek: h.days,
+    opens: h.opens,
+    closes: h.closes,
+  })),
   founder: { "@id": CEO_ID },
   employee: { "@id": CEO_ID },
   contactPoint: [
@@ -87,7 +80,7 @@ const localBusiness = {
   knowsAbout: KEYWORDS,
   hasOfferCatalog: {
     "@type": "OfferCatalog",
-    name: "Fancy Carp — สายพันธุ์ปลาคาร์พที่จำหน่าย",
+    name: "Fancy Carp — สายพันธุ์ปลาคาร์ฟที่จำหน่าย",
     url: `${SITE_URL}/blog/koi-varieties`,
     numberOfItems: 7,
   },

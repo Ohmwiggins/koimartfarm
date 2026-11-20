@@ -6,13 +6,13 @@ import { SECTION_DESCRIPTIONS } from "../../../lib/seo";
 // The root layout appends " | Koi Mart Farm" via its title template — don't
 // repeat the brand here.
 export const metadata: Metadata = {
-  title: "Koi Varieties — สายพันธุ์ปลาคาร์พ",
+  title: "Koi Varieties — สายพันธุ์ปลาคาร์ฟ",
   description: SECTION_DESCRIPTIONS.koiVarieties,
   alternates: { canonical: "/blog/koi-varieties" },
   openGraph: {
     type: "article",
     url: "/blog/koi-varieties",
-    title: "Koi Varieties — สายพันธุ์ปลาคาร์พ | Koi Mart Farm",
+    title: "Koi Varieties — สายพันธุ์ปลาคาร์ฟ | Koi Mart Farm",
     description: SECTION_DESCRIPTIONS.koiVarieties,
   },
 };

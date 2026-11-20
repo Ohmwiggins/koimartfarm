@@ -1,4 +1,4 @@
-import { Box, Container } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import Event from "./Event/index";
 import HeaderText from "../../components/HeaderText";
 import History from "./KoiHistory";
@@ -12,7 +12,7 @@ import {
   getBlogHighlights,
   getEvents,
 } from "../../lib/queries";
-import { SECTION_DESCRIPTIONS } from "../../lib/seo";
+import { HOME_INTRO, SECTION_DESCRIPTIONS } from "../../lib/seo";
 
 export const revalidate = 3600;
 
@@ -115,6 +115,49 @@ async function Home() {
           </Box>
 
           <SectionLink href="/about" label="อ่านเรื่องราวทั้งหมด" />
+        </Container>
+      </Box>
+
+      {/* Local-search intro: visible Thai copy for "ฟาร์มปลาคาร์ฟ นนทบุรี"
+          style queries. Kept outside RevealSection so it is never hidden. */}
+      <Box sx={{ backgroundColor: "background.elevation1", paddingY: 6 }}>
+        <Container
+          maxWidth="md"
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 3,
+          }}
+        >
+          <Typography
+            component="h2"
+            sx={{
+              fontFamily: "var(--font-prompt)",
+              fontWeight: 600,
+              fontSize: { xs: 22, sm: 26, md: 30 },
+              lineHeight: 1.4,
+              color: "#E91D26",
+              textAlign: "center",
+            }}
+          >
+            {HOME_INTRO.heading}
+          </Typography>
+          <Box className="gold-divider" />
+          <Typography
+            component="p"
+            sx={{
+              fontFamily: "var(--font-prompt)",
+              fontWeight: 300,
+              fontSize: { xs: 15, md: 17 },
+              lineHeight: 1.9,
+              color: "text.secondary",
+              textAlign: { xs: "left", sm: "center" },
+            }}
+          >
+            {HOME_INTRO.body}
+          </Typography>
+          <SectionLink href="/contact" label="ดูแผนที่และติดต่อฟาร์ม" />
         </Container>
       </Box>
     </Box>

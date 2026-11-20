@@ -10,13 +10,13 @@ import { SECTION_DESCRIPTIONS } from "../../lib/seo";
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "Events — กิจกรรมและงานประมูลปลาคาร์พ",
+  title: "Events — กิจกรรมและงานประมูลปลาคาร์ฟ",
   description: SECTION_DESCRIPTIONS.events,
   alternates: { canonical: "/events" },
   openGraph: {
     type: "website",
     url: "/events",
-    title: "Events — กิจกรรมและงานประมูลปลาคาร์พ | Koi Mart Farm",
+    title: "Events — กิจกรรมและงานประมูลปลาคาร์ฟ | Koi Mart Farm",
     description: SECTION_DESCRIPTIONS.events,
   },
 };
