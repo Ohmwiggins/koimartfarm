@@ -10,16 +10,16 @@ import { SECTION_DESCRIPTIONS } from "../../lib/seo";
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "About Us — เกี่ยวกับเรา",
+  title: "About Us — เกี่ยวกับฟาร์มปลาคาร์ฟของเรา",
   description:
-    "เรื่องราวของ Koi Mart Farm และคุณบวรศักดิ์ ศุภทนต์ ผู้ก่อตั้ง จากความหลงใหลในปลาโค่ยสู่ผู้นำเข้า Fancy Carp จากฟาร์มชั้นนำญี่ปุ่น",
+    "เรื่องราวของ Koi Mart Farm และคุณบวรศักดิ์ ศุภทนต์ ผู้ก่อตั้ง จากความหลงใหลในปลาโค่ยสู่ฟาร์มปลาคาร์ฟนำเข้าที่ปากเกร็ด นนทบุรี คัดปลาคาร์ฟจากฟาร์มชั้นนำญี่ปุ่น",
   alternates: { canonical: "/about" },
   openGraph: {
     type: "profile",
     url: "/about",
     title: "About Us — เกี่ยวกับ Koi Mart Farm",
     description:
-      "เรื่องราวของ Koi Mart Farm และคุณบวรศักดิ์ ศุภทนต์ ผู้ก่อตั้ง จากความหลงใหลในปลาโค่ยสู่ผู้นำเข้า Fancy Carp จากฟาร์มชั้นนำญี่ปุ่น",
+      "เรื่องราวของ Koi Mart Farm และคุณบวรศักดิ์ ศุภทนต์ ผู้ก่อตั้ง จากความหลงใหลในปลาโค่ยสู่ฟาร์มปลาคาร์ฟนำเข้าที่ปากเกร็ด นนทบุรี คัดปลาคาร์ฟจากฟาร์มชั้นนำญี่ปุ่น",
   },
 };
 

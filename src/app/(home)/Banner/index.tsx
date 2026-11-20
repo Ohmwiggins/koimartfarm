@@ -558,19 +558,38 @@ export default function Banner() {
       >
         <Grow in timeout={1500}>
           <Box>
-            <Typography
-              component="h1"
-              sx={{
-                fontFamily: "var(--font-playfair)",
-                fontSize: { xs: 38, sm: 56, md: 72 },
-                color: "#E91D26",
-                lineHeight: 1.05,
-                fontWeight: 700,
-                letterSpacing: "-0.02em",
-                mb: 2,
-              }}
-            >
-              KOIMART FARM
+            {/* One h1 carrying both the brand and the Thai search phrase:
+                Google reads "KOIMART FARM ฟาร์มปลาคาร์ฟญี่ปุ่นนำเข้า ปากเกร็ด
+                นนทบุรี" while the brand mark stays visually unchanged. */}
+            <Typography component="h1" sx={{ m: 0, mb: 2 }}>
+              <Box
+                component="span"
+                sx={{
+                  display: "block",
+                  fontFamily: "var(--font-playfair)",
+                  fontSize: { xs: 38, sm: 56, md: 72 },
+                  color: "#E91D26",
+                  lineHeight: 1.05,
+                  fontWeight: 700,
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                KOIMART FARM
+              </Box>
+              <Box
+                component="span"
+                sx={{
+                  display: "block",
+                  mt: { xs: 1.5, md: 2 },
+                  fontFamily: "var(--font-prompt)",
+                  fontSize: { xs: 17, sm: 20, md: 24 },
+                  color: "primary.main",
+                  fontWeight: 500,
+                  lineHeight: 1.4,
+                }}
+              >
+                ฟาร์มปลาคาร์ฟญี่ปุ่นนำเข้า ปากเกร็ด นนทบุรี
+              </Box>
             </Typography>
             <Typography
               sx={{
@@ -584,7 +603,7 @@ export default function Banner() {
                 lineHeight: 1.7,
               }}
             >
-              นำเข้าและจัดจำหน่าย Fancy Carp จากทุกๆ ฟาร์มดังในประเทศญี่ปุ่น
+              นำเข้าและจัดจำหน่ายปลาคาร์ฟ (Fancy Carp) จากทุกๆ ฟาร์มดังในประเทศญี่ปุ่น
               อาทิเช่น Dainichi, Sakai, Isa, Momotaro, Marudo
             </Typography>
           </Box>

@@ -4,10 +4,15 @@ import HeaderText from "../../components/HeaderText";
 import PageMargin from "../../components/PageMargin";
 import ContactForm from "../../components/ContactForm";
 import { BreadcrumbJsonLd } from "../../components/StructuredData";
-import { ADDRESS_TH, PHONE_LOCAL, SECTION_DESCRIPTIONS } from "../../lib/seo";
+import {
+  ADDRESS_TH,
+  OPENING_HOURS_TH,
+  PHONE_LOCAL,
+  SECTION_DESCRIPTIONS,
+} from "../../lib/seo";
 
 export const metadata: Metadata = {
-  title: "Contact — ติดต่อเรา",
+  title: "Contact — ติดต่อฟาร์มปลาคาร์ฟ ปากเกร็ด นนทบุรี",
   description:
     "ติดต่อ Koi Mart Farm 46/81 หมู่ 2 แจ้งวัฒนะ 28 บางตลาด ปากเกร็ด นนทบุรี 11120 โทร 083-615-5250 ติดต่อผ่าน Line, Facebook หรือส่งข้อความผ่านฟอร์ม",
   alternates: { canonical: "/contact" },
@@ -16,7 +21,7 @@ export const metadata: Metadata = {
     url: "/contact",
     title: "Contact — ติดต่อ Koi Mart Farm",
     description:
-      "ติดต่อ Koi Mart Farm ปากเกร็ด นนทบุรี โทร 083-615-5250 เปิดทุกวัน 09:00–18:00",
+      "ติดต่อ Koi Mart Farm ปากเกร็ด นนทบุรี โทร 083-615-5250 เปิดอังคาร–อาทิตย์ ปิดวันจันทร์",
   },
 };
 
@@ -24,7 +29,7 @@ export const metadata: Metadata = {
 const DETAILS = [
   { label: "ที่อยู่", value: ADDRESS_TH },
   { label: "โทรศัพท์", value: PHONE_LOCAL, href: `tel:+66${PHONE_LOCAL.slice(1)}` },
-  { label: "เวลาทำการ", value: "เปิดทุกวัน 09:00 – 18:00 น." },
+  { label: "เวลาทำการ", value: OPENING_HOURS_TH },
   { label: "Line", value: "@koimartfarm", href: "https://lin.ee/nTAFJe2" },
 ];
 

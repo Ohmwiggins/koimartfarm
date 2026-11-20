@@ -49,7 +49,7 @@ export const metadata: Metadata = {
         url: OG_IMAGE,
         width: 1200,
         height: 630,
-        alt: "Koi Mart Farm — ปลาคาร์พญี่ปุ่นพรีเมียม Fancy Carp",
+        alt: "Koi Mart Farm — ฟาร์มปลาคาร์ฟญี่ปุ่นนำเข้า ปากเกร็ด นนทบุรี",
       },
       { url: LOGO_IMAGE, width: 400, height: 400, alt: "Koi Mart Farm Logo" },
     ],
